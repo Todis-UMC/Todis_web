@@ -7,10 +7,16 @@ assignees: ''
 
 ---
 
-##제목
+## Description
 
-##내용
+> description
 
-##할당자
+## Progress
 
-##라벨
+-[] todo1
+-[] todo2
+-[] todo3
+
+## Precaution
+
+>Precaution
