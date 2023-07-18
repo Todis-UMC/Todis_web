@@ -20,7 +20,7 @@
     "react/react-in-jsx-scope": "off",
     "spaced-comment": "warn",
     "quotes": ["error", "single", { "avoidEscape": true }],
-    "no-duplicate-imports": "error"
+    "no-duplicate-imports": "warn"
   },
   "settings": {
     "import/parsers": {
