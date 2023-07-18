@@ -20,7 +20,9 @@
     "react/react-in-jsx-scope": "off",
     "spaced-comment": "warn",
     "quotes": ["error", "single", { "avoidEscape": true }],
-    "no-duplicate-imports": "warn"
+    "no-duplicate-imports": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["off"]
   },
   "settings": {
     "import/parsers": {
