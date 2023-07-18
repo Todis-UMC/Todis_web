@@ -68,7 +68,6 @@ const InputBox = styled.div`
   border: none;
   border-radius: 14px;
   padding: 0 24px;
-  margin-bottom: 24px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
