@@ -5,7 +5,7 @@ import App from './App';
 import { ThemeProvider } from 'styled-components';
 import theme from './styles/Color';
 import reportWebVitals from './reportWebVitals';
-import { store } from './store/store';
+import { store } from './store/Store';
 import { Provider } from 'react-redux';
 import GlobalStyles from './styles/GlobalStyles';
 import './fonts/Font.css';
