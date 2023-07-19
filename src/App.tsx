@@ -1,11 +1,24 @@
 import React from 'react';
-import './App.css';
+import Login from './pages/Login';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
+  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
+  // client_id가 설정되어 있는지 확인
+  if (!client_id) {
+    console.error(
+      'Google Client ID가 설정되지 않았습니다. .env 파일에 REACT_APP_GOOGLE_CLIENT_ID를 설정하세요.'
+    );
+    return null;
+  }
+
   return (
-    <div className='App'>
-      <header className='App-header'></header>
-    </div>
+    <>
+      <GoogleOAuthProvider clientId={client_id}>
+        <Login />
+      </GoogleOAuthProvider>
+    </>
   );
 }
 
