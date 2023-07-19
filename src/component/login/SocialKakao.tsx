@@ -16,7 +16,7 @@ const SocialKakao = () => {
       <Button onClick={handleLogin}>
         {' '}
         <Kakao />
-        <div style={FONT.M3}>카카오 로그인</div>
+        <div style={FONT.M3}>카카오로 시작하기</div>
       </Button>
     </>
   );
