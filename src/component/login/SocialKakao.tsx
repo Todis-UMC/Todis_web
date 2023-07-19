@@ -26,6 +26,7 @@ export default SocialKakao;
 const Button = styled.button`
   width: 100%;
   height: 55px;
+  margin-top: 15px;
   border-radius: 14px;
   border: none;
   font-size: 16px;

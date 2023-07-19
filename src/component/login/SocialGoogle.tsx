@@ -31,6 +31,7 @@ export default SocialGoogle;
 const Button = styled.button`
   width: 100%;
   height: 55px;
+  margin-top: 38px;
   border-radius: 14px;
   border: 0.5px solid ${(props) => props.theme.Gray_01};
   font-size: 16px;
