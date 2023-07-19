@@ -17,7 +17,8 @@ const color = {
   Gray_01: '#868686',
   Gray_02: '#d0d0d0',
   Gray_03: '#e6e6e6',
-  Gray_04: '#f8f8f8'
+  Gray_04: '#f8f8f8',
+  Typo_Black: '#181818'
 };
 
 export default color;
