@@ -7,18 +7,23 @@ import SocialKakao from '../component/login/SocialKakao';
 import FONT from '../styles/Font';
 import { ReactComponent as SmallUnCheck } from '../assets/icon/SmallUnCheck.svg';
 import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
+import { LoginProps } from '../types/Auth';
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [memory, setMemory] = useState<boolean>(false);
+  const [login, setLogin] = useState<LoginProps>({
+    email: '',
+    password: ''
+  });
 
   const handleLoginBtn = () => {
     if (memory) {
       localStorage.setItem('email', email);
       localStorage.setItem('password', password);
-      console.log('localstorage에 저장됨');
     }
-    console.log('로그인 버튼 클릭');
+    setLogin({ email: email, password: password });
+    console.log(login);
   };
   return (
     <Container>
