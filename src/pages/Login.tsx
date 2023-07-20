@@ -5,12 +5,21 @@ import Input from '../component/common/InputComponent';
 import SocialGoogle from '../component/login/SocialGoogle';
 import SocialKakao from '../component/login/SocialKakao';
 import FONT from '../styles/Font';
-import { ReactComponent as GrayCheck } from '../assets/icon/GrayCheck.svg';
-
+import { ReactComponent as SmallUnCheck } from '../assets/icon/SmallUnCheck.svg';
+import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [memory, setMemory] = useState<boolean>(false);
 
+  const handleLoginBtn = () => {
+    if (memory) {
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
+      console.log('localstorage에 저장됨');
+    }
+    console.log('로그인 버튼 클릭');
+  };
   return (
     <Container>
       <Box>
@@ -20,7 +29,7 @@ const Login = () => {
           label='이메일'
           type='email'
           placeholder='이메일 주소 입력'
-          value={email}
+          value={localStorage.getItem('email') || email}
           onChange={(ev) => setEmail(ev.target.value)}
         />
         <div style={{ height: 15 }} />
@@ -28,13 +37,13 @@ const Login = () => {
           label='비밀번호'
           type='password'
           placeholder='비밀번호 입력'
-          value={password}
+          value={localStorage.getItem('password') || password}
           onChange={(ev) => setPassword(ev.target.value)}
         />
-        <Button>로그인</Button>
+        <Button onClick={() => handleLoginBtn()}>로그인</Button>
         <Setting>
-          <div style={FONT.L6}>
-            <GrayCheck />
+          <div style={FONT.L6} onClick={() => setMemory(!memory)}>
+            {memory ? <SmallCheck /> : <SmallUnCheck />}
             로그인 정보 기억하기
           </div>
           <div>
