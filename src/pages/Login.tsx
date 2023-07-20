@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SmallLogo } from '../assets/icon/SmallLogo.svg';
 import Input from '../component/common/InputComponent';
@@ -16,7 +16,17 @@ const Login = () => {
     email: '',
     password: ''
   });
-
+  // 컴포넌트가 마운트될 때 로컬스토리지의 값으로 초기화
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+    if (storedPassword) {
+      setPassword(storedPassword);
+    }
+  }, []);
   const handleLoginBtn = () => {
     if (memory) {
       localStorage.setItem('email', email);
@@ -34,7 +44,7 @@ const Login = () => {
           label='이메일'
           type='email'
           placeholder='이메일 주소 입력'
-          value={localStorage.getItem('email') || email}
+          value={email}
           onChange={(ev) => setEmail(ev.target.value)}
         />
         <div style={{ height: 15 }} />
@@ -42,7 +52,7 @@ const Login = () => {
           label='비밀번호'
           type='password'
           placeholder='비밀번호 입력'
-          value={localStorage.getItem('password') || password}
+          value={password}
           onChange={(ev) => setPassword(ev.target.value)}
         />
         <Button onClick={() => handleLoginBtn()}>로그인</Button>
