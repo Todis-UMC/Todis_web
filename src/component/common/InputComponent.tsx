@@ -61,6 +61,7 @@ const Title = styled.div`
   color: ${(props) => props.theme.Black_Main};
   margin-bottom: 12px;
   padding-left: 3px;
+  text-align: left;
 `;
 const InputBox = styled.div`
   width: 100%;
