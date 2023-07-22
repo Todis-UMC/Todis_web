@@ -32,7 +32,7 @@ export const Input = ({
   };
 
   return (
-    <>
+    <InputContainer>
       <Title style={FONT.H7}>{label}</Title>
       <InputBox>
         <StyledInput
@@ -51,11 +51,18 @@ export const Input = ({
           <></>
         )}
       </InputBox>
-    </>
+    </InputContainer>
   );
 };
 
 export default Input;
+
+const InputContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
 
 const Title = styled.div`
   color: ${(props) => props.theme.Black_Main};
