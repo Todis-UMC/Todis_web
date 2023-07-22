@@ -64,11 +64,7 @@ const Login = () => {
           {memory ? <SmallCheck /> : <SmallUnCheck />}
           로그인 정보 기억하기
         </div>
-        <div>
-          <span style={FONT.L6}>아이디 찾기</span>
-          <span style={FONT.L6}> | </span>
-          <span style={FONT.L6}>비밀번호 찾기</span>
-        </div>
+        <div style={FONT.L6}>비밀번호 찾기</div>
       </Setting>
       <SocialGoogle />
       <SocialKakao />
