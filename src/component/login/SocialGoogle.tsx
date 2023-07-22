@@ -21,7 +21,7 @@ const SocialGoogle = () => {
   return (
     <Button onClick={() => googleSocialLogin()}>
       <Google />
-      <div style={FONT.M3}>구글로 시작하기</div>
+      <div style={FONT.M3}>Google로 시작하기</div>
     </Button>
   );
 };
@@ -31,7 +31,7 @@ export default SocialGoogle;
 const Button = styled.button`
   width: 100%;
   height: 55px;
-  margin-top: 38px;
+  margin-top: 15px;
   border-radius: 14px;
   border: 0.5px solid ${(props) => props.theme.Gray_01};
   font-size: 16px;
