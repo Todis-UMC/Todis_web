@@ -13,6 +13,7 @@ interface InputProps {
   type: string;
   value?: InputValue;
   onChange?: (ev: InputChangeEvent) => void;
+  warn?: boolean;
 }
 
 export const Input = ({
@@ -21,7 +22,8 @@ export const Input = ({
   minLength = 0,
   type = '',
   value = '',
-  onChange
+  onChange,
+  warn = false
 }: InputProps) => {
   const [show, setShow] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<InputValue>(value);
@@ -33,7 +35,10 @@ export const Input = ({
 
   return (
     <InputContainer>
-      <Title style={FONT.H7}>{label}</Title>
+      <EmailTitle>
+        <Title style={FONT.H7}>{label}</Title>
+        {warn && <Warn style={FONT.L6}>* 사용 가능한 이메일 입니다</Warn>}
+      </EmailTitle>
       <InputBox>
         <StyledInput
           type={type == 'password' ? (show ? 'text' : 'password') : type}
@@ -70,6 +75,13 @@ const Title = styled.div`
   padding-left: 3px;
   text-align: left;
 `;
+const Warn = styled.div`
+  color: ${(props) => props.theme.Blue_Main};
+  margin-bottom: 12px;
+  padding-left: 3px;
+  text-align: left;
+`;
+
 const InputBox = styled.div`
   width: 100%;
   height: 55px;
@@ -102,4 +114,9 @@ const Secret = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+const EmailTitle = styled.div`
+  display: flex;
+  gap: 15px;
+  width: 100%;
 `;

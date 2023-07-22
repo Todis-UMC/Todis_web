@@ -12,8 +12,29 @@ const SignUpEmailPage = () => (
 
 export default SignUpEmailPage;
 
+function isValidEmail(email: string) {
+  // 이메일 주소 형식을 확인하는 정규식
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // 정규식과 일치하는지 확인하여 유효한 이메일인지 여부를 반환
+  return emailRegex.test(email);
+}
+
 const SignUpEmail = () => {
   const [check, setCheck] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordCheck, setPasswordCheck] = useState<string>('');
+  const [warn, setWarn] = useState<boolean>(false);
+
+  const EmailCheck = () => {
+    setWarn(isValidEmail(email));
+  };
+  const NextPageHandler = () => {
+    isValidEmail(email) && password === passwordCheck && check
+      ? console.log('다음 페이지로 이동')
+      : console.log('다음 페이지로 이동 불가');
+  };
   return (
     <>
       <InputBox>
@@ -21,8 +42,11 @@ const SignUpEmail = () => {
           label='이메일 주소'
           type='email'
           placeholder='이메일 주소 입력'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          warn={warn}
         />
-        <ShortButton>인증</ShortButton>
+        <ShortButton onClick={() => EmailCheck()}>인증</ShortButton>
       </InputBox>
       <Blank />
       <Input
@@ -30,6 +54,8 @@ const SignUpEmail = () => {
         type='password'
         placeholder='비밀번호 입력(6자리 이상)'
         minLength={6}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <Blank />
       <Input
@@ -37,6 +63,8 @@ const SignUpEmail = () => {
         type='password'
         placeholder='비밀번호 확인'
         minLength={6}
+        value={passwordCheck}
+        onChange={(e) => setPasswordCheck(e.target.value)}
       />
 
       <Terms>
@@ -51,7 +79,13 @@ const SignUpEmail = () => {
         동의(필수)
       </TermsUnder>
 
-      <Button>다음</Button>
+      <Button
+        onClick={() => {
+          NextPageHandler();
+        }}
+      >
+        다음
+      </Button>
     </>
   );
 };
