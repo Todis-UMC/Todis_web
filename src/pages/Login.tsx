@@ -8,6 +8,7 @@ import FONT from '../styles/Font';
 import { ReactComponent as SmallUnCheck } from '../assets/icon/SmallUnCheck.svg';
 import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
 import { LoginProps } from '../types/Auth';
+import { Container, Box } from '../component/login/AuthContainer';
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -80,24 +81,6 @@ const Login = () => {
 
 export default Login;
 
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: ${(props) => props.theme.Sky_Blue_04};
-  align-items: center;
-  justify-content: center;
-  display: flex;
-`;
-const Box = styled.div`
-  max-width: 569px;
-  width: 80%;
-  height: 730px;
-  background-color: #fff;
-  border-radius: 47px;
-  justify-content: center;
-  padding: 44px 65px 50px 65px;
-  text-align: center;
-`;
 const Title = styled.div`
   margin-top: 19px;
   margin-bottom: 42px;
