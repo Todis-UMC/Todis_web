@@ -92,6 +92,7 @@ const Setting = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 18px;
+  margin-bottom: 38px;
   div {
     display: flex;
     align-items: center;
