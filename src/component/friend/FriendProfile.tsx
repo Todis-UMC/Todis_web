@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 
@@ -11,7 +11,7 @@ const FriendProfile = ({
 }) => {
   return (
     <Box>
-      <Abatar></Abatar>
+      <Avatar></Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
         <Message style={FONT.L5}>{message}</Message>
@@ -21,6 +21,7 @@ const FriendProfile = ({
   );
 };
 export default FriendProfile;
+
 const Box = styled.div`
   width: 415px;
   height: 388px;
@@ -28,7 +29,7 @@ const Box = styled.div`
   border: none;
   position: relative;
 `;
-const Abatar = styled.div`
+const Avatar = styled.div`
   width: 415px;
   height: 274.31px;
   background-color: ${(props) => props.theme.SkyBlue_03};

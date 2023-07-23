@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as ProfilePlus } from '../../assets/icon/ProfilePlus.svg';
+import MyMessage from './MyMessage';
 
 const MyProfile = ({ name, message }: { name: string; message: string }) => {
+  // 글쓰기 모달창 열기
+  const [modal, setModal] = useState(false);
+  const openModal = () => {
+    setModal(!modal);
+  };
+
   return (
     <Box>
-      <Abatar></Abatar>
+      <Avatar></Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
         <Message style={FONT.L5}>{message}</Message>
@@ -14,15 +21,17 @@ const MyProfile = ({ name, message }: { name: string; message: string }) => {
       <ProfileLine />
       <Profile />
       <ProfileCircle />
-      <ProfileBlueCircle>
+      <ProfileBlueCircle onClick={openModal}>
         <span id='plus'>
           <ProfilePlus />
         </span>
       </ProfileBlueCircle>
+      <span>{modal === true ? <MyMessage></MyMessage> : null}</span>
     </Box>
   );
 };
 export default MyProfile;
+
 const Box = styled.div`
   width: 415px;
   height: 388px;
@@ -30,7 +39,7 @@ const Box = styled.div`
   border: none;
   position: relative;
 `;
-const Abatar = styled.div`
+const Avatar = styled.div`
   width: 415px;
   height: 274.31px;
   background-color: ${(props) => props.theme.SkyBlue_03};
