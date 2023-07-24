@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
+import ModalContainer from './modal/ModalContainer';
+import useOutSideClick from './modal/useOutSideClick';
 
-const FriendDelete = ({ name }: { name: string }) => {
+interface ModalProps {
+  name: string;
+  open: boolean;
+  onClose: () => void;
+}
+
+const FriendDelete = ({ name, onClose }: ModalProps) => {
   // 친구 삭제 모달창 닫기
-  const [modal, setModal] = useState<boolean>(false);
-  const closeModal = () => {
-    setModal(!modal);
+  const handleClose = () => {
+    onClose?.();
   };
-  if (modal === true) {
-    return null;
-  }
+
+  // 모달창 외부 클릭시 닫기
+  const modalRef = useRef<HTMLDivElement>(null);
+  useOutSideClick(modalRef, handleClose);
 
   return (
     <Container className='container'>
-      <Box>
+      <Box ref={modalRef}>
         <Profile></Profile>
         <Name style={FONT.M2}>
           <span>{name}</span>님을
         </Name>
         <Message style={FONT.M2}>친구 목록에서 삭제하시겠습니까?</Message>
-        <Cancel style={FONT.L4} onClick={closeModal}>
+        <Cancel style={FONT.L4} onClick={handleClose}>
           취소
         </Cancel>
         <Delete style={FONT.L4}>삭제</Delete>

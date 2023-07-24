@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
-import { ReactComponent as GoBack } from '../../../assets/icon/GoBack.svg';
+import { ReactComponent as GoBack } from '../../assets/icon/GoBack.svg';
 import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
 

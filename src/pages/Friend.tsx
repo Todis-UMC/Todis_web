@@ -20,9 +20,9 @@ const Friend = () => {
   };
 
   // 친구 검색 모달창 열기
-  const [modal, setModal] = useState(false);
-  const openModal = () => {
-    setModal(!modal);
+  const [isOpen, setIsOpen] = useState(false);
+  const onClickButton = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -31,13 +31,20 @@ const Friend = () => {
         <SubTitle style={FONT.L4}>날씨에 따른</SubTitle>
         <Title style={FONT.H1}>나의 친구는 이렇게 입었어요!</Title>
       </TitleBox>
-      <SearchBox onClick={openModal}>
+      <SearchBox onClick={onClickButton}>
         <span>
           <Search />
         </span>
         <SearchInput style={FONT.L3}>친구 검색</SearchInput>
       </SearchBox>
-      {modal === true ? <FriendSearch /> : null}
+      {isOpen && (
+        <FriendSearch
+          open={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+          }}
+        />
+      )}
       <MainBox>
         <MyProfile name='나' message='...' />
         <FriendProfile name='이름1' message='...' />

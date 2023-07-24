@@ -5,20 +5,28 @@ import FriendDelete from './FriendDelete';
 
 const FriendSearchComponent = ({ name }: { name: string }) => {
   // 친구 삭제 모달창 열기
-  const [modal, setModal] = useState(false);
-  const openModal = () => {
-    setModal(!modal);
+  const [isOpen, setIsOpen] = useState(false);
+  const onClickButton = () => {
+    setIsOpen(true);
   };
 
   return (
     <Box>
       <Profile></Profile>
       <Name>{name}</Name>
-      <Delete style={FONT.L5} onClick={openModal}>
+      <Delete style={FONT.L5} onClick={onClickButton}>
         삭제
       </Delete>
       <hr />
-      {modal === true ? <FriendDelete name={name} /> : null}
+      {isOpen && (
+        <FriendDelete
+          name={name}
+          open={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+          }}
+        />
+      )}
     </Box>
   );
 };

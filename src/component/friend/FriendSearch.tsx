@@ -1,54 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as GoBack } from '../../assets/icon/GoBack.svg';
 import { ReactComponent as Search } from '../../assets/icon/Search.svg';
 import FriendSearchComponent from './FriendSearchComponent';
+import ModalContainer from './modal/ModalContainer';
+import useOutSideClick from './modal/useOutSideClick';
 
-const FriendSearch = () => {
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const FriendSearch = ({ onClose }: ModalProps) => {
   // 친구 검색 모달창 닫기
-  const [modal, setmodal] = useState<boolean>(false);
-  const closeModal = () => {
-    setmodal(!modal);
+  const handleClose = () => {
+    onClose?.();
   };
-  if (modal === true) {
-    return null;
-  }
+
+  // 모달창 외부 클릭시 닫기
+  const modalRef = useRef<HTMLDivElement>(null);
+  useOutSideClick(modalRef, handleClose);
+
+  // 모달창 열렸을 때 외부 스크롤 막기
+  useEffect(() => {
+    const $body = document.querySelector('body') as HTMLBodyElement;
+    const overflow = $body.style.overflow;
+    $body.style.overflow = 'hidden';
+    return () => {
+      $body.style.overflow = overflow;
+    };
+  }, []);
 
   return (
-    <Container className='container'>
-      <Box>
-        <SearchBox>
-          <FriendSearchBox style={FONT.M2} />
-          <SearchInput
-            style={FONT.L3}
-            placeholder='친구 검색...'
-            color='${(props) => props.theme.Gray_02}'
-          />
-          <span id='search'>
-            <Search />
+    <ModalContainer>
+      <Container className='container'>
+        <Box ref={modalRef}>
+          <SearchBox>
+            <FriendSearchBox style={FONT.M2} />
+            <SearchInput
+              style={FONT.L3}
+              placeholder='친구 검색...'
+              color='${(props) => props.theme.Gray_02}'
+            />
+            <span id='search'>
+              <Search />
+            </span>
+            <span id='goBack' onClick={handleClose}>
+              <GoBack />
+            </span>
+          </SearchBox>
+          <span id='friends' style={FONT.M3}>
+            전체 친구 : 00명
           </span>
-          <span id='goBack' onClick={closeModal}>
-            <GoBack />
-          </span>
-        </SearchBox>
-        <span id='friends' style={FONT.M3}>
-          전체 친구 : 00명
-        </span>
-        <ListBox>
-          <FriendSearchComponent name='김우진' />
-          <FriendSearchComponent name='이민하' />
-          <FriendSearchComponent name='강민경' />
-          <FriendSearchComponent name='우소정' />
-          <FriendSearchComponent name='이민하' />
-          <FriendSearchComponent name='김우진' />
-          <FriendSearchComponent name='이민하' />
-          <FriendSearchComponent name='강민경' />
-          <FriendSearchComponent name='우소정' />
-          <FriendSearchComponent name='이민하' />
-        </ListBox>
-      </Box>
-    </Container>
+          <ListBox>
+            <FriendSearchComponent name='김우진' />
+            <FriendSearchComponent name='이민하' />
+            <FriendSearchComponent name='강민경' />
+            <FriendSearchComponent name='우소정' />
+            <FriendSearchComponent name='이민하' />
+            <FriendSearchComponent name='김우진' />
+            <FriendSearchComponent name='이민하' />
+            <FriendSearchComponent name='강민경' />
+            <FriendSearchComponent name='우소정' />
+            <FriendSearchComponent name='이민하' />
+          </ListBox>
+        </Box>
+      </Container>
+    </ModalContainer>
   );
 };
 export default FriendSearch;
