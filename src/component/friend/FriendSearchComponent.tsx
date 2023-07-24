@@ -35,6 +35,7 @@ export default FriendSearchComponent;
 const Box = styled.div`
   margin: 0px auto;
   margin-bottom: 36px;
+  margin-top: 25px;
   color: ${(props) => props.theme.Black_Main};
   width: 430px;
   height: 39px;

@@ -53,6 +53,7 @@ const FriendSearch = ({ onClose }: ModalProps) => {
           <span id='friends' style={FONT.M3}>
             전체 친구 : 00명
           </span>
+          <GradientTop />
           <ListBox>
             <FriendSearchComponent name='김우진' />
             <FriendSearchComponent name='이민하' />
@@ -65,6 +66,7 @@ const FriendSearch = ({ onClose }: ModalProps) => {
             <FriendSearchComponent name='우소정' />
             <FriendSearchComponent name='이민하' />
           </ListBox>
+          <GradientBottom />
         </Box>
       </Container>
     </ModalContainer>
@@ -162,4 +164,29 @@ const ListBox = styled.div`
     background-color: hsla(0, 0%, 42%, 0.49);
     border-radius: 100px;
   }
+`;
+const GradientTop = styled.div`
+  z-index: 1;
+  width: 437px;
+  height: 40px;
+  position: absolute;
+  top: 141px;
+  left: 123px;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+`;
+const GradientBottom = styled.div`
+  width: 437px;
+  height: 40px;
+  position: absolute;
+  top: 513px;
+  left: 123px;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
 `;
