@@ -31,7 +31,10 @@ const SignUpEmail = () => {
     setWarn(isValidEmail(email));
   };
   const NextPageHandler = () => {
-    isValidEmail(email) && password === passwordCheck && check
+    isValidEmail(email) &&
+    password === passwordCheck &&
+    check &&
+    password.length >= 6
       ? console.log('다음 페이지로 이동')
       : console.log('다음 페이지로 이동 불가');
   };
