@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Input from '../component/common/InputComponent';
-import PasswordContainer from '../component/login/PasswordContainer';
+import AuthContainer from '../component/login/AuthContainer';
 
 const PasswordResetPage = () => (
-  <PasswordContainer
+  <AuthContainer
     title='비밀번호 재설정'
     component={<PasswordReset />}
     content='새로운 비밀번호를 입력해주세요.'

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Input from '../component/common/InputComponent';
-import PasswordContainer from '../component/login/PasswordContainer';
+import AuthContainer from '../component/login/AuthContainer';
 
 const PasswordSearchPage = () => (
-  <PasswordContainer
+  <AuthContainer
     title='비밀번호 찾기'
     component={<PasswordSearch />}
     content='가입하신 이메일을 입력해 주세요.<br/>
