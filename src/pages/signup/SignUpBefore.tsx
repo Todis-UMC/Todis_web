@@ -1,9 +1,9 @@
 import React from 'react';
-import AuthContainer from '../component/login/AuthContainer';
-import SignUpBeforeLogo from '../assets/img/SignUpBeforeLogo.png';
-import SocialGoogle from '../component/login/SocialGoogle';
-import SocialKakao from '../component/login/SocialKakao';
-import EmailSignUp from '../component/login/EmailSignup';
+import AuthContainer from '../../component/login/AuthContainer';
+import SignUpBeforeLogo from '../../assets/img/SignUpBeforeLogo.png';
+import SocialGoogle from '../../component/login/SocialGoogle';
+import SocialKakao from '../../component/login/SocialKakao';
+import EmailSignUp from '../../component/login/EmailSignup';
 const SignUpBeforePage = () => (
   <AuthContainer title='회원가입' component={<SignUpBefore />} />
 );

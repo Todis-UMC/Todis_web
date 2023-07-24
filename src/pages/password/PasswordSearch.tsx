@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import Input from '../component/common/InputComponent';
-import SmallModal from '../component/common/SmallModal';
-import AuthContainer from '../component/login/AuthContainer';
+import Input from '../../component/common/InputComponent';
+import SmallModal from '../../component/common/SmallModal';
+import AuthContainer from '../../component/login/AuthContainer';
 
 const PasswordSearchPage = () => (
   <AuthContainer
@@ -26,7 +26,7 @@ export const PasswordSearch = () => {
     // API 전송 후 없는 이메일일 경우
     // setWarn(true);
 
-    //존재하는 이메일 & 전송 성공
+    // 존재하는 이메일 & 전송 성공
     setNotice(true);
   };
   return (

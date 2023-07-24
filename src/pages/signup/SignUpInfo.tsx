@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Input from '../component/common/InputComponent';
-import AuthContainer from '../component/login/AuthContainer';
-import FONT from '../styles/Font';
+import Input from '../../component/common/InputComponent';
+import AuthContainer from '../../component/login/AuthContainer';
+import FONT from '../../styles/Font';
 
 const SignUpInfoPage = () => (
   <AuthContainer title='마지막 단계에요!' component={<SignUpInfo />} />

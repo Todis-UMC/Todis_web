@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Input from '../component/common/InputComponent';
-import AuthContainer from '../component/login/AuthContainer';
+import Input from '../../component/common/InputComponent';
+import AuthContainer from '../../component/login/AuthContainer';
 
 const PasswordResetPage = () => (
   <AuthContainer
