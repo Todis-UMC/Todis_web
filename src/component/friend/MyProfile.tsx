@@ -6,9 +6,9 @@ import MyMessage from './MyMessage';
 
 const MyProfile = ({ name, message }: { name: string; message: string }) => {
   // 글쓰기 모달창 열기
-  const [modal, setModal] = useState(false);
-  const openModal = () => {
-    setModal(!modal);
+  const [isOpen, setIsOpen] = useState(false);
+  const onClickButton = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -21,12 +21,20 @@ const MyProfile = ({ name, message }: { name: string; message: string }) => {
       <ProfileLine />
       <Profile />
       <ProfileCircle />
-      <ProfileBlueCircle onClick={openModal}>
+      <ProfileBlueCircle onClick={onClickButton}>
         <span id='plus'>
           <ProfilePlus />
         </span>
       </ProfileBlueCircle>
-      <span>{modal === true ? <MyMessage></MyMessage> : null}</span>
+      {isOpen && (
+        <MyMessage
+          open={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+            console.log('close버튼');
+          }}
+        />
+      )}{' '}
     </Box>
   );
 };

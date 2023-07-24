@@ -1,34 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import FONT from '../..//styles/Font';
-import { ReactComponent as GoBack } from '../../assets/icon/GoBack.svg';
+import FONT from '../../styles/Font';
+import { ReactComponent as GoBack } from '../../../assets/icon/GoBack.svg';
+import ModalContainer from './modal/ModalContainer';
+import useOutSideClick from './modal/useOutSideClick';
 
-const MyMessage = () => {
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const MyMessage = ({ onClose }: ModalProps) => {
   // 글쓰기 모달창 닫기
-  const [modal, setmodal] = useState<boolean>(false);
-  const closeModal = () => {
-    setmodal(!modal);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const handleClose = () => {
+    onClose?.();
   };
-  if (modal === true) {
-    return null;
-  }
+
+  // 모달창 외부 클릭시 닫기
+  useOutSideClick(modalRef, handleClose);
+  useEffect(() => {
+    const $body = document.querySelector('body') as HTMLBodyElement;
+    const overflow = $body.style.overflow;
+    $body.style.overflow = 'hidden';
+    return () => {
+      $body.style.overflow = overflow;
+    };
+  }, []);
 
   return (
-    <Container className='container'>
-      <Box>
-        <Title style={FONT.M2}>
-          <span id='goBack'>
-            <GoBack onClick={closeModal} />
-          </span>
-          <span id='title'>글쓰기</span>
-        </Title>
-        <Message
-          style={FONT.L5}
-          placeholder='오늘의 날씨는 어떤가요?...'
-        ></Message>
-        <Ok style={FONT.L5}>완료</Ok>
-      </Box>
-    </Container>
+    <ModalContainer>
+      <Container className='container'>
+        <Box ref={modalRef}>
+          <Title style={FONT.M2}>
+            <span id='goBack'>
+              <GoBack onClick={handleClose} />
+            </span>
+            <span id='title'>글쓰기</span>
+          </Title>
+          <Message
+            style={FONT.L5}
+            placeholder='오늘의 날씨는 어떤가요?...'
+          ></Message>
+          <Ok style={FONT.L5}>완료</Ok>
+        </Box>
+      </Container>
+    </ModalContainer>
   );
 };
 export default MyMessage;
