@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Input from '../component/common/InputComponent';
-import AuthContainer from '../component/login/AuthContainer';
-import { ReactComponent as SmallUnCheck } from '../assets/icon/SmallUnCheck.svg';
-import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
-import FONT from '../styles/Font';
+import Input from '../../component/common/InputComponent';
+import AuthContainer from '../../component/login/AuthContainer';
+import { ReactComponent as SmallUnCheck } from '../../assets/icon/SmallUnCheck.svg';
+import { ReactComponent as SmallCheck } from '../../assets/icon/SmallCheck.svg';
+import FONT from '../../styles/Font';
 
 const SignUpEmailPage = () => (
   <AuthContainer title='이메일로 가입하기' component={<SignUpEmail />} />

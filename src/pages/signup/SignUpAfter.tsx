@@ -1,8 +1,8 @@
 import React from 'react';
-import AuthContainer from '../component/login/AuthContainer';
-import SignUpAfterLogo from '../assets/img/SignUpAfterLogo.png';
+import AuthContainer from '../../component/login/AuthContainer';
+import SignUpAfterLogo from '../../assets/img/SignUpAfterLogo.png';
 import styled from 'styled-components';
-import FONT from '../styles/Font';
+import FONT from '../../styles/Font';
 
 const SignUpAfterPage = () => (
   <AuthContainer title='회원가입에 성공했어요!' component={<SignUpAfter />} />
