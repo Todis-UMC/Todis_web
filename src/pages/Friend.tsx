@@ -125,11 +125,11 @@ const SearchInput = styled.div`
 const MainBox = styled.div`
   width: 90%;
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 47px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 420px);
+  grid-gap: 2vw;
   text-align: center;
-  //justify-content: space-evenly;
+  justify-content: center;
 `;
 const ToggleBox = styled.div`
   padding: 70px 0;
