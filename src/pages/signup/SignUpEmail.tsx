@@ -181,6 +181,7 @@ const Terms = styled.div`
     color: ${(props) => props.theme.Blue_Main};
     margin-left: 5px;
     margin-right: 5px;
+    cursor: pointer;
   }
   svg {
     margin-right: 17px;
