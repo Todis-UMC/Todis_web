@@ -36,17 +36,26 @@ const CodiPoint = () => {
         isChecked: false
       }
     ];
-    setCoditexts(data);
+
+    // 로컬 스토리지에 저장된 상태 불러옴
+    const savedCoditexts = localStorage.getItem('coditexts');
+    savedCoditexts
+      ? setCoditexts(JSON.parse(savedCoditexts))
+      : setCoditexts(data);
   }, []);
 
   const CodiCheckHandler = (id: number) => {
     setCoditexts((prevData) => {
-      return prevData.map((item) => {
+      const updatedCoditexts = prevData.map((item) => {
         if (item.id === id) {
           return { ...item, isChecked: !item.isChecked };
         }
         return item;
       });
+
+      // 로컬 스토리지에 업데이트된 상태 저장
+      localStorage.setItem('coditexts', JSON.stringify(updatedCoditexts));
+      return updatedCoditexts;
     });
   };
 
