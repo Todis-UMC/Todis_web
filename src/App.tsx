@@ -2,6 +2,14 @@ import React from 'react';
 import Login from './pages/Login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+const splash = document.querySelector('.splash');
+
+document.addEventListener('DOMContentLoaded', (e)=>{
+  setTimeout(()=>{
+    splash?.classList.add('display-none');
+  }, 2000);
+})
+
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
