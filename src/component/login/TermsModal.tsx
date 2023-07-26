@@ -22,7 +22,9 @@ const TermsModal = ({ id, onClose }: ModalProps) => {
   console.log(term);
   return (
     <Container onClick={onClose}>
-      <Box>
+      <Box
+        onClick={(e: { stopPropagation: () => void }) => e.stopPropagation()}
+      >
         <Title style={FONT.H4}>{term.title}</Title>
         <Guide style={FONT.L4}>
           아래 약관에 동의하시고 다음 단계로 이동하세요
@@ -64,6 +66,7 @@ const Box = styled.div`
   background-color: #fff;
   border-radius: 47px;
   z-index: 101;
+  cursor: default;
 `;
 
 const Title = styled.div`
