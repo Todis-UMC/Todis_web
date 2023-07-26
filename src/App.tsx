@@ -1,6 +1,7 @@
 import React from 'react';
 import Login from './pages/Login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import SignUpEmailPage from './pages/signup/SignUpEmail';
 
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -16,7 +17,7 @@ function App() {
   return (
     <>
       <GoogleOAuthProvider clientId={client_id}>
-        <Login />
+        <SignUpEmailPage />
       </GoogleOAuthProvider>
     </>
   );
