@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as DownIcon } from '../../assets/icon/DownIcon.svg';
 import { ReactComponent as UpIcon } from '../../assets/icon/UpIcon.svg';
@@ -10,26 +10,30 @@ import { ReactComponent as ResetIcon } from '../../assets/icon/ResetIcon.svg';
 type AvatarProps = {
   showItemBox: boolean;
   selected: boolean;
+  selectedMenuIndex: number;
+  uttonImages: string[];
 };
+
+const Imges = require.context('../../assets/img/avatar', true, /\.png$/);
 
 const ItemMenu = [
   {
     id: 1,
     label: '상의',
-    images: [],
-    buttonImages: []
+    images: [Imges('./top1.png')],
+    buttonImages: [Imges('./Pv_top1.png')]
   },
   {
     id: 2,
     label: '하의',
-    images: [],
-    buttonImages: []
+    images: [Imges('./btm1.png')],
+    buttonImages: [Imges('./Pv_btm1.png')]
   },
   {
     id: 3,
     label: '신발',
-    images: [],
-    buttonImages: []
+    images: [Imges('./shoes1.png')],
+    buttonImages: [Imges('./Pv_shoes1.png')]
   },
   {
     id: 4,
@@ -45,6 +49,7 @@ const Avatar = () => {
 
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [inventory, setInventory] = useState<string[][]>([]);
 
   const handleMenuClick = (menuIndex: number): void => {
     setSelectedMenuIndex(menuIndex);
@@ -55,10 +60,20 @@ const Avatar = () => {
     updatedSelectedImages[selectedMenuIndex] =
       ItemMenu[selectedMenuIndex].images[imageIndex];
     setSelectedImages(updatedSelectedImages);
+
+    const updatedInventory = [...inventory];
+    updatedInventory[selectedMenuIndex] = [
+      ...(updatedInventory[selectedMenuIndex] || [])
+    ];
+    updatedInventory[selectedMenuIndex][0] =
+      ItemMenu[selectedMenuIndex].buttonImages[imageIndex];
+    setInventory(updatedInventory);
   };
 
   const selectedMenu = ItemMenu[selectedMenuIndex];
   const selectedMenuImages = selectedImages.filter(Boolean);
+
+  const avatarImage = Imges('./W_Avatar.png');
 
   useEffect(() => {
     if (selectedImages.length === 0) {
@@ -90,16 +105,32 @@ const Avatar = () => {
               </SexIcon>
             </SexBtnBox>
             <InventoryBox>
-              <Inventory />
-              <Inventory />
-              <Inventory />
-              <Inventory />
+              {ItemMenu.map((menu, index) => (
+                <Inventory
+                  key={index}
+                  style={{
+                    backgroundImage:
+                      inventory.length > index ? `url(${inventory[index]})` : ''
+                  }}
+                />
+              ))}
             </InventoryBox>
             <ResetBtn>
               <ResetIcon />
             </ResetBtn>
           </SettingContainer>
         )}
+        <AvatarImgBox showItemBox={showItemBox}>
+          <img src={avatarImage} alt='avatar' width='110%' />
+          {selectedMenuImages.map((image, index) => (
+            <SelectedImage
+              key={index}
+              src={image}
+              alt='Selected Image'
+              selectedMenuIndex={index}
+            />
+          ))}
+        </AvatarImgBox>
         <UpDownBtn onClick={ItemBoxHandler} showItemBox={showItemBox}>
           {showItemBox ? <UpIcon /> : <DownIcon />}
         </UpDownBtn>
@@ -155,6 +186,27 @@ const AvatarBox = styled.div`
   width: 100vw;
   max-width: 764px;
   height: 590px;
+  position: relative;
+`;
+const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: ${(props) => (props.showItemBox ? '40%' : '45%')};
+  transition: top 0.3s ease-in-out;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 15px;
+`;
+const SelectedImage = styled.img<Pick<AvatarProps, 'selectedMenuIndex'>>`
+  position: absolute;
+  width: 110%;
+  ${(props) =>
+    props.selectedMenuIndex === 0 &&
+    css`
+      z-index: 2;
+    `}
 `;
 const UpDownBtn = styled.button<Pick<AvatarProps, 'showItemBox'>>`
   display: flex;
@@ -214,6 +266,9 @@ const Inventory = styled.div`
   border-radius: 9px;
   background-color: white;
   margin-bottom: 10px;
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 /* 리셋 */
 const ResetBtn = styled.button`
@@ -270,7 +325,7 @@ const ImageButton = styled.button`
   border: none;
   background-color: ${(props) => props.theme.Sky_Blue_04};
   cursor: pointer;
-  background-size: 50%;
+  background-size: 90%;
   background-position: center;
   background-repeat: no-repeat;
 `;
