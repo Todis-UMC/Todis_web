@@ -1,25 +1,36 @@
 import React from 'react';
 import Login from './pages/Login';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google'; 
+import {useState} from "react";
+import logo from './logo.svg';
+import {useSpring, animated} from "react-spring";
 
 function App() {
-  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-
-  // client_id가 설정되어 있는지 확인
-  if (!client_id) {
-    console.error(
-      'Google Client ID가 설정되지 않았습니다. .env 파일에 REACT_APP_GOOGLE_CLIENT_ID를 설정하세요.'
-    );
-    return null;
-  }
+  const [flip, setFlip] = useState(false);
+  const props = useSpring (
+    {
+      to: {opacity: 1},
+      from: {opacity: 0},
+      reset: true,
+      reverse: flip,
+      delay: 200,
+      onRest: () => setFlip(!flip),
+    }
+  );
 
   return (
-    <>
-      <GoogleOAuthProvider clientId={client_id}>
-        <Login />
-      </GoogleOAuthProvider>
-    </>
+    <div className="App">
+      <header className="App-header">
+      <animated.div style={props}>
+        <img src={logo}/>
+      </animated.div>
+      </header>
+    </div>
   );
+  
+  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
+  
 }
 
 export default App;
