@@ -6,16 +6,20 @@ import FriendRequestComponent from '../component/friendInvite/FriendRequestCompo
 import FriendRequest from '../component/friendInvite/FriendRequest';
 
 const FriendInvite = () => {
-  // 아이디 검색 모달창 열기
+  // 아이디 검색 모달창 열기 & 이메일 유효성 검사
   const [isOpen, setIsOpen] = useState(false);
-  const onClickButton = () => {
-    setIsOpen(true);
-  };
+  const [isValid, setIsValid] = useState(true);
+  const [id, setId] = useState('');
 
-  // input 입력값
-  const [idValue, setId] = useState('');
+  const onClickButton = () => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const isValidEmail = emailRegex.test(id);
+    setIsValid(isValidEmail);
+    setIsOpen(isValidEmail);
+  };
   const saveUserId = (event: ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
+    setIsValid(true);
   };
 
   return (
@@ -50,8 +54,8 @@ const FriendInvite = () => {
         <IdText>아이디 검색</IdText>
         <IdBox>
           <Id
-            type='text'
-            value={idValue}
+            type='email'
+            value={id}
             onChange={saveUserId}
             placeholder='아이디 입력'
             style={FONT.L5}
@@ -62,7 +66,7 @@ const FriendInvite = () => {
         </IdBox>
         {isOpen && (
           <FriendRequest
-            name={idValue}
+            name={id}
             open={isOpen}
             onClose={() => {
               setIsOpen(false);
