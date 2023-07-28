@@ -25,7 +25,7 @@ export default EditProfilePage;
 
 const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
   const [name, setName] = useState<string>(user.name);
-  const [password, setPassword] = useState<string>(user.password);
+  const [password, setPassword] = useState<string>('');
   return (
     <>
       <Input
