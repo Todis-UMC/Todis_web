@@ -1,6 +1,9 @@
 import React from 'react';
 import Login from './pages/Login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Friend from './pages/Friend';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Nav from './component/Nav/Nav';
 
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -14,11 +17,18 @@ function App() {
   }
 
   return (
-    <>
-      <GoogleOAuthProvider clientId={client_id}>
-        <Login />
-      </GoogleOAuthProvider>
-    </>
+    <BrowserRouter>
+      <div className='App'>
+        <GoogleOAuthProvider clientId={client_id}>
+          <Nav />
+          <Routes>
+            <Route path='/Friend' element={<Friend />}/>
+          </Routes>
+          <Login />
+        </GoogleOAuthProvider>
+      </div>
+    </BrowserRouter>
+
   );
 }
 
