@@ -1,29 +1,29 @@
 import React from 'react';
-import Color from '../../styles/Color';
 import styled from 'styled-components';
+import Color from '../../styles/Color';
 import FONT from '../../styles/Font';
 
 interface ButtonProps {
     backgroundColor?: string;
     textColor?: string;
-    fontSize?: string;
-    fontWeight?: number;
+    font?: typeof FONT[keyof typeof FONT];
 }
 
 const Button = styled.button<ButtonProps>`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 150px;
     height: 55px;
     background-color: ${(props) => props.backgroundColor || Color.Blue_Main};
     color: ${(props) => props.textColor || Color.Typo_Black};
-    font-size: ${(props) => props.fontSize || FONT.M1.fontSize};
-    font-weight: ${(props) => props.fontWeight || FONT.M1.fontWeight};
-    line-height: ${FONT.M1.lineHeight};
+    font-size: ${(props) => props.font?.fontSize || FONT.H7.fontSize};
+    font-weight: ${(props) => props.font?.fontWeight || FONT.H7.fontWeight};
+    line-height: ${(props) => props.font?.lineHeight || FONT.H7.lineHeight};
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-radius: 25px;
 
     &:hover {
         background-color: ${(props) => props.backgroundColor || Color.SkyBlue_01};
