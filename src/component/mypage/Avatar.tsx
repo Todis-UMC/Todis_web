@@ -11,7 +11,6 @@ type AvatarProps = {
   showItemBox: boolean;
   selected: boolean;
   selectedMenuIndex: number;
-  uttonImages: string[];
 };
 
 const Imges = require.context('../../assets/img/avatar', true, /\.png$/);
@@ -46,10 +45,11 @@ const ItemMenu = [
 const Avatar = () => {
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
-
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [inventory, setInventory] = useState<string[][]>([]);
+  const selectedMenu = ItemMenu[selectedMenuIndex];
+  const [saveButtonText, setSaveButtonText] = useState<string>('저장하기');
 
   const handleMenuClick = (menuIndex: number): void => {
     setSelectedMenuIndex(menuIndex);
@@ -61,6 +61,7 @@ const Avatar = () => {
       ItemMenu[selectedMenuIndex].images[imageIndex];
     setSelectedImages(updatedSelectedImages);
 
+    // 카테고리별 인벤토리 관리
     const updatedInventory = [...inventory];
     updatedInventory[selectedMenuIndex] = [
       ...(updatedInventory[selectedMenuIndex] || [])
@@ -70,18 +71,6 @@ const Avatar = () => {
     setInventory(updatedInventory);
   };
 
-  const selectedMenu = ItemMenu[selectedMenuIndex];
-  const selectedMenuImages = selectedImages.filter(Boolean);
-
-  const avatarImage = Imges('./W_Avatar.png');
-
-  useEffect(() => {
-    if (selectedImages.length === 0) {
-      const initialSelectedImages = ItemMenu.map(() => '');
-      setSelectedImages(initialSelectedImages);
-    }
-  }, []);
-
   const ItemBoxHandler = () => {
     setShowItemBox((prevState) => !prevState);
   };
@@ -90,6 +79,41 @@ const Avatar = () => {
     /* 성별에 따른 아바타 적용 */
     setSelected((prevState) => !prevState);
   };
+
+  const ResetHandler = () => {
+    setSelectedImages([]);
+    setInventory([]);
+  };
+
+  const SaveHandler = () => {
+    try {
+      localStorage.setItem('selectedImages', JSON.stringify(selectedImages));
+      localStorage.setItem('inventory', JSON.stringify(inventory));
+      setSaveButtonText('저장 완료!');
+    } catch (error) {
+      setSaveButtonText('저장 실패!');
+    }
+
+    setTimeout(() => {
+      setSaveButtonText('저장하기');
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (selectedImages.length === 0) {
+      const initialSelectedImages = ItemMenu.map(() => '');
+      setSelectedImages(initialSelectedImages);
+    }
+
+    const savedselectedImages = localStorage.getItem('selectedImages');
+    const savedInventory = localStorage.getItem('inventory');
+    setSelectedImages(
+      savedselectedImages ? JSON.parse(savedselectedImages) : selectedImages
+    );
+    setInventory(
+      savedInventory ? JSON.parse(savedInventory) : inventory[selectedMenuIndex]
+    );
+  }, []);
 
   return (
     <AvatarContainer>
@@ -115,14 +139,14 @@ const Avatar = () => {
                 />
               ))}
             </InventoryBox>
-            <ResetBtn>
+            <ResetBtn onClick={ResetHandler}>
               <ResetIcon />
             </ResetBtn>
           </SettingContainer>
         )}
         <AvatarImgBox showItemBox={showItemBox}>
-          <img src={avatarImage} alt='avatar' width='110%' />
-          {selectedMenuImages.map((image, index) => (
+          <img src={Imges('./W_Avatar.png')} alt='avatar' width='110%' />
+          {selectedImages.filter(Boolean).map((image, index) => (
             <SelectedImage
               key={index}
               src={image}
@@ -159,8 +183,8 @@ const Avatar = () => {
                 />
               ))}
           </ImageButtonsContainer>
-          <SaveBtn>
-            <div style={FONT.H4}>저장하기</div>
+          <SaveBtn onClick={SaveHandler}>
+            <div style={FONT.H4}>{saveButtonText}</div>
           </SaveBtn>
         </ItemBox>
       )}
@@ -188,6 +212,7 @@ const AvatarBox = styled.div`
   height: 590px;
   position: relative;
 `;
+/* 아바타 단독 이미지 */
 const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   display: flex;
   justify-content: center;
@@ -199,6 +224,7 @@ const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   transform: translate(-50%, -50%);
   margin-top: 15px;
 `;
+/* 아바타 위에 적용되는 아이템 이미지 */
 const SelectedImage = styled.img<Pick<AvatarProps, 'selectedMenuIndex'>>`
   position: absolute;
   width: 110%;
@@ -302,6 +328,7 @@ const MenuItemBox = styled.div`
   display: flex;
   flex-direction: row;
 `;
+/* 카테고리 */
 const MenuItem = styled.div<Pick<AvatarProps, 'selected'>>`
   display: flex;
   align-items: center;
@@ -318,6 +345,7 @@ const ImageButtonsContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+/* 아이템 버튼 */
 const ImageButton = styled.button`
   width: 145px;
   height: 146px;
