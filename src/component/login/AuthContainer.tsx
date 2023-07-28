@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { ReactComponent as SmallLogo } from '../../assets/icon/SmallLogo.svg';
 import React from 'react';
 import FONT from '../../styles/Font';
+import { ReactComponent as ArrowBack } from '../../assets/icon/ArrowBack.svg';
 
 const AuthContainer = ({
   title,
@@ -15,6 +16,9 @@ const AuthContainer = ({
   return (
     <Container>
       <Box>
+        <Back>
+          <ArrowBack />
+        </Back>
         <SmallLogo />
         <Title style={FONT.H5}>{title}</Title>
         {content ? (
@@ -75,4 +79,11 @@ const Content = styled.div`
 `;
 const A = styled.a`
   color: ${(props) => props.theme.Black_Main};
+`;
+
+const Back = styled.div`
+  position: absolute;
+  top: 188px;
+  cursor: pointer;
+  margin-left: -19px;
 `;
