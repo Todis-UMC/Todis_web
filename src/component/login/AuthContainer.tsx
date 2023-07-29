@@ -16,9 +16,11 @@ const AuthContainer = ({
   return (
     <Container>
       <Box>
-        <Back>
-          <ArrowBack />
-        </Back>
+        {content && (
+          <Back>
+            <ArrowBack />
+          </Back>
+        )}
         <SmallLogo />
         <Title style={FONT.H5}>{title}</Title>
         {content ? (
@@ -83,7 +85,6 @@ const A = styled.a`
 
 const Back = styled.div`
   position: absolute;
-  top: 188px;
   cursor: pointer;
   margin-left: -19px;
 `;
