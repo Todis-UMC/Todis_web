@@ -6,21 +6,31 @@ interface ModalProps {
   title: string;
   content: string;
   onClose: () => void;
+  btn?: string; // 버튼 text
+  onStart?: () => void; // 처음으로 이동
 }
 
-const SmallModal = (props: ModalProps) => {
+const SmallModal = ({
+  title = '',
+  content = '',
+  onClose,
+  btn = '확인',
+  onStart
+}: ModalProps) => {
   return (
-    <Container onClick={props.onClose}>
-      <Box>
-        <div style={FONT.H5}>{props.title}</div>
+    <Container onClick={onClose}>
+      <Box
+        onClick={(e: { stopPropagation: () => void }) => e.stopPropagation()}
+      >
+        <div style={FONT.H5}>{title}</div>
         <Content>
-          {props.content.split('<br/>').map((txt) => (
+          {content.split('<br/>').map((txt) => (
             <>
               <div style={FONT.L5}>{txt}</div>
             </>
           ))}
         </Content>
-        <Button>확인</Button>
+        <Button onClick={btn === '처음으로' ? onStart : onClose}>{btn}</Button>
       </Box>
     </Container>
   );
