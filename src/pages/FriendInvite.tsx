@@ -113,6 +113,7 @@ const SubTitle = styled.div`
 const Title = styled.div`
   span {
     padding: 15px;
+    line-height: 41.77px;
   }
 `;
 
