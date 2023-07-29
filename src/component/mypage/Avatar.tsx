@@ -47,33 +47,38 @@ const ItemMenu = [
 const Avatar = () => {
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
-  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
-  const [inventory, setInventory] = useState<string[][]>([]);
+  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0); // 카테고리 인덱스
+  const [selectedImages, setSelectedImages] = useState<string[]>([]); // 아바타에 적용될 옷
+  const [inventory, setInventory] = useState<string[][]>([]); // 인벤토리 카테고리별 관리
   const selectedMenu = ItemMenu[selectedMenuIndex];
   const [saveButtonText, setSaveButtonText] = useState<string>('저장하기');
   // 아바타 최종 모습 이미지로 저장
   const captureRef = useRef<HTMLDivElement>(null);
   const [avatarSaveArray, setAvatarSaveArray] = useState<string[]>([]);
 
-  const handleMenuClick = (menuIndex: number): void => {
+  const MenuClickHandler = (menuIndex: number): void => {
     setSelectedMenuIndex(menuIndex);
   };
 
-  const handleImageButtonClick = (imageIndex: number): void => {
-    const updatedSelectedImages = [...selectedImages];
-    updatedSelectedImages[selectedMenuIndex] =
+  const ImageButtonClickHandler = (imageIndex: number): void => {
+    const SameIndex =
+      selectedImages[selectedMenuIndex] ===
       ItemMenu[selectedMenuIndex].images[imageIndex];
-    setSelectedImages(updatedSelectedImages);
 
-    // 카테고리별 인벤토리 관리
     const updatedInventory = [...inventory];
+    const updatedSelectedImages = [...selectedImages];
+    // 같은 아이템 두 번 클릭 시 옷 벗기기 (인벤토리 포함)
     updatedInventory[selectedMenuIndex] = [
-      ...(updatedInventory[selectedMenuIndex] || [])
+      ...(SameIndex
+        ? []
+        : [ItemMenu[selectedMenuIndex].buttonImages[imageIndex]])
     ];
-    updatedInventory[selectedMenuIndex][0] =
-      ItemMenu[selectedMenuIndex].buttonImages[imageIndex];
     setInventory(updatedInventory);
+
+    updatedSelectedImages[selectedMenuIndex] = SameIndex
+      ? ''
+      : ItemMenu[selectedMenuIndex].images[imageIndex];
+    setSelectedImages(updatedSelectedImages);
   };
 
   const ItemBoxHandler = () => {
@@ -116,7 +121,7 @@ const Avatar = () => {
           });
       }
       console.log('저장 성공');
-      console.log(...avatarSaveArray);
+      console.log(avatarSaveArray);
       setSaveButtonText('저장 완료!');
     } catch (error) {
       console.error('저장 실패', error);
@@ -185,7 +190,6 @@ const Avatar = () => {
             </ResetBtn>
           </SettingContainer>
         )}
-
         <UpDownBtn onClick={ItemBoxHandler} showItemBox={showItemBox}>
           {showItemBox ? <UpIcon /> : <DownIcon />}
         </UpDownBtn>
@@ -196,7 +200,7 @@ const Avatar = () => {
             {ItemMenu.map((menu, index) => (
               <MenuItem
                 key={menu.id}
-                onClick={() => handleMenuClick(index)}
+                onClick={() => MenuClickHandler(index)}
                 selected={selectedMenuIndex === index}
                 style={FONT.H4}
               >
@@ -210,7 +214,7 @@ const Avatar = () => {
                 <ImageButton
                   key={index}
                   style={{ backgroundImage: `url(${buttonImage})` }}
-                  onClick={() => handleImageButtonClick(index)}
+                  onClick={() => ImageButtonClickHandler(index)}
                 />
               ))}
           </ImageButtonsContainer>
