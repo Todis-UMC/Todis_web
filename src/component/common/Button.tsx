@@ -5,7 +5,6 @@ import FONT from '../../styles/Font';
 
 interface ButtonProps {
     backgroundColor?: string;
-    textColor?: string;
     font?: typeof FONT[keyof typeof FONT];
 }
 
@@ -16,14 +15,14 @@ const Button = styled.button<ButtonProps>`
     width: 150px;
     height: 55px;
     background-color: ${(props) => props.backgroundColor || Color.Blue_Main};
-    color: ${(props) => props.textColor || Color.Typo_Black};
+    color: ${Color.Typo_White};
     font-size: ${(props) => props.font?.fontSize || FONT.H7.fontSize};
     font-weight: ${(props) => props.font?.fontWeight || FONT.H7.fontWeight};
     line-height: ${(props) => props.font?.lineHeight || FONT.H7.lineHeight};
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
-    border-radius: 25px;
+    border-radius: 14px;
 
     &:hover {
         background-color: ${(props) => props.backgroundColor || Color.SkyBlue_01};
