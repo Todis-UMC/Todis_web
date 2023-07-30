@@ -149,6 +149,13 @@ const Avatar = () => {
       : Images('./M_Avatar.png');
     setAvatarImg(newAvatarImg);
 
+    // 성별에 따른 아바타 및 성별토글 상태 저장
+    localStorage.setItem('isFemale', selected ? 'true' : 'false');
+    const saveSexToLocalStorage = (value: boolean) => {
+      localStorage.setItem('selectedSex', JSON.stringify(value));
+    };
+    saveSexToLocalStorage(!selected);
+
     const E5_W_Image = Images('./E5_W.png');
     const E5_M_Image = Images('./E5_M.png');
 
@@ -173,7 +180,9 @@ const Avatar = () => {
     try {
       localStorage.setItem('selectedImages', JSON.stringify(selectedImages));
       localStorage.setItem('inventory', JSON.stringify(inventory));
+      localStorage.setItem('newAvatarImg', JSON.stringify(avatarImg));
 
+      // 아바타 최종 화면 캡쳐
       if (captureRef.current) {
         domtoimage
           .toPng(captureRef.current, {
@@ -214,6 +223,16 @@ const Avatar = () => {
     // 로컬스토리지에 저장된 아이템 이미지 가져오기
     const savedselectedImages = localStorage.getItem('selectedImages');
     const savedInventory = localStorage.getItem('inventory');
+    // 로컬스토리지에 저장된 성별토글 상태와 아바타 가져오기
+    const isFemale = localStorage.getItem('isFemale');
+    setAvatarImg(
+      isFemale === 'true' ? Images('./W_Avatar.png') : Images('./M_Avatar.png')
+    );
+    const savedSelectedSex = localStorage.getItem('selectedSex');
+    if (savedSelectedSex !== null) {
+      setSelected(savedSelectedSex === 'true');
+    }
+
     setSelectedImages(
       savedselectedImages ? JSON.parse(savedselectedImages) : selectedImages
     );
