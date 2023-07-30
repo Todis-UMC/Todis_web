@@ -15,38 +15,95 @@ type AvatarProps = {
   avatarSaveArray: string[];
 };
 
-const Imges = require.context('../../assets/img/avatar', true, /\.png$/);
+const Images = require.context('../../assets/img/avatar', true, /\.png$/);
 
 const ItemMenu = [
   {
     id: 1,
     label: '상의',
-    images: [Imges('./top1.png')],
-    buttonImages: [Imges('./Pv_top1.png')]
+    images: [
+      Images('./T1_knit.png'),
+      Images('./T2_long.png'),
+      Images('./T3_sleeveless.png'),
+      Images('./T4_short.png'),
+      Images('./T5_shirt.png'),
+      Images('./T6_hoodie.png')
+    ],
+    buttonImages: [
+      Images('./preview/Pv_T1.png'),
+      Images('./preview/Pv_T2.png'),
+      Images('./preview/Pv_T3.png'),
+      Images('./preview/Pv_T4.png'),
+      Images('./preview/Pv_T5.png'),
+      Images('./preview/Pv_T6.png')
+    ]
   },
   {
     id: 2,
     label: '하의',
-    images: [Imges('./btm1.png')],
-    buttonImages: [Imges('./Pv_btm1.png')]
+    images: [
+      Images('./B1_long.png'),
+      Images('./B2_longskirt.png'),
+      Images('./B3_short.png'),
+      Images('./B4_shortskirt.png'),
+      Images('./B5_jeans.png'),
+      Images('./B6_training.png')
+    ],
+    buttonImages: [
+      Images('./preview/Pv_B1.png'),
+      Images('./preview/Pv_B2.png'),
+      Images('./preview/Pv_B3.png'),
+      Images('./preview/Pv_B4.png'),
+      Images('./preview/Pv_B5.png'),
+      Images('./preview/Pv_B6.png')
+    ]
   },
   {
     id: 3,
     label: '신발',
-    images: [Imges('./shoes1.png')],
-    buttonImages: [Imges('./Pv_shoes1.png')]
+    images: [
+      Images('./S1_loafer.png'),
+      Images('./S2_boots.png'),
+      Images('./S3_sandal.png'),
+      Images('./S4_slipper.png'),
+      Images('./S5_sneakers.png'),
+      Images('./S6_flat.png')
+    ],
+    buttonImages: [
+      Images('./preview/Pv_S1.png'),
+      Images('./preview/Pv_S2.png'),
+      Images('./preview/Pv_S3.png'),
+      Images('./preview/Pv_S4.png'),
+      Images('./preview/Pv_S5.png'),
+      Images('./preview/Pv_S6.png')
+    ]
   },
   {
     id: 4,
     label: '악세사리',
-    images: [],
-    buttonImages: []
+    images: [
+      Images('./E1_mask.png'),
+      Images('./E2_hat.png'),
+      Images('./E3_sunglasses.png'),
+      Images('./E4_watch.png'),
+      Images('./E5_W.png'),
+      Images('./E6_umbrella.png')
+    ],
+    buttonImages: [
+      Images('./preview/Pv_E1.png'),
+      Images('./preview/Pv_E2.png'),
+      Images('./preview/Pv_E3.png'),
+      Images('./preview/Pv_E4.png'),
+      Images('./preview/Pv_E5.png'),
+      Images('./preview/Pv_E6.png')
+    ]
   }
 ];
 
 const Avatar = () => {
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [avatarImg, setAvatarImg] = useState(Images('./W_Avatar.png')); // 아바타 성별
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0); // 카테고리 인덱스
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // 아바타에 적용될 옷
   const [inventory, setInventory] = useState<string[][]>([]); // 인벤토리 카테고리별 관리
@@ -73,11 +130,11 @@ const Avatar = () => {
         ? []
         : [ItemMenu[selectedMenuIndex].buttonImages[imageIndex]])
     ];
-    setInventory(updatedInventory);
-
     updatedSelectedImages[selectedMenuIndex] = SameIndex
-      ? ''
+      ? undefined
       : ItemMenu[selectedMenuIndex].images[imageIndex];
+
+    setInventory(updatedInventory);
     setSelectedImages(updatedSelectedImages);
   };
 
@@ -86,8 +143,25 @@ const Avatar = () => {
   };
 
   const SexBtnHandler = () => {
-    /* 성별에 따른 아바타 적용 */
-    setSelected((prevState) => !prevState);
+    setSelected((prevSelected) => !prevSelected);
+    const newAvatarImg = selected
+      ? Images('./W_Avatar.png')
+      : Images('./M_Avatar.png');
+    setAvatarImg(newAvatarImg);
+
+    const E5_W_Image = Images('./E5_W.png');
+    const E5_M_Image = Images('./E5_M.png');
+
+    const updatedImages = [...ItemMenu];
+    // 성별에 따라 소품 '안경' 이미지 변경
+    if (selected) {
+      updatedImages[3].images[4] = E5_W_Image;
+    } else {
+      updatedImages[3].images[4] = E5_M_Image;
+    }
+    // 아이템도 초기화
+    setSelectedImages([]);
+    setInventory([]);
   };
 
   const ResetHandler = () => {
@@ -144,7 +218,7 @@ const Avatar = () => {
       savedselectedImages ? JSON.parse(savedselectedImages) : selectedImages
     );
     setInventory(
-      savedInventory ? JSON.parse(savedInventory) : inventory[selectedMenuIndex]
+      savedInventory ? JSON.parse(savedInventory) : ItemMenu.map(() => [])
     );
   }, []);
 
@@ -153,15 +227,19 @@ const Avatar = () => {
       <AvatarBox>
         <AvatarCaptureBox ref={captureRef} avatarSaveArray={avatarSaveArray}>
           <AvatarImgBox showItemBox={showItemBox}>
-            <img src={Imges('./W_Avatar.png')} alt='avatar' width='125%' />
-            {selectedImages.filter(Boolean).map((image, index) => (
-              <SelectedImage
-                key={index}
-                src={image}
-                alt='Selected Image'
-                selectedMenuIndex={index}
-              />
-            ))}
+            <img src={avatarImg} alt='avatar' width='125%' />
+            {selectedImages.length > 0 &&
+              selectedImages.map(
+                (image, index) =>
+                  image !== undefined && (
+                    <SelectedImage
+                      key={index}
+                      src={image}
+                      alt='Selected Image'
+                      selectedMenuIndex={index}
+                    />
+                  )
+              )}
           </AvatarImgBox>
         </AvatarCaptureBox>
         {showItemBox && (
@@ -175,7 +253,7 @@ const Avatar = () => {
               </SexIcon>
             </SexBtnBox>
             <InventoryBox>
-              {ItemMenu.map((menu, index) => (
+              {ItemMenu.map((_, index) => (
                 <Inventory
                   key={index}
                   style={{
@@ -255,7 +333,7 @@ const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   position: absolute;
   top: ${(props) => (props.showItemBox ? '50%' : '55%')};
   transition: top 0.3s ease-in-out;
-  left: 50%;
+  left: 51%;
   transform: translate(-50%, -50%);
 `;
 /* 아바타 최종 캡쳐 화면 */
@@ -270,11 +348,14 @@ const AvatarCaptureBox = styled.div<Pick<AvatarProps, 'avatarSaveArray'>>`
 const SelectedImage = styled.img<Pick<AvatarProps, 'selectedMenuIndex'>>`
   position: absolute;
   width: 125%;
-  ${(props) =>
-    props.selectedMenuIndex === 0 &&
-    css`
-      z-index: 2;
-    `}
+  z-index: ${(props) =>
+    props.selectedMenuIndex === 3
+      ? 5
+      : props.selectedMenuIndex === 1
+      ? 2
+      : props.selectedMenuIndex === 2
+      ? 1
+      : 3};
 `;
 const UpDownBtn = styled.button<Pick<AvatarProps, 'showItemBox'>>`
   display: flex;
@@ -395,9 +476,10 @@ const ImageButton = styled.button`
   border: none;
   background-color: ${(props) => props.theme.Sky_Blue_04};
   cursor: pointer;
-  background-size: 90%;
+  background-size: 80%;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 25px;
 `;
 const SaveBtn = styled.button`
   display: flex;
