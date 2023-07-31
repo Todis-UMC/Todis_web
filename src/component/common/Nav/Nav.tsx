@@ -75,16 +75,16 @@ const Nav: React.FC = () => {
         <Logo />
       </LogoContainer>
       <NavBar>
-        <NavLink to={'/Home'} style={activeLink === '/Home' ? { color: '#437df6' } : {}}>
+        <NavLink to={'/home'} style={activeLink === '/home' ? { color: '#437df6' } : {}}>
           홈
         </NavLink>
-        <NavLink to={'/MyPage'} style={activeLink === '/MyPage' ? { color: '#437df6' } : {}}>
+        <NavLink to={'/mypage'} style={activeLink === '/mypage' ? { color: '#437df6' } : {}}>
           마이페이지
         </NavLink>
-        <NavLink to={'/Friend'} style={activeLink === '/Friend' ? { color: '#437df6' } : {}}>
+        <NavLink to={'/friend'} style={activeLink === '/friend' ? { color: '#437df6' } : {}}>
           친구
         </NavLink>
-        <NavLink to={'/Lank'} style={activeLink === '/Lank' ? { color: '#437df6' } : {}}>
+        <NavLink to={'/lank'} style={activeLink === '/lank' ? { color: '#437df6' } : {}}>
           더보기
         </NavLink>
       </NavBar>

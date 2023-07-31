@@ -7,6 +7,7 @@ import Nav from './component/common/Nav/Nav';
 import NavLogin from './component/common/Nav/NavLogin';
 import SignUpBeforePage from './pages/signup/SignUpBefore';
 import SignUpEmailPage from './pages/signup/SignUpEmail';
+import MyPage from './pages/MyPage';
 
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -24,12 +25,11 @@ function App() {
       <BrowserRouter>
         <GoogleOAuthProvider clientId={client_id}>
           <div className='App'>
-            <Routes>
-              <Route path='/Friend' element={<Friend />} />
-              <Route path='/Login' element={<Login />} />
-              <Route path='/SignUp' element={<SignUpBeforePage />} />
-              <Route path='/Nav' element={<Nav />} />
-            </Routes>
+          <Route path='/friend' element={<Friend />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/signUp' element={<SignUpBeforePage />} />
+              <Route path='/nav' element={<Nav />} />
+              <Route path='/mypage' element={<MyPage />} />
           </div>
         </GoogleOAuthProvider>
       </BrowserRouter>
