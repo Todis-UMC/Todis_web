@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
-import { ReactComponent as SmallUnCheck } from '../../assets/icon/SmallUnCheck.svg';
-import { ReactComponent as SmallCheck } from '../../assets/icon/SmallCheck.svg';
+import { ReactComponent as SmallBlueUnCheck } from '../../assets/icon/SmallBlueUnCheck.svg';
+import { ReactComponent as SmallBlueCheck } from '../../assets/icon/SmallBlueCheck.svg';
 import FONT from '../../styles/Font';
+import TermsModal from '../../component/login/TermsModal';
 
 const SignUpEmailPage = () => (
   <AuthContainer title='이메일로 가입하기' component={<SignUpEmail />} />
@@ -21,11 +22,31 @@ function isValidEmail(email: string) {
 }
 
 const SignUpEmail = () => {
+  const [checkAll, setCheckAll] = useState<boolean>(false);
   const [check, setCheck] = useState<boolean>(false);
+  const [check2, setCheck2] = useState(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordCheck, setPasswordCheck] = useState<string>('');
   const [warn, setWarn] = useState<boolean>(false);
+  const [term, setTerm] = useState<boolean>(false);
+  const [modalId, setModalId] = useState<number>(0);
+
+  const handleCheckAll = () => {
+    setCheckAll(!checkAll);
+    if (!checkAll) {
+      setCheck(true);
+      setCheck2(true);
+    } else {
+      setCheck(false);
+      setCheck2(false);
+    }
+  };
+
+  const handleModal = (id: number) => {
+    setTerm(!term);
+    setModalId(id);
+  };
 
   const EmailCheck = () => {
     setWarn(isValidEmail(email));
@@ -33,7 +54,7 @@ const SignUpEmail = () => {
   const NextPageHandler = () => {
     isValidEmail(email) &&
     password === passwordCheck &&
-    check &&
+    checkAll &&
     password.length >= 6
       ? console.log('다음 페이지로 이동')
       : console.log('다음 페이지로 이동 불가');
@@ -69,18 +90,28 @@ const SignUpEmail = () => {
         value={passwordCheck}
         onChange={(e) => setPasswordCheck(e.target.value)}
       />
+      <div>
+        <Term style={FONT.H7} onClick={() => handleCheckAll()}>
+          {checkAll ? <SmallBlueCheck /> : <SmallBlueUnCheck />}
+          모두 동의합니다.
+        </Term>
 
-      <Terms>
-        <div style={FONT.L6} onClick={() => setCheck(!check)}>
-          {check ? <SmallCheck /> : <SmallUnCheck />}
-          TODIS 가입 약관에 동의 합니다
-        </div>
-        <div style={FONT.L6}>가입 약관</div>
-      </Terms>
-      <TermsUnder style={FONT.L6}>
-        TODIS 이용약관 (필수), 개인정보취급방침(필수), 이메일 정보 수집
-        동의(필수)
-      </TermsUnder>
+        <Terms style={FONT.L6} onClick={() => setCheck(!check)}>
+          {check ? <SmallBlueCheck /> : <SmallBlueUnCheck />}
+          본인은
+          <span onClick={() => handleModal(0)}>TODIS 이용약관 (필수)</span>에
+          동의합니다.
+        </Terms>
+
+        <Terms style={FONT.L6} onClick={() => setCheck2(!check2)}>
+          {check2 ? <SmallBlueCheck /> : <SmallBlueUnCheck />}
+          TODIS의
+          <span onClick={() => handleModal(1)}>
+            개인정보 수집 및 이용 (필수)
+          </span>
+          에 동의합니다.
+        </Terms>
+      </div>
 
       <Button
         onClick={() => {
@@ -89,28 +120,10 @@ const SignUpEmail = () => {
       >
         다음
       </Button>
+      {term && <TermsModal onClose={() => setTerm(false)} id={modalId} />}
     </>
   );
 };
-
-const Terms = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 52px;
-  margin-bottom: 16px;
-  > div {
-    color: ${(props) => props.theme.Black_Main};
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    gap: 5px;
-  }
-`;
-const TermsUnder = styled.div`
-  color: ${(props) => props.theme.Gray_01};
-  margin-bottom: 43px;
-`;
 
 const Blank = styled.div`
   height: 23px;
@@ -146,4 +159,31 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  margin-top: 46px;
+`;
+
+const Term = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${(props) => props.theme.Gray_02};
+  color: ${(props) => props.theme.Black_Main};
+  padding-bottom: 10px;
+  margin-top: 38px;
+  svg {
+    margin-right: 17px;
+  }
+`;
+const Terms = styled.div`
+  display: flex;
+  color: ${(props) => props.theme.Black_Main};
+  padding-bottom: 5px;
+  margin-top: 15px;
+  span {
+    color: ${(props) => props.theme.Blue_Main};
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  svg {
+    margin-right: 17px;
+  }
 `;
