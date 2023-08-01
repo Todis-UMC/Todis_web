@@ -1,6 +1,7 @@
 import React from 'react';
-import Login from './pages/Login';
+import Login from './pages/Home';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Home from './pages/Home';
 
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -16,10 +17,9 @@ function App() {
   return (
     <>
       <GoogleOAuthProvider clientId={client_id}>
-        <Login />
+        <Home />
       </GoogleOAuthProvider>
     </>
   );
 }
-
 export default App;
