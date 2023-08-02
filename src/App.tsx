@@ -25,11 +25,14 @@ function App() {
       <BrowserRouter>
         <GoogleOAuthProvider clientId={client_id}>
           <div className='App'>
-          <Route path='/friend' element={<Friend />} />
+            <Nav />
+            <Routes>
+              <Route path='/friend' element={<Friend />} />
               <Route path='/login' element={<Login />} />
               <Route path='/signUp' element={<SignUpBeforePage />} />
               <Route path='/nav' element={<Nav />} />
               <Route path='/mypage' element={<MyPage />} />
+            </Routes>
           </div>
         </GoogleOAuthProvider>
       </BrowserRouter>
