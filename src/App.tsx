@@ -20,17 +20,21 @@ function App() {
     return null;
   }
 
+  const noLayout =
+    window.location.pathname === '/login' ||
+    window.location.pathname.startsWith('/signup') ||
+    window.location.pathname.startsWith('/user');
+
   return (
     <>
       <BrowserRouter>
         <GoogleOAuthProvider clientId={client_id}>
           <div className='App'>
-            <Nav />
+            {!noLayout && <Nav />}
             <Routes>
               <Route path='/friend' element={<Friend />} />
               <Route path='/login' element={<Login />} />
               <Route path='/signUp' element={<SignUpBeforePage />} />
-              <Route path='/nav' element={<Nav />} />
               <Route path='/mypage' element={<MyPage />} />
             </Routes>
           </div>
