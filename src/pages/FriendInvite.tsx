@@ -33,7 +33,12 @@ const FriendInvite = () => {
         </Title>
       </TitleBox>
       <MainBox>
-        <span id='goBack'>
+        <span
+          id='goBack'
+          onClick={() => {
+            window.location.href = '/friend';
+          }}
+        >
           <GoBack />
         </span>
         <Profile />
@@ -77,11 +82,11 @@ const FriendInvite = () => {
         <RequestText>받은 친구 요청</RequestText>
         <ListBox>
           <FriendRequestComponent name='김우진' />
-          <FriendRequestComponent name='1' />
-          <FriendRequestComponent name='2' />
-          <FriendRequestComponent name='3' />
-          <FriendRequestComponent name='4' />
-          <FriendRequestComponent name='5' />
+          <FriendRequestComponent name='이민하' />
+          <FriendRequestComponent name='우소정' />
+          <FriendRequestComponent name='이민하' />
+          <FriendRequestComponent name='이은경' />
+          <FriendRequestComponent name='고민혁' />
         </ListBox>
         <GradiBottom />
       </MainBox>
