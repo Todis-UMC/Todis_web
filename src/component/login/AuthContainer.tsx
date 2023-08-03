@@ -3,6 +3,7 @@ import { ReactComponent as SmallLogo } from '../../assets/icon/SmallLogo.svg';
 import React from 'react';
 import FONT from '../../styles/Font';
 import { ReactComponent as ArrowBack } from '../../assets/icon/ArrowBack.svg';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContainer = ({
   title,
@@ -13,11 +14,12 @@ const AuthContainer = ({
   component: React.ReactElement;
   content?: string;
 }) => {
+  const navigate = useNavigate();
   return (
     <Container>
       <Box>
         {content && (
-          <Back>
+          <Back onClick={() => navigate(-1)}>
             <ArrowBack />
           </Back>
         )}
@@ -36,9 +38,9 @@ const AuthContainer = ({
         )}
         {component}
         {content && (
-          <A href='login' style={FONT.L6}>
+          <Login onClick={() => navigate('/login')} style={FONT.L6}>
             로그인하기
-          </A>
+          </Login>
         )}
       </Box>
     </Container>
@@ -79,8 +81,12 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: center;
 `;
-const A = styled.a`
+const Login = styled.div`
   color: ${(props) => props.theme.Black_Main};
+  border-bottom: 1px solid ${(props) => props.theme.Gray_01};
+  width: 15%;
+  padding-bottom: 2px;
+  margin: 0 auto;
 `;
 
 const Back = styled.div`

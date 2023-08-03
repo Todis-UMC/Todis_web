@@ -6,6 +6,8 @@ import { ReactComponent as SmallBlueUnCheck } from '../../assets/icon/SmallBlueU
 import { ReactComponent as SmallBlueCheck } from '../../assets/icon/SmallBlueCheck.svg';
 import FONT from '../../styles/Font';
 import TermsModal from '../../component/login/TermsModal';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../component/common/Button';
 
 const SignUpEmailPage = () => (
   <AuthContainer title='이메일로 가입하기' component={<SignUpEmail />} />
@@ -31,6 +33,7 @@ const SignUpEmail = () => {
   const [warn, setWarn] = useState<boolean>(false);
   const [term, setTerm] = useState<boolean>(false);
   const [modalId, setModalId] = useState<number>(0);
+  const navigate = useNavigate();
 
   const handleCheckAll = () => {
     setCheckAll(!checkAll);
@@ -51,14 +54,7 @@ const SignUpEmail = () => {
   const EmailCheck = () => {
     setWarn(isValidEmail(email));
   };
-  const NextPageHandler = () => {
-    isValidEmail(email) &&
-    password === passwordCheck &&
-    checkAll &&
-    password.length >= 6
-      ? console.log('다음 페이지로 이동')
-      : console.log('다음 페이지로 이동 불가');
-  };
+
   return (
     <>
       <InputBox>
@@ -70,7 +66,13 @@ const SignUpEmail = () => {
           onChange={(e) => setEmail(e.target.value)}
           warn={warn}
         />
-        <ShortButton onClick={() => EmailCheck()}>인증</ShortButton>
+        <ShortButtonBox>
+          {email ? (
+            <Button onClick={() => EmailCheck()}>인증</Button>
+          ) : (
+            <Button disabled>인증</Button>
+          )}
+        </ShortButtonBox>
       </InputBox>
       <Blank />
       <Input
@@ -113,13 +115,23 @@ const SignUpEmail = () => {
         </Terms>
       </div>
 
-      <Button
-        onClick={() => {
-          NextPageHandler();
-        }}
-      >
-        다음
-      </Button>
+      <ButtonBox>
+        {isValidEmail(email) &&
+        password === passwordCheck &&
+        checkAll &&
+        password.length >= 6 ? (
+          <Button
+            onClick={() => {
+              NextPageHandler();
+            }}
+          >
+            다음
+          </Button>
+        ) : (
+          <Button disabled={true}>다음</Button>
+        )}
+      </ButtonBox>
+
       {term && <TermsModal onClose={() => setTerm(false)} id={modalId} />}
     </>
   );
@@ -136,32 +148,14 @@ const InputBox = styled.div`
   gap: 6px;
 `;
 
-const ShortButton = styled.button`
+const ShortButtonBox = styled.div`
   width: 30%;
-  height: 55px;
-  border-radius: 14px;
-  border: none;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
   margin-top: 28px;
 `;
 
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
+const ButtonBox = styled.div`
   margin-top: 46px;
 `;
-
 const Term = styled.div`
   display: flex;
   border-bottom: 1px solid ${(props) => props.theme.Gray_02};

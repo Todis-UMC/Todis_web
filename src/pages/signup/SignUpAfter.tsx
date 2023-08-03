@@ -3,6 +3,8 @@ import AuthContainer from '../../component/login/AuthContainer';
 import SignUpAfterLogo from '../../assets/img/SignUpAfterLogo.png';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
+import Button from '../../component/common/Button';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpAfterPage = () => (
   <AuthContainer title='회원가입에 성공했어요!' component={<SignUpAfter />} />
@@ -11,31 +13,27 @@ const SignUpAfterPage = () => (
 export default SignUpAfterPage;
 
 const SignUpAfter = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Title style={FONT.H1}>반가워요, 이름님! </Title>
       <img src={SignUpAfterLogo} alt='SignUpAfter' width={302} height={302} />
-      <Button style={FONT.H7}>아바타 설정하기</Button>
-      <WhiteButton style={FONT.H7}>메인으로 가기</WhiteButton>
+      <BlueButton>
+        <Button style={FONT.H7}>아바타 설정하기</Button>
+      </BlueButton>
+      <WhiteButton onClick={() => navigate('/')} style={FONT.H7}>
+        메인으로 가기
+      </WhiteButton>
     </>
   );
 };
 const Title = styled.div`
   margin-bottom: 23px;
 `;
-
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
+const BlueButton = styled.div`
   margin-top: 18px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
 `;
+
 const WhiteButton = styled.button`
   width: 100%;
   height: 55px;

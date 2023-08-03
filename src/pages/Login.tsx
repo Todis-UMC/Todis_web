@@ -9,6 +9,7 @@ import { ReactComponent as SmallUnCheck } from '../assets/icon/SmallUnCheck.svg'
 import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
 import { LoginProps } from '../types/User';
 import AuthContainer from '../component/login/AuthContainer';
+import Button from '../component/common/Button';
 
 const LoginPage = () => <AuthContainer title='로그인' component={<Login />} />;
 
@@ -58,7 +59,13 @@ const Login = () => {
         value={password}
         onChange={(ev) => setPassword(ev.target.value)}
       />
-      <Button onClick={() => handleLoginBtn()}>로그인</Button>
+      <ButtonBox>
+        {email && password ? (
+          <Button onClick={() => handleLoginBtn()}>로그인</Button>
+        ) : (
+          <Button disabled>로그인</Button>
+        )}
+      </ButtonBox>
       <Setting>
         <div style={FONT.L6} onClick={() => setMemory(!memory)}>
           {memory ? <SmallCheck /> : <SmallUnCheck />}
@@ -100,15 +107,6 @@ const Setting = styled.div`
     }
   }
 `;
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
+const ButtonBox = styled.div`
   margin-top: 58px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
 `;
