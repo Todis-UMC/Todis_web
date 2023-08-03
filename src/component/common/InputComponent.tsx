@@ -34,7 +34,6 @@ export const Input = ({
     setInputValue(ev.target.value);
     onChange && onChange(ev);
   };
-  console.log(disabled);
 
   return (
     <InputContainer>

@@ -2,14 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as Email } from '../../assets/icon/Email.svg';
+import { useNavigate } from 'react-router-dom';
 
 const EmailSignUp = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Button>
         {' '}
         <Email />
-        <div style={FONT.M3}>이메일로 시작하기</div>
+        <div onClick={() => navigate('/signup/email')} style={FONT.M3}>
+          이메일로 시작하기
+        </div>
       </Button>
     </>
   );
