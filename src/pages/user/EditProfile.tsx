@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
-import { UserProps } from '../../types/Auth';
+import { UserProps } from '../../types/User';
 
 const user = {
   id: 0,
-  name: '김민수',
+  nickname: '김민수',
   email: 'Todis@gmail.com',
-  password: '1234'
+  password: '1234',
+  gender: '남자'
 };
 
 const EditProfilePage = () => {
@@ -24,8 +27,13 @@ const EditProfilePage = () => {
 export default EditProfilePage;
 
 const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
-  const [name, setName] = useState<string>(user.name);
+  const [name, setName] = useState<string>(user.nickname);
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
+
+  const handleChangePassword = () => {
+    navigate('/user/edit/password');
+  };
   return (
     <>
       <Input
@@ -46,9 +54,17 @@ const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
           onChange={(ev) => setPassword(ev.target.value)}
           placeholder='비밀번호를 입력하세요'
         />
-        <ShortButton>변경</ShortButton>
+        <ShortButtonBox>
+          {password ? (
+            <Button onClick={() => handleChangePassword()}>변경</Button>
+          ) : (
+            <Button disabled>변경</Button>
+          )}
+        </ShortButtonBox>
       </InputBox>
-      <Button>수정완료</Button>
+      <ButtonBox>
+        <Button>수정완료</Button>
+      </ButtonBox>
       <A href='/user/delete' style={FONT.L6}>
         계정 삭제하기
       </A>
@@ -59,18 +75,9 @@ const A = styled.a`
   color: ${(props) => props.theme.Black_Main};
 `;
 
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
+const ButtonBox = styled.div`
   margin-top: 78px;
   margin-bottom: 19px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
 `;
 const InputBox = styled.div`
   display: flex;
@@ -78,15 +85,7 @@ const InputBox = styled.div`
   align-items: center;
   gap: 6px;
 `;
-const ShortButton = styled.button`
+const ShortButtonBox = styled.div`
   width: 30%;
-  height: 55px;
-  border-radius: 14px;
-  border: none;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
   margin-top: 28px;
 `;
