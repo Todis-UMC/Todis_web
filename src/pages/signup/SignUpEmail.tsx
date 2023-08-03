@@ -54,6 +54,13 @@ const SignUpEmail = () => {
   const EmailCheck = () => {
     setWarn(isValidEmail(email));
   };
+  const state: { email: string; password: string } = {
+    email: email || '',
+    password: password || ''
+  };
+  const NextPageHandler = () => {
+    navigate('/signup/info', { state: state });
+  };
 
   return (
     <>

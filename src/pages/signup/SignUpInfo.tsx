@@ -5,7 +5,7 @@ import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
 import { UserProps } from '../../types/User';
 import { postSignup } from '../../api/user';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../component/common/Button';
 
 const SignUpInfoPage = () => (
@@ -19,6 +19,20 @@ const SignUpInfo = () => {
   const [nickname, setNickname] = useState<string>('');
   const handleButtonClick = (selectedSex: number) => {
     setSex(selectedSex);
+  };
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleButton = async () => {
+    const data: UserProps = {
+      email: location.state.email,
+      password: location.state.password,
+      gender: sex == 2 ? '여자' : '남자',
+      nickname
+    };
+    // const response = await postSignup(data);
+    // console.log(response);
+    navigate('/signup/complete');
   };
 
   return (

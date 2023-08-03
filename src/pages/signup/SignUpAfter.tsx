@@ -19,7 +19,14 @@ const SignUpAfter = () => {
       <Title style={FONT.H1}>반가워요, 이름님! </Title>
       <img src={SignUpAfterLogo} alt='SignUpAfter' width={302} height={302} />
       <BlueButton>
-        <Button style={FONT.H7}>아바타 설정하기</Button>
+        <Button
+          onClick={() => {
+            navigate('/mypage');
+          }}
+          style={FONT.H7}
+        >
+          아바타 설정하기
+        </Button>
       </BlueButton>
       <WhiteButton onClick={() => navigate('/')} style={FONT.H7}>
         메인으로 가기
