@@ -4,6 +4,7 @@ import FONT from '../styles/Font';
 import { ReactComponent as GoBack } from '../assets/icon/GoBack.svg';
 import FriendRequestComponent from '../component/friendInvite/FriendRequestComponent';
 import FriendRequest from '../component/friendInvite/FriendRequest';
+import avatar from '../assets/img/avatar/M_Avatar.png';
 
 const FriendInvite = () => {
   // 아이디 검색 모달창 열기 & 이메일 유효성 검사
@@ -41,7 +42,9 @@ const FriendInvite = () => {
         >
           <GoBack />
         </span>
-        <Profile />
+        <Profile>
+          <img src={avatar} alt='avatar' />
+        </Profile>
         <MyInfo>
           <table>
             <tbody>
@@ -147,12 +150,16 @@ const Profile = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
   border-radius: 50%;
   border: none;
-  /*#edit {
+  overflow: hidden;
+  img {
     position: absolute;
-    bottom: 3px;
-    right: 4px;
-    cursor: pointer;
-  }*/
+    top: -10px;
+    left: -25px;
+    height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 const MyInfo = styled.div`
   position: absolute;
