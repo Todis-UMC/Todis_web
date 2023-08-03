@@ -37,6 +37,7 @@ function App() {
               <Route path='/signUp' element={<SignUpBeforePage />} />
               <Route path='/mypage' element={<MyPage />} />
             </Routes>
+            !noLayout && <Footer />}
           </div>
         </GoogleOAuthProvider>
       </BrowserRouter>
