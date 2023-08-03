@@ -7,7 +7,7 @@ import SocialKakao from '../component/login/SocialKakao';
 import FONT from '../styles/Font';
 import { ReactComponent as SmallUnCheck } from '../assets/icon/SmallUnCheck.svg';
 import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
-import { LoginProps } from '../types/Auth';
+import { LoginProps } from '../types/User';
 import AuthContainer from '../component/login/AuthContainer';
 
 const LoginPage = () => <AuthContainer title='로그인' component={<Login />} />;

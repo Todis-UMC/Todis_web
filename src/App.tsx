@@ -1,25 +1,41 @@
 import React from 'react';
 import Login from './pages/Login';
-import SignUpBeforePage from './pages/signup/SignUpBefore'
+import SignUpBeforePage from './pages/signup/SignUpBefore';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import SignUpEmailPage from './pages/signup/SignUpEmail';
 import Footer from './component/common/Footer/Footer';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TermsPage from './component/common/Footer/TermsPage';
-
+import SignUpInfoPage from './pages/signup/SignUpInfo';
+import SignUpAfterPage from './pages/signup/SignUpAfter';
 
 function App() {
+  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
+  // client_id가 설정되어 있는지 확인
+  if (!client_id) {
+    console.error(
+      'Google Client ID가 설정되지 않았습니다. .env 파일에 REACT_APP_GOOGLE_CLIENT_ID를 설정하세요.'
+    );
+    return null;
+  }
   return (
     <>
-    <BrowserRouter>
-        <div className='App'>
-          <Routes>
-              <Route path="/terms/:id" Component={TermsPage} />
-          </Routes>
-          <Footer />
-        </div>
-    </BrowserRouter>
+      <BrowserRouter>
+        <GoogleOAuthProvider clientId={client_id}>
+          <div className='App'>
+            <Routes>
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<SignUpBeforePage />} />
+              <Route path='/signup/email' element={<SignUpEmailPage />} />
+              <Route path='/signup/info' element={<SignUpInfoPage />} />
+              <Route path='/signup/complete' element={<SignUpAfterPage />} />
+              <Route path='/terms/:id' Component={TermsPage} />
+            </Routes>
+            <Footer />
+          </div>
+        </GoogleOAuthProvider>
+      </BrowserRouter>
     </>
   );
 }

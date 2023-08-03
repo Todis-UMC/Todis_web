@@ -14,7 +14,9 @@ const SignUpBefore = () => {
   return (
     <>
       <img src={SignUpBeforeLogo} alt='SignUpBefore' width={302} height={302} />
-      <EmailSignUp />
+      <a href='/signup/email'>
+        <EmailSignUp />
+      </a>
       <SocialGoogle />
       <SocialKakao />
     </>
