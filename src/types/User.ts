@@ -4,8 +4,8 @@ export interface LoginProps {
 }
 
 export interface UserProps {
-  id: number;
   email: string;
-  name: string;
+  nickname: string;
   password: string;
+  gender: string;
 }

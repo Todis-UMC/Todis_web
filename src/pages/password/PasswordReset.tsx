@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 
@@ -24,21 +25,14 @@ export const PasswordReset = () => {
         value={password}
         onChange={(ev) => setPassword(ev.target.value)}
       />
-      <Button>변경하기</Button>
+      <ButtonBox>
+        <Button>변경하기</Button>
+      </ButtonBox>
     </>
   );
 };
 
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
+const ButtonBox = styled.div`
   margin-top: 22px;
   margin-bottom: 19px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
 `;
