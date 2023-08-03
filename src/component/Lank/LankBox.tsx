@@ -36,7 +36,7 @@ const StatusMessage = styled.div`
 const LankNum = styled.div`
 color: ${(props) => props.theme.Blue_Main};
 margin-top: 1.9rem;
-margin-left: 1.7rem;
+text-align: center;
 `;
 
 const OutfitPic = styled.div`
