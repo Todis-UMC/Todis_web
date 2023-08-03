@@ -30,8 +30,8 @@ const SignUpInfo = () => {
       gender: sex == 2 ? '여자' : '남자',
       nickname
     };
-    // const response = await postSignup(data);
-    // console.log(response);
+    const response = await postSignup(data);
+    console.log(response);
     navigate('/signup/complete');
   };
 
