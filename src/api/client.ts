@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-const baseURL = 'http://13.209.73.222:8080';
+const baseURL =
+  'http://ec2-13-209-15-210.ap-northeast-2.compute.amazonaws.com:8080';
 
 const baseHeaders = {
   'Content-Type': 'application/json'
