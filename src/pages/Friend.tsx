@@ -46,22 +46,28 @@ const Friend = () => {
         />
       )}
       <MainBox>
-        <MyProfile name='나' message='...' />
-        <FriendProfile name='이름1' message='...' />
-        <FriendProfile name='이름2' message='...' />
-        <FriendProfile name='이름3' message='...' />
-        <FriendProfile name='이름4' message='...' />
-        <FriendProfile name='이름5' message='...' />
-        <FriendProfile name='이름6' message='...' />
-        <FriendProfile name='이름7' message='...' />
-        <FriendProfile name='이름8' message='...' />
+        <MyProfile name='김민서' message='얘들아 진짜 덥다...' />
+        <FriendProfile name='박소정' message='난 오늘 핑크색 상의 입었다!' />
+        <FriendProfile name='권은지' message='반팔 필수' />
+        <FriendProfile
+          name='심규민'
+          message='오늘 미세먼지 매우 나쁨임. 마스크 써라!!'
+        />
+        <FriendProfile
+          name='황승희'
+          message='얘들아 나 오늘 꾸꾸로 나왔으니까 다들 꾸며서 와'
+        />
+        <FriendProfile name='강혜원' message='와 너무 더워' />
+        <FriendProfile name='박진경' message=':)' />
+        <FriendProfile name='이유빈' message='~~~' />
+        <FriendProfile name='김이름' message='...' />
         {expanded === true ? (
           <>
-            <FriendProfile name='이름9' message='...' />
-            <FriendProfile name='이름10' message='...' />
-            <FriendProfile name='이름11' message='...' />
-            <FriendProfile name='이름12' message='...' />
-            <FriendProfile name='이름13' message='...' />
+            <FriendProfile name='김이름' message='...' />
+            <FriendProfile name='김이름' message='...' />
+            <FriendProfile name='김이름' message='...' />
+            <FriendProfile name='김이름' message='...' />
+            <FriendProfile name='김이름' message='...' />
           </>
         ) : null}
       </MainBox>
@@ -70,7 +76,13 @@ const Friend = () => {
           {toggleBtnText}
         </ToggleBtn>
       </ToggleBox>
-      <FriendInviteButton />
+      <span
+        onClick={() => {
+          window.location.href = '/friend/invite';
+        }}
+      >
+        <FriendInviteButton />
+      </span>
     </Container>
   );
 };

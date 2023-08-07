@@ -4,6 +4,7 @@ import FONT from '../styles/Font';
 import { ReactComponent as GoBack } from '../assets/icon/GoBack.svg';
 import FriendRequestComponent from '../component/friendInvite/FriendRequestComponent';
 import FriendRequest from '../component/friendInvite/FriendRequest';
+import avatar from '../assets/img/avatar/M_Avatar.png';
 
 const FriendInvite = () => {
   // 아이디 검색 모달창 열기 & 이메일 유효성 검사
@@ -33,10 +34,17 @@ const FriendInvite = () => {
         </Title>
       </TitleBox>
       <MainBox>
-        <span id='goBack'>
+        <span
+          id='goBack'
+          onClick={() => {
+            window.location.href = '/friend';
+          }}
+        >
           <GoBack />
         </span>
-        <Profile />
+        <Profile>
+          <img src={avatar} alt='avatar' />
+        </Profile>
         <MyInfo>
           <table>
             <tbody>
@@ -77,11 +85,11 @@ const FriendInvite = () => {
         <RequestText>받은 친구 요청</RequestText>
         <ListBox>
           <FriendRequestComponent name='김우진' />
-          <FriendRequestComponent name='1' />
-          <FriendRequestComponent name='2' />
-          <FriendRequestComponent name='3' />
-          <FriendRequestComponent name='4' />
-          <FriendRequestComponent name='5' />
+          <FriendRequestComponent name='이민하' />
+          <FriendRequestComponent name='우소정' />
+          <FriendRequestComponent name='이민하' />
+          <FriendRequestComponent name='이은경' />
+          <FriendRequestComponent name='고민혁' />
         </ListBox>
         <GradiBottom />
       </MainBox>
@@ -142,12 +150,16 @@ const Profile = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
   border-radius: 50%;
   border: none;
-  /*#edit {
+  overflow: hidden;
+  img {
     position: absolute;
-    bottom: 3px;
-    right: 4px;
-    cursor: pointer;
-  }*/
+    top: -10px;
+    left: -25px;
+    height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 const MyInfo = styled.div`
   position: absolute;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 const FriendProfile = ({
   name,
@@ -11,12 +12,16 @@ const FriendProfile = ({
 }) => {
   return (
     <Box>
-      <Avatar></Avatar>
+      <Avatar>
+        <img src={avatar} alt='avatar' height='100%' />
+      </Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
         <Message style={FONT.L5}>{message}</Message>
       </MessageBox>
-      <Profile></Profile>
+      <Profile>
+        <img src={avatar} alt='avatar-face' />
+      </Profile>
     </Box>
   );
 };
@@ -43,7 +48,17 @@ const Profile = styled.div`
   border-radius: 50%;
   position: absolute;
   top: 203px;
-  left: 165px;
+  left: 163px;
+  overflow: hidden;
+  img {
+    position: absolute;
+    top: -5px;
+    left: -18px;
+    height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 const Name = styled.div`
   margin-top: 30px;

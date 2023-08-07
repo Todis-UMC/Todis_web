@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as ProfilePlus } from '../../assets/icon/ProfilePlus.svg';
 import MyMessage from './MyMessage';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 const MyProfile = ({ name, message }: { name: string; message: string }) => {
   // 글쓰기 모달창 열기
@@ -13,13 +14,17 @@ const MyProfile = ({ name, message }: { name: string; message: string }) => {
 
   return (
     <Box>
-      <Avatar></Avatar>
+      <Avatar>
+        <img src={avatar} alt='avatar' height='100%' />
+      </Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
         <Message style={FONT.L5}>{message}</Message>
       </MessageBox>
       <ProfileLine />
-      <Profile />
+      <Profile>
+        <img src={avatar} alt='avatar-face' />
+      </Profile>
       <ProfileCircle />
       <ProfileBlueCircle onClick={onClickButton}>
         <span id='plus'>
@@ -61,7 +66,7 @@ const ProfileLine = styled.div`
   border-radius: 50%;
   position: absolute;
   top: 198px;
-  left: 160px;
+  left: 158px;
 `;
 const Profile = styled.div`
   width: 86px;
@@ -70,7 +75,17 @@ const Profile = styled.div`
   border-radius: 50%;
   position: absolute;
   top: 203px;
-  left: 165px;
+  left: 163px;
+  overflow: hidden;
+  img {
+    position: absolute;
+    top: -5px;
+    left: -18px;
+    height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 const ProfileCircle = styled.div`
   width: 22px;
