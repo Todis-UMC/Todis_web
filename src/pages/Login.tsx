@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as SmallLogo } from '../assets/icon/SmallLogo.svg';
 import Input from '../component/common/InputComponent';
 import SocialGoogle from '../component/login/SocialGoogle';
 import SocialKakao from '../component/login/SocialKakao';
@@ -10,20 +9,24 @@ import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
 import { LoginProps } from '../types/User';
 import AuthContainer from '../component/login/AuthContainer';
 import Button from '../component/common/Button';
+import { postLogin } from '../api/user';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => <AuthContainer title='로그인' component={<Login />} />;
 
 export default LoginPage;
 
 const Login = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>(
+    localStorage.getItem('email') || ''
+  );
+  const [password, setPassword] = useState<string>(
+    localStorage.getItem('password') || ''
+  );
   const [memory, setMemory] = useState<boolean>(false);
-  const [login, setLogin] = useState<LoginProps>({
-    email: '',
-    password: ''
-  });
-  // 컴포넌트가 마운트될 때 로컬스토리지의 값으로 초기화
+  const navigate = useNavigate();
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
     const storedPassword = localStorage.getItem('password');
@@ -34,13 +37,34 @@ const Login = () => {
       setPassword(storedPassword);
     }
   }, []);
-  const handleLoginBtn = () => {
+  const handleLoginBtn = async () => {
     if (memory) {
       localStorage.setItem('email', email);
       localStorage.setItem('password', password);
     }
-    setLogin({ email: email, password: password });
-    console.log(login);
+    const login: LoginProps = {
+      email: email,
+      password: password
+    };
+    try {
+      const response = await postLogin(login);
+      if (response.code === 200) {
+        localStorage.setItem('token', response.data);
+        navigate('/signup/complete');
+      } else if (response.code === 400) {
+        console.log(response.message);
+        toast(response.message, {
+          position: 'bottom-center',
+          autoClose: 1000,
+          hideProgressBar: true,
+          pauseOnHover: false,
+          progress: undefined,
+          className: 'custom-toast'
+        });
+      }
+    } catch (error) {
+      console.log(error, 'error');
+    }
   };
   return (
     <>
@@ -79,6 +103,7 @@ const Login = () => {
         계정이 없으신가요?
         <a href='/signup'> 회원가입</a>
       </SignUp>
+      <ToastContainer />
     </>
   );
 };
