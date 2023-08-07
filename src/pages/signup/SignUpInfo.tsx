@@ -27,11 +27,12 @@ const SignUpInfo = () => {
     const data: UserProps = {
       name: name,
       email: location.state.email,
-      password: location.state.password
+      password: location.state.password,
+      gender: sex === 1 ? '남자' : '여자'
     };
     const response = await postSignup(data);
     console.log(response);
-    // navigate('/signup/complete');
+    navigate('/signup/complete');
   };
 
   return (
