@@ -11,8 +11,8 @@ const user = {
   id: 0,
   name: '김민수',
   email: 'Todis@gmail.com',
-  password: '1234'
-  // gender: '남자'
+  password: '1234',
+  gender: '남자'
 };
 
 const EditProfilePage = () => {
