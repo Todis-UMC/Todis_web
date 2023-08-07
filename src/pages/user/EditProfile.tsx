@@ -9,10 +9,10 @@ import { UserProps } from '../../types/User';
 
 const user = {
   id: 0,
-  nickname: '김민수',
+  name: '김민수',
   email: 'Todis@gmail.com',
-  password: '1234',
-  gender: '남자'
+  password: '1234'
+  // gender: '남자'
 };
 
 const EditProfilePage = () => {
@@ -27,7 +27,7 @@ const EditProfilePage = () => {
 export default EditProfilePage;
 
 const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
-  const [name, setName] = useState<string>(user.nickname);
+  const [name, setName] = useState<string>(user.name);
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 

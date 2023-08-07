@@ -16,7 +16,7 @@ export default SignUpInfoPage;
 
 const SignUpInfo = () => {
   const [sex, setSex] = useState<number>(0);
-  const [nickname, setNickname] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const handleButtonClick = (selectedSex: number) => {
     setSex(selectedSex);
   };
@@ -25,14 +25,13 @@ const SignUpInfo = () => {
 
   const handleButton = async () => {
     const data: UserProps = {
+      name: name,
       email: location.state.email,
-      password: location.state.password,
-      gender: sex == 2 ? '여자' : '남자',
-      nickname
+      password: location.state.password
     };
     const response = await postSignup(data);
     console.log(response);
-    navigate('/signup/complete');
+    // navigate('/signup/complete');
   };
 
   return (
@@ -41,8 +40,8 @@ const SignUpInfo = () => {
         label='이름'
         type='text'
         placeholder='이름 입력'
-        value={nickname}
-        onChange={(ev) => setNickname(ev.target.value)}
+        value={name}
+        onChange={(ev) => setName(ev.target.value)}
       />
       <Title style={FONT.H7}>성별</Title>
       <Sex>
@@ -60,7 +59,7 @@ const SignUpInfo = () => {
         </GenderButton>
       </Sex>
       <ButtonBox>
-        {nickname && sex ? (
+        {name && sex ? (
           <Button
             onClick={() => {
               handleButton();
