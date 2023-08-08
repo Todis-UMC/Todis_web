@@ -9,7 +9,7 @@ import { ReactComponent as SmallCheck } from '../assets/icon/SmallCheck.svg';
 import { LoginProps } from '../types/User';
 import AuthContainer from '../component/login/AuthContainer';
 import Button from '../component/common/Button';
-import { postLogin } from '../api/user';
+import { postLogin } from '../api/Auth';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
