@@ -44,3 +44,18 @@ export const postPasswordCompare = async (data: { password: string }) => {
     throw error;
   }
 };
+
+export const putChangePassword = async (data: { password: string }) => {
+  console.log('비밀번호 변경 요청:', data);
+  try {
+    const res = await request.put({
+      url: '/user/change_password',
+      data: data
+    });
+    console.log('비밀번호 변경 완료', res);
+    return res;
+  } catch (error) {
+    console.error('비밀번호 변경 오류:', error);
+    throw error;
+  }
+};
