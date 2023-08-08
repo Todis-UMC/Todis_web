@@ -59,3 +59,18 @@ export const putChangePassword = async (data: { password: string }) => {
     throw error;
   }
 };
+
+export const getFindPassword = async (data: { email: string }) => {
+  console.log('비밀번호 찾기 요청:', data);
+  try {
+    const res = await request.get({
+      url: '/user/find_password',
+      params: data
+    });
+    console.log('비밀번호 찾기 완료', res);
+    return res;
+  } catch (error) {
+    console.error('비밀번호 찾기 오류:', error);
+    throw error;
+  }
+};

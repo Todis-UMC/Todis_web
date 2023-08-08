@@ -10,6 +10,7 @@ import SignUpInfoPage from './pages/signup/SignUpInfo';
 import SignUpAfterPage from './pages/signup/SignUpAfter';
 import EditProfilePage from './pages/user/EditProfile';
 import PasswordResetPage from './pages/password/PasswordReset';
+import PasswordSearchPage from './pages/password/PasswordSearch';
 
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -37,6 +38,7 @@ function App() {
                 path='/user/edit/password'
                 element={<PasswordResetPage />}
               />
+              <Route path='/login/password' element={<PasswordSearchPage />} />
               <Route path='/terms/:id' Component={TermsPage} />
             </Routes>
             <Footer />
