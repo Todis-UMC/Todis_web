@@ -4,7 +4,7 @@ import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
 import { UserProps } from '../../types/User';
-import { postSignup } from '../../api/user';
+import { postSignup } from '../../api/Auth';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../component/common/Button';
 
