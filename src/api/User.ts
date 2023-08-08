@@ -22,10 +22,25 @@ export const getInfo = async () => {
       url: '/user/info',
       params: {}
     });
-    console.log('유저 정보 요청 완료', res);
+    // console.log('유저 정보 요청 완료', res);
     return res;
   } catch (error) {
     console.error('유저 정보 요청 오류:', error);
+    throw error;
+  }
+};
+
+export const postPasswordCompare = async (data: { password: string }) => {
+  console.log('비밀번호 확인 요청:', data);
+  try {
+    const res = await request.post({
+      url: '/user/compare_password',
+      data: data
+    });
+    console.log('비밀번호 확인 완료', res);
+    return res;
+  } catch (error) {
+    console.error('비밀번호 확인 오류:', error);
     throw error;
   }
 };
