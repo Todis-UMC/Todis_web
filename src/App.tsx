@@ -15,6 +15,7 @@ import EditProfilePage from './pages/user/EditProfile';
 import PasswordResetPage from './pages/password/PasswordReset';
 import FriendInvite from './pages/FriendInvite';
 import WithdrawalPage from './pages/Withdrawal';
+import MyPage from './pages/MyPage';
 
 function App() {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -45,6 +46,7 @@ function App() {
               <Route path='/signup/info' element={<SignUpInfoPage />} />
               <Route path='/signup/complete' element={<SignUpAfterPage />} />
               <Route path='/user/edit' element={<EditProfilePage />} />
+              <Route path='/mypage' element={<MyPage />} />
               <Route path='/friend' element={<Friend />} />
               <Route path='/friend/invite' element={<FriendInvite />} />
               <Route
