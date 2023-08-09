@@ -1,10 +1,17 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-const baseURL = 'http://13.209.73.222:8080';
+const baseURL =
+  'http://ec2-13-209-15-210.ap-northeast-2.compute.amazonaws.com:8080';
+
+const token = localStorage.getItem('token');
 
 const baseHeaders = {
   'Content-Type': 'application/json'
 };
-
+const getHeadersWithToken = () => {
+  const token = localStorage.getItem('token');
+  return token
+    ? { ...baseHeaders, Authorization: `Bearer ${token}` }
+    : { ...baseHeaders };
+};
 interface Request {
   url: string;
   headers?: object;
@@ -43,18 +50,43 @@ const sendRequestWithData = async ({
 
 export const request = {
   get: ({ url, params, headers }: Omit<RequestWithParams, 'method'>) => {
-    return sendRequest({ url, params, headers, method: 'get' });
+    return sendRequest({
+      url,
+      params,
+      headers: { ...getHeadersWithToken(), ...headers },
+      method: 'get'
+    });
   },
   post: ({ url, data, headers }: Omit<RequestWithData, 'method'>) => {
-    return sendRequestWithData({ url, data, headers, method: 'post' });
+    return sendRequestWithData({
+      url,
+      data,
+      headers: { ...getHeadersWithToken(), ...headers },
+      method: 'post'
+    });
   },
   put: ({ url, data, headers }: Omit<RequestWithData, 'method'>) => {
-    return sendRequestWithData({ url, data, headers, method: 'put' });
+    return sendRequestWithData({
+      url,
+      data,
+      headers: { ...getHeadersWithToken(), ...headers },
+      method: 'put'
+    });
   },
   patch: ({ url, data, headers }: Omit<RequestWithData, 'method'>) => {
-    return sendRequestWithData({ url, data, headers, method: 'patch' });
+    return sendRequestWithData({
+      url,
+      data,
+      headers: { ...getHeadersWithToken(), ...headers },
+      method: 'patch'
+    });
   },
   delete: ({ url, params, headers }: Omit<RequestWithParams, 'method'>) => {
-    return sendRequest({ url, params, headers, method: 'delete' });
+    return sendRequest({
+      url,
+      params,
+      headers: { ...getHeadersWithToken(), ...headers },
+      method: 'delete'
+    });
   }
 };

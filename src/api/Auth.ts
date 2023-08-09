@@ -4,7 +4,7 @@ import { request } from './client';
 export const postSignup = async (data: UserProps) => {
   console.log('가입 요청:', data);
   try {
-    const res = await request.post({ url: '/user/signup', data });
+    const res = await request.post({ url: '/user/join', data });
     console.log('가입완료', res);
     return res;
   } catch (error) {

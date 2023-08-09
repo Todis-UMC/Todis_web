@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { putChangeNickname } from '../../api/User';
 import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
@@ -9,9 +10,9 @@ import { UserProps } from '../../types/User';
 
 const user = {
   id: 0,
-  nickname: '김민수',
-  email: 'Todis@gmail.com',
-  password: '1234',
+  name: '김민수',
+  email: localStorage.getItem('email') || '',
+  password: localStorage.getItem('password') || '',
   gender: '남자'
 };
 
@@ -27,12 +28,17 @@ const EditProfilePage = () => {
 export default EditProfilePage;
 
 const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
-  const [name, setName] = useState<string>(user.nickname);
+  const [name, setName] = useState<string>(user.name);
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
+  const data = { name: name };
 
   const handleChangePassword = () => {
     navigate('/user/edit/password');
+  };
+  const handleChangeName = async () => {
+    const response = await putChangeNickname(data);
+    console.log(response);
   };
   return (
     <>
@@ -63,7 +69,7 @@ const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
         </ShortButtonBox>
       </InputBox>
       <ButtonBox>
-        <Button>수정완료</Button>
+        <Button onClick={() => handleChangeName()}>수정완료</Button>
       </ButtonBox>
       <A href='/user/delete' style={FONT.L6}>
         계정 삭제하기

@@ -4,7 +4,7 @@ import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
 import { UserProps } from '../../types/User';
-import { postSignup } from '../../api/user';
+import { postSignup } from '../../api/Auth';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../component/common/Button';
 
@@ -16,7 +16,7 @@ export default SignUpInfoPage;
 
 const SignUpInfo = () => {
   const [sex, setSex] = useState<number>(0);
-  const [nickname, setNickname] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const handleButtonClick = (selectedSex: number) => {
     setSex(selectedSex);
   };
@@ -25,13 +25,13 @@ const SignUpInfo = () => {
 
   const handleButton = async () => {
     const data: UserProps = {
+      name: name,
       email: location.state.email,
       password: location.state.password,
-      gender: sex == 2 ? '여자' : '남자',
-      nickname
+      gender: sex === 1 ? '남자' : '여자'
     };
-    // const response = await postSignup(data);
-    // console.log(response);
+    const response = await postSignup(data);
+    console.log(response);
     navigate('/signup/complete');
   };
 
@@ -41,8 +41,8 @@ const SignUpInfo = () => {
         label='이름'
         type='text'
         placeholder='이름 입력'
-        value={nickname}
-        onChange={(ev) => setNickname(ev.target.value)}
+        value={name}
+        onChange={(ev) => setName(ev.target.value)}
       />
       <Title style={FONT.H7}>성별</Title>
       <Sex>
@@ -60,7 +60,7 @@ const SignUpInfo = () => {
         </GenderButton>
       </Sex>
       <ButtonBox>
-        {nickname && sex ? (
+        {name && sex ? (
           <Button
             onClick={() => {
               handleButton();

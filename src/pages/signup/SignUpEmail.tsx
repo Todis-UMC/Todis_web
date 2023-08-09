@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
@@ -34,6 +34,14 @@ const SignUpEmail = () => {
   const [term, setTerm] = useState<boolean>(false);
   const [modalId, setModalId] = useState<number>(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (check && check2) {
+      setCheckAll(true);
+    } else if (!check && !check2) {
+      setCheckAll(false);
+    }
+  }, [check, check2]);
 
   const handleCheckAll = () => {
     setCheckAll(!checkAll);
