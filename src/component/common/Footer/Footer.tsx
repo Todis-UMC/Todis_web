@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
             로그인
           </Link>
           {' | '}
-          <Link to="/signupbefore" style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Link to="/signup" style={{ color: 'inherit', textDecoration: 'none' }}>
             회원가입
           </Link>
           {' | '}
