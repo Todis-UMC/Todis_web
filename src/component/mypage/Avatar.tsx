@@ -465,7 +465,7 @@ const ItemBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   width: 100vw;
   max-width: 764px;
   height: 624px;
-  margin-top: -60px;
+  margin: -60px 0 120px 0;
   padding: 50px;
 `;
 const MenuItemBox = styled.div`
