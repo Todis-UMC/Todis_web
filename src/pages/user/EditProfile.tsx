@@ -12,6 +12,7 @@ import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
 import { ToastContainer, toast } from 'react-toastify';
 
+
 const EditProfilePage = () => {
   return <AuthContainer title='회원정보 수정' component={<EditProfile />} />;
 };
@@ -49,6 +50,10 @@ const EditProfile = () => {
         className: 'custom-toast'
       });
     }
+  };
+  const handleChangeName = async () => {
+    const response = await putChangeNickname(data);
+    console.log(response);
   };
   const handleChangeName = async () => {
     const response = await putChangeNickname(data);
