@@ -28,8 +28,8 @@ export const postLogin = async (data: LoginProps) => {
 export const getKakaologin = async (code: string) => {
   try {
     const res = await request.get({
-      url: '/user/kakao',
-      params: { code: code }
+      url: `/user/kakao?code=${code}`,
+      params: {}
     });
     console.log('카카오 로그인 완료', res);
     return res;

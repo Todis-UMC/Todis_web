@@ -24,10 +24,7 @@ export const PasswordSearch = () => {
   const [notice, setNotice] = useState<boolean>(false);
 
   const handleButton = async () => {
-    const data = {
-      email: email
-    };
-    const response = await getFindPassword(data);
+    const response = await getFindPassword(email);
     console.log(response);
     if (response.code === 200) {
       setNotice(true);
