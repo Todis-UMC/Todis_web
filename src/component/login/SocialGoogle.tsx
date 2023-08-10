@@ -1,10 +1,14 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as Google } from '../../assets/icon/Google.svg';
+import { getGoogleLogin } from '../../api/Auth';
+import { useNavigate } from 'react-router-dom';
 const SocialGoogle = () => {
   const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [code, setCode] = useState<string>('');
+  const navigate = useNavigate();
 
   // client_id가 설정되어 있는지 확인
   if (!client_id) {
@@ -14,10 +18,16 @@ const SocialGoogle = () => {
     return null;
   }
   const googleSocialLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => console.log(codeResponse),
+    onSuccess: async (codeResponse) => {
+      setCode(codeResponse.code);
+      const response = await getGoogleLogin(codeResponse.code);
+      // console.log('??', response);
+      navigate('/');
+    },
     flow: 'auth-code'
   });
 
+  // console.log(code);
   return (
     <Button onClick={() => googleSocialLogin()}>
       <Google />

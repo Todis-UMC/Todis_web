@@ -38,3 +38,18 @@ export const getKakaologin = async (code: string) => {
     throw error;
   }
 };
+
+export const getGoogleLogin = async (code: string) => {
+  console.log('구글 로그인 요청:', code);
+  try {
+    const res = await request.get({
+      url: '/user/google',
+      params: { code: code }
+    });
+    console.log('구글 로그인 완료', res);
+    return res;
+  } catch (error) {
+    console.error('구글 로그인 오류:', error);
+    throw error;
+  }
+};
