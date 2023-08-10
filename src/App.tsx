@@ -13,6 +13,7 @@ import SignUpInfoPage from './pages/signup/SignUpInfo';
 import SignUpAfterPage from './pages/signup/SignUpAfter';
 import EditProfilePage from './pages/user/EditProfile';
 import PasswordResetPage from './pages/password/PasswordReset';
+import PasswordSearchPage from './pages/password/PasswordSearch';
 import FriendInvite from './pages/FriendInvite';
 import WithdrawalPage from './pages/Withdrawal';
 
@@ -51,6 +52,7 @@ function App() {
                 path='/user/edit/password'
                 element={<PasswordResetPage />}
               />
+              <Route path='/login/password' element={<PasswordSearchPage />} />
               <Route path='/user/delete' element={<WithdrawalPage />} />
               <Route path='/terms/:id' Component={TermsPage} />
             </Routes>
