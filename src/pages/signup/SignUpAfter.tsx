@@ -21,7 +21,7 @@ const SignUpAfter = () => {
       <BlueButton>
         <Button
           onClick={() => {
-            navigate('/mypage');
+            window.location.href = '/mypage';
           }}
           style={FONT.H7}
         >

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import domtoimage from 'dom-to-image';
 import { ReactComponent as DownIcon } from '../../assets/icon/DownIcon.svg';
@@ -7,13 +7,23 @@ import { ReactComponent as UpIcon } from '../../assets/icon/UpIcon.svg';
 import { ReactComponent as MaleIcon } from '../../assets/icon/MaleIcon.svg';
 import { ReactComponent as FemaleIcon } from '../../assets/icon/FemaleIcon.svg';
 import { ReactComponent as ResetIcon } from '../../assets/icon/ResetIcon.svg';
+import { postAvatarImg, postAvatarInfo } from '../../api/Cody';
 
 type AvatarProps = {
   showItemBox: boolean;
   selected: boolean;
   selectedMenuIndex: number;
-  avatarSaveArray: string[];
 };
+
+export interface AvatarImgProps {
+  avatarSaveImg: string;
+}
+
+export interface AvatarInfoProps {
+  selectedImages: string[];
+  inventory: string[][];
+  selectedSex: boolean;
+}
 
 const Images = require.context('../../assets/img/avatar', true, /\.png$/);
 
@@ -103,7 +113,7 @@ const ItemMenu = [
 const Avatar = () => {
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
-  const [avatarImg, setAvatarImg] = useState(Images('./W_Avatar.png')); // 아바타 성별
+  const [avatarImg, setAvatarImg] = useState(Images('./M_Avatar.png')); // 아바타 성별
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0); // 카테고리 인덱스
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // 아바타에 적용될 옷
   const [inventory, setInventory] = useState<string[][]>([]); // 인벤토리 카테고리별 관리
@@ -111,7 +121,7 @@ const Avatar = () => {
   const [saveButtonText, setSaveButtonText] = useState<string>('저장하기');
   // 아바타 최종 모습 이미지로 저장
   const captureRef = useRef<HTMLDivElement>(null);
-  const [avatarSaveArray, setAvatarSaveArray] = useState<string[]>([]);
+  const [avatarSaveImg, setAvatarSaveImg] = useState<string>('');
 
   const MenuClickHandler = (menuIndex: number): void => {
     setSelectedMenuIndex(menuIndex);
@@ -176,50 +186,75 @@ const Avatar = () => {
     setInventory([]);
   };
 
-  const SaveHandler = () => {
+  const SaveHandler = async () => {
     try {
+      /*
       localStorage.setItem('selectedImages', JSON.stringify(selectedImages));
+      console.log('선택된 옷 : ' + selectedImages);
       localStorage.setItem('inventory', JSON.stringify(inventory));
-      localStorage.setItem('newAvatarImg', JSON.stringify(avatarImg));
+      console.log('인벤토리 이미지 : ' + inventory);
+
+      localStorage.setItem('newAvatarImg', JSON.stringify(avatarImg));*/
 
       // 아바타 최종 화면 캡쳐
       if (captureRef.current) {
-        domtoimage
-          .toPng(captureRef.current, {
-            style: {
-              position: 'absolute',
-              transform: 'translate(-5%)',
-              backgroundColor: '#e4ebfa'
-            }
-          })
-          .then((dataUrl) => {
-            setAvatarSaveArray((prevAvatarSaveArray) => [
-              ...prevAvatarSaveArray,
-              dataUrl
-            ]);
-            localStorage.setItem(
-              'avatarSaveArray',
-              JSON.stringify([...avatarSaveArray, dataUrl])
-            );
-          });
+        const dataUrl = await domtoimage.toJpeg(captureRef.current, {
+          quality: 0.8,
+          style: {
+            position: 'absolute',
+            transform: 'translate(-5%)',
+            backgroundColor: '#e4ebfa'
+          }
+        });
+
+        setAvatarSaveImg(dataUrl);
+        // localStorage.setItem('avatarSaveImg', JSON.stringify(dataUrl));
+        console.log('캡처 완료');
+        console.log('URL: ' + dataUrl);
+
+        // 서버에 아바타 최종 이미지 저장
+        const saveavatarimg: AvatarImgProps = {
+          avatarSaveImg: dataUrl
+        };
+        // 서버에 아바타 정보 저장
+        const saveavatarinfo: AvatarInfoProps = {
+          selectedImages: selectedImages,
+          inventory: inventory,
+          selectedSex: selected
+        };
+        try {
+          const [responseImg, responseInfo] = await Promise.all([
+            postAvatarImg(saveavatarimg),
+            postAvatarInfo(saveavatarinfo)
+          ]);
+          if (responseImg.code === 200 && responseInfo.code === 200) {
+            console.log('이미지 및 정보 서버에 저장 완료');
+            console.log('최종 이미지 : ' + saveavatarimg);
+            console.log('아바타 정보 : ' + saveavatarinfo);
+            setSaveButtonText('저장 완료!');
+            setTimeout(() => {
+              setSaveButtonText('저장하기');
+            }, 1000);
+          } else if (responseImg.code === 400 && responseInfo.code === 400) {
+            console.log('저장 실패');
+            setSaveButtonText('저장 실패!');
+          }
+        } catch (error) {
+          console.log(error, 'error');
+        }
       }
-      console.log('저장 성공');
-      console.log(avatarSaveArray);
-      setSaveButtonText('저장 완료!');
     } catch (error) {
-      console.error('저장 실패', error);
-      setSaveButtonText('저장 실패!');
+      console.log(error, 'error');
     }
-    setTimeout(() => {
-      setSaveButtonText('저장하기');
-    }, 1000);
   };
 
   useEffect(() => {
+    /*
     if (selectedImages.length === 0) {
       const initialSelectedImages = ItemMenu.map(() => '');
       setSelectedImages(initialSelectedImages);
-    }
+    }*/
+    /*
     // 로컬스토리지에 저장된 아이템 이미지 가져오기
     const savedselectedImages = localStorage.getItem('selectedImages');
     const savedInventory = localStorage.getItem('inventory');
@@ -240,13 +275,13 @@ const Avatar = () => {
     );
     setInventory(
       savedInventory ? JSON.parse(savedInventory) : ItemMenu.map(() => [])
-    );
+    );*/
   }, []);
 
   return (
     <AvatarContainer>
       <AvatarBox>
-        <AvatarCaptureBox ref={captureRef} avatarSaveArray={avatarSaveArray}>
+        <AvatarCaptureBox ref={captureRef} avatarSaveImg={avatarSaveImg}>
           <AvatarImgBox showItemBox={showItemBox}>
             <img src={avatarImg} alt='avatar' width='125%' />
             {selectedImages.length > 0 &&
@@ -358,7 +393,7 @@ const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   transform: translate(-50%, -50%);
 `;
 /* 아바타 최종 캡쳐 화면 */
-const AvatarCaptureBox = styled.div<Pick<AvatarProps, 'avatarSaveArray'>>`
+const AvatarCaptureBox = styled.div<Pick<AvatarImgProps, 'avatarSaveImg'>>`
   display: flex;
   position: absolute;
   width: 700px;
@@ -418,7 +453,7 @@ const SexIcon = styled.div<Pick<AvatarProps, 'selected'>>`
   justify-content: center;
   align-items: center;
   background-color: ${(props) =>
-    props.selected ? props.theme.Blue_Main : 'white'};
+    props.selected ? 'white' : props.theme.Blue_Main};
   svg {
     cursor: pointer;
   }

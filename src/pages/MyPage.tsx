@@ -24,6 +24,7 @@ export default MyPage;
 const Container = styled.div`
   width: 100%;
   min-height: 90vh;
+  color: ${(props) => props.theme.Black_Main};
   background-color: ${(props) => props.theme.Sky_Blue_04};
   display: flex;
   flex-direction: column;
