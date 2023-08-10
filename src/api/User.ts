@@ -60,12 +60,13 @@ export const putChangePassword = async (data: { password: string }) => {
   }
 };
 
-export const getFindPassword = async (email: string) => {
+export const postFindPassword = async (email: string) => {
   console.log('비밀번호 찾기 요청:', email);
+  const data = { email: email };
   try {
-    const res = await request.get({
-      url: `/user/find_password?email=${email}`,
-      params: {}
+    const res = await request.post({
+      url: '/user/find_password',
+      data: data
     });
     console.log('비밀번호 찾기 완료', res);
     return res;
