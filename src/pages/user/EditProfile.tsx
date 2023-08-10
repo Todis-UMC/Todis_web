@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  getInfo,
-  postPasswordCompare,
-  putChangeNickname
-} from '../../api/User';
+import { postPasswordCompare, putChangeNickname } from '../../api/User';
 import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
@@ -19,20 +15,11 @@ const EditProfilePage = () => {
 export default EditProfilePage;
 
 const EditProfile = () => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  const [name, setName] = useState<string>(localStorage.getItem('name')!);
+  const [email, setEmail] = useState<string>(localStorage.getItem('email')!);
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
   const data = { name: name };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getInfo();
-      setEmail(response.data.email);
-      setName(response.data.name);
-    };
-    fetchData();
-  }, []);
 
   const handleChangePassword = async () => {
     const data = { password: password };
