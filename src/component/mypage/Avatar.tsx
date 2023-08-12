@@ -7,23 +7,14 @@ import { ReactComponent as UpIcon } from '../../assets/icon/UpIcon.svg';
 import { ReactComponent as MaleIcon } from '../../assets/icon/MaleIcon.svg';
 import { ReactComponent as FemaleIcon } from '../../assets/icon/FemaleIcon.svg';
 import { ReactComponent as ResetIcon } from '../../assets/icon/ResetIcon.svg';
-import { postAvatarImg, postAvatarInfo } from '../../api/Cody';
+import axios from 'axios';
 
 type AvatarProps = {
   showItemBox: boolean;
   selected: boolean;
   selectedMenuIndex: number;
-};
-
-export interface AvatarImgProps {
   avatarSaveImg: string;
-}
-
-export interface AvatarInfoProps {
-  selectedImages: string[];
-  inventory: string[][];
-  selectedSex: boolean;
-}
+};
 
 const Images = require.context('../../assets/img/avatar', true, /\.png$/);
 
@@ -110,6 +101,11 @@ const ItemMenu = [
   }
 ];
 
+const baseURL =
+  'http://ec2-13-209-15-210.ap-northeast-2.compute.amazonaws.com:8080';
+
+const token = localStorage.getItem('token');
+
 const Avatar = () => {
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -155,16 +151,16 @@ const Avatar = () => {
   const SexBtnHandler = () => {
     setSelected((prevSelected) => !prevSelected);
     const newAvatarImg = selected
-      ? Images('./W_Avatar.png')
-      : Images('./M_Avatar.png');
+      ? Images('./M_Avatar.png')
+      : Images('./W_Avatar.png');
     setAvatarImg(newAvatarImg);
 
-    // 성별에 따른 아바타 및 성별토글 상태 저장
+    /* 성별에 따른 아바타 및 성별토글 상태 저장
     localStorage.setItem('isFemale', selected ? 'true' : 'false');
     const saveSexToLocalStorage = (value: boolean) => {
       localStorage.setItem('selectedSex', JSON.stringify(value));
     };
-    saveSexToLocalStorage(!selected);
+    saveSexToLocalStorage(!selected);*/
 
     const E5_W_Image = Images('./E5_W.png');
     const E5_M_Image = Images('./E5_M.png');
@@ -187,8 +183,7 @@ const Avatar = () => {
   };
 
   const SaveHandler = async () => {
-    try {
-      /*
+    /*
       localStorage.setItem('selectedImages', JSON.stringify(selectedImages));
       console.log('선택된 옷 : ' + selectedImages);
       localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -196,59 +191,188 @@ const Avatar = () => {
 
       localStorage.setItem('newAvatarImg', JSON.stringify(avatarImg));*/
 
-      // 아바타 최종 화면 캡쳐
-      if (captureRef.current) {
-        const dataUrl = await domtoimage.toJpeg(captureRef.current, {
-          quality: 0.8,
-          style: {
-            position: 'absolute',
-            transform: 'translate(-5%)',
-            backgroundColor: '#e4ebfa'
-          }
-        });
+    // 아바타 최종 화면 캡쳐
+    if (captureRef.current) {
+      const dataUrl = await domtoimage.toJpeg(captureRef.current, {
+        quality: 0.8,
+        style: {
+          position: 'absolute',
+          transform: 'translate(-5%)',
+          backgroundColor: '#e4ebfa'
+        }
+      });
 
-        setAvatarSaveImg(dataUrl);
-        // localStorage.setItem('avatarSaveImg', JSON.stringify(dataUrl));
-        console.log('캡처 완료');
-        console.log('URL: ' + dataUrl);
+      // 아바타 최종 이미지 FormData 변환 + cody/all 연동
+      const avatarSaveImg = dataUrl;
+      const avatarImgFormData = new FormData();
+      const blob = await fetch(avatarSaveImg).then((r) => r.blob()); // 이미지 데이터를 Blob으로 변환
+      avatarImgFormData.append('file', blob, 'file');
 
-        // 서버에 아바타 최종 이미지 저장
-        const saveavatarimg: AvatarImgProps = {
-          avatarSaveImg: dataUrl
-        };
-        // 서버에 아바타 정보 저장
-        const saveavatarinfo: AvatarInfoProps = {
-          selectedImages: selectedImages,
-          inventory: inventory,
-          selectedSex: selected
-        };
-        try {
-          const [responseImg, responseInfo] = await Promise.all([
-            postAvatarImg(saveavatarimg),
-            postAvatarInfo(saveavatarinfo)
-          ]);
-          if (responseImg.code === 200 && responseInfo.code === 200) {
-            console.log('이미지 및 정보 서버에 저장 완료');
-            console.log('최종 이미지 : ' + saveavatarimg);
-            console.log('아바타 정보 : ' + saveavatarinfo);
-            setSaveButtonText('저장 완료!');
-            setTimeout(() => {
-              setSaveButtonText('저장하기');
-            }, 1000);
-          } else if (responseImg.code === 400 && responseInfo.code === 400) {
-            console.log('저장 실패');
-            setSaveButtonText('저장 실패!');
+      avatarImgFormData.forEach((value, key) => {
+        console.log(key, value);
+      });
+
+      const response = await fetch(baseURL + '/cody/all', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: avatarImgFormData
+      });
+      const responseData = await response.json();
+      console.log('all Response Data : ', responseData);
+      interface ImageDataObject {
+        [key: string]: Blob | File;
+      }
+
+      // 아바타 상태 이미지 FormData 변환 + cody/image 연동
+      const avatarInfoFormData = new FormData();
+      const imageArray: ImageDataObject[] = [];
+
+      for (let i = 0; i < 4; i++) {
+        const imageName = ['top', 'bottom', 'shoes', 'acc'][i];
+        const itemImageName = ['topmin', 'bottommin', 'shoesmin', 'accmin'][i];
+
+        if (selectedImages[i]) {
+          const imageBlob = new Blob([selectedImages[i]], {
+            type: 'image/png'
+          });
+          avatarInfoFormData.append(imageName, imageBlob, 'image');
+          const imageObject: ImageDataObject = {};
+          imageObject[imageName] = imageBlob;
+          imageArray.push(imageObject);
+        } else {
+          imageArray.push({
+            [imageName]: new Blob([''], { type: 'image/png' })
+          });
+        }
+
+        if (inventory[i]) {
+          if (inventory[i][0]) {
+            const itemImageBlob = new Blob([inventory[i][0]], {
+              type: 'image/png'
+            });
+            avatarInfoFormData.append(itemImageName, itemImageBlob, 'minimage');
+            const itemImageObject: ImageDataObject = {};
+            itemImageObject[itemImageName] = itemImageBlob;
+            imageArray.push(itemImageObject);
+
+            if (inventory[i][1]) {
+              const itemImageBlob = new Blob([inventory[i][1]], {
+                type: 'image/png'
+              });
+              const itemImageObject: ImageDataObject = {};
+              itemImageObject[itemImageName] = itemImageBlob;
+              imageArray.push(itemImageObject);
+            } else {
+              const itemImageObject: ImageDataObject = {};
+              itemImageObject[itemImageName] = new Blob([''], {
+                type: 'image/png'
+              });
+              imageArray.push(itemImageObject);
+            }
+          } else {
+            const itemImageObject: ImageDataObject = {};
+            itemImageObject[itemImageName] = new Blob([''], {
+              type: 'image/png'
+            });
+            imageArray.push(itemImageObject);
           }
-        } catch (error) {
-          console.log(error, 'error');
         }
       }
-    } catch (error) {
-      console.log(error, 'error');
+
+      avatarInfoFormData.append('imageArray', JSON.stringify(imageArray));
+      const gender = selected;
+      const params = {
+        gender: gender
+      };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        params: params
+      };
+      try {
+        const response = await axios.post(
+          `${baseURL}/cody/image`,
+          avatarInfoFormData,
+          config
+        );
+        console.log('image Response Data:', JSON.stringify(response.data));
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+      // FormData 내용 확인
+      avatarInfoFormData.forEach((value, key) => {
+        console.log(key, value);
+      });
     }
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/cody`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const responseData = response.data;
+        console.log('GET 아바타 데이터:', responseData);
+        console.log(
+          'GET:',
+          responseData.topimg
+            ? URL.createObjectURL(
+                new Blob([responseData.topimg], { type: 'image/png' })
+              )
+            : ''
+        );
+
+        if (responseData) {
+          const selectedImages = [
+            URL.createObjectURL(
+              new Blob([responseData.topimg], { type: 'image/png' })
+            ),
+            URL.createObjectURL(
+              new Blob([responseData.bottomimg], { type: 'image/png' })
+            ),
+            URL.createObjectURL(
+              new Blob([responseData.shoesimg], { type: 'image/png' })
+            ),
+            URL.createObjectURL(
+              new Blob([responseData.accimg], { type: 'image/png' })
+            )
+          ];
+          const inventory = [
+            URL.createObjectURL(
+              new Blob([responseData.topminimg], { type: 'image/png' })
+            ),
+            URL.createObjectURL(
+              new Blob([responseData.bottomminimg], { type: 'image/png' })
+            ),
+            URL.createObjectURL(
+              new Blob([responseData.shoesminimg], { type: 'image/png' })
+            ),
+            URL.createObjectURL(
+              new Blob([responseData.accminimg], { type: 'image/png' })
+            )
+          ];
+          console.log('이미지 : ' + selectedImages);
+          console.log('인벤 : ' + inventory);
+        } else {
+          console.error('No data found in the response');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+    setSelectedImages(selectedImages);
+    setInventory(inventory);
+
     /*
     if (selectedImages.length === 0) {
       const initialSelectedImages = ItemMenu.map(() => '');
@@ -393,7 +517,7 @@ const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   transform: translate(-50%, -50%);
 `;
 /* 아바타 최종 캡쳐 화면 */
-const AvatarCaptureBox = styled.div<Pick<AvatarImgProps, 'avatarSaveImg'>>`
+const AvatarCaptureBox = styled.div<Pick<AvatarProps, 'avatarSaveImg'>>`
   display: flex;
   position: absolute;
   width: 700px;
