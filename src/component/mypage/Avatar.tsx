@@ -119,6 +119,15 @@ const Avatar = () => {
   const captureRef = useRef<HTMLDivElement>(null);
   const [avatarSaveImg, setAvatarSaveImg] = useState<string>('');
 
+  const [selectedImageArray, setSelectedImageArray] = useState<
+    (string | undefined)[]
+  >(Array(4).fill(undefined));
+  const [inventoryImageArray, setInventoryImageArray] = useState<
+    (string | undefined)[]
+  >(Array(4).fill(undefined));
+
+  const [testurl, setTesturl] = useState<string>('');
+
   const MenuClickHandler = (menuIndex: number): void => {
     setSelectedMenuIndex(menuIndex);
   };
@@ -140,8 +149,39 @@ const Avatar = () => {
       ? undefined
       : ItemMenu[selectedMenuIndex].images[imageIndex];
 
+    console.log(
+      '아이템 인덱스: ',
+      ItemMenu[selectedMenuIndex].images[imageIndex]
+    );
+    console.log('인벤 인덱스: ', [
+      ItemMenu[selectedMenuIndex].buttonImages[imageIndex]
+    ]);
+
     setInventory(updatedInventory);
     setSelectedImages(updatedSelectedImages);
+
+    // 아이템 이미지 URL 배열
+    const selectedImageArray: (string | undefined)[] = ItemMenu.map(
+      (menu, index) => {
+        if (index === selectedMenuIndex) {
+          return ItemMenu[selectedMenuIndex].images[imageIndex];
+        }
+        return updatedSelectedImages[index];
+      }
+    );
+    // 인벤 이미지 URL 배열
+    const inventoryImageArray: (string | undefined)[] = ItemMenu.map(
+      (menu, index) => {
+        if (index === selectedMenuIndex) {
+          return ItemMenu[selectedMenuIndex].buttonImages[imageIndex];
+        }
+        return updatedInventory[index];
+      }
+    );
+    setSelectedImageArray(selectedImageArray);
+    setSelectedImageArray(inventoryImageArray);
+    console.log('아이템url배열: ', selectedImageArray);
+    console.log('인벤url배열: ', inventoryImageArray);
   };
 
   const ItemBoxHandler = () => {
@@ -207,7 +247,6 @@ const Avatar = () => {
       const avatarImgFormData = new FormData();
       const blob = await fetch(avatarSaveImg).then((r) => r.blob()); // 이미지 데이터를 Blob으로 변환
       avatarImgFormData.append('file', blob, 'file');
-
       avatarImgFormData.forEach((value, key) => {
         console.log(key, value);
       });
@@ -221,11 +260,12 @@ const Avatar = () => {
       });
       const responseData = await response.json();
       console.log('all Response Data : ', responseData);
+
+      // 아바타 상태 이미지 FormData 변환 + cody/image 연동
+
       interface ImageDataObject {
         [key: string]: Blob | File;
       }
-
-      // 아바타 상태 이미지 FormData 변환 + cody/image 연동
       const avatarInfoFormData = new FormData();
       const imageArray: ImageDataObject[] = [];
 
@@ -233,55 +273,54 @@ const Avatar = () => {
         const imageName = ['top', 'bottom', 'shoes', 'acc'][i];
         const itemImageName = ['topmin', 'bottommin', 'shoesmin', 'accmin'][i];
 
-        if (selectedImages[i]) {
-          const imageBlob = new Blob([selectedImages[i]], {
-            type: 'image/png'
-          });
+        if (selectedImageArray[i]) {
+          const imageUrl = selectedImageArray[i] || '';
+          const response = await fetch(imageUrl);
+          const buffer = await response.arrayBuffer(); // 데이터를 ArrayBuffer로 변환
+          const base64String = btoa(
+            new Uint8Array(buffer).reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              ''
+            )
+          );
+          const dataUrl = `data:image/png;base64,${base64String}`; // 데이터 URL 변환
+          const imageBlob = await fetch(dataUrl).then((r) => r.blob());
           avatarInfoFormData.append(imageName, imageBlob, 'image');
           const imageObject: ImageDataObject = {};
           imageObject[imageName] = imageBlob;
           imageArray.push(imageObject);
+          console.log('저장: ', JSON.stringify(imageArray));
         } else {
           imageArray.push({
             [imageName]: new Blob([''], { type: 'image/png' })
           });
+          console.log('실패: ', JSON.stringify(imageArray));
         }
 
-        if (inventory[i]) {
-          if (inventory[i][0]) {
-            const itemImageBlob = new Blob([inventory[i][0]], {
-              type: 'image/png'
-            });
-            avatarInfoFormData.append(itemImageName, itemImageBlob, 'minimage');
-            const itemImageObject: ImageDataObject = {};
-            itemImageObject[itemImageName] = itemImageBlob;
-            imageArray.push(itemImageObject);
-
-            if (inventory[i][1]) {
-              const itemImageBlob = new Blob([inventory[i][1]], {
-                type: 'image/png'
-              });
-              const itemImageObject: ImageDataObject = {};
-              itemImageObject[itemImageName] = itemImageBlob;
-              imageArray.push(itemImageObject);
-            } else {
-              const itemImageObject: ImageDataObject = {};
-              itemImageObject[itemImageName] = new Blob([''], {
-                type: 'image/png'
-              });
-              imageArray.push(itemImageObject);
-            }
-          } else {
-            const itemImageObject: ImageDataObject = {};
-            itemImageObject[itemImageName] = new Blob([''], {
-              type: 'image/png'
-            });
-            imageArray.push(itemImageObject);
-          }
+        if (inventoryImageArray[i]) {
+          const itemImageUrl = inventoryImageArray[i] || '';
+          const itemResponse = await fetch(itemImageUrl);
+          const itemBuffer = await itemResponse.arrayBuffer();
+          const itemBase64String = btoa(
+            new Uint8Array(itemBuffer).reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              ''
+            )
+          );
+          const itemDataUrl = `data:image/png;base64,${itemBase64String}`; // 데이터 URL 변환
+          const itemImageBlob = await fetch(itemDataUrl).then((r) => r.blob());
+          avatarInfoFormData.append(itemImageName, itemImageBlob, 'image');
+          const itemImageObject: ImageDataObject = {};
+          itemImageObject[itemImageName] = itemImageBlob;
+          imageArray.push(itemImageObject);
+        } else {
+          imageArray.push({
+            [itemImageName]: new Blob([''], { type: 'image/png' })
+          });
         }
       }
-
       avatarInfoFormData.append('imageArray', JSON.stringify(imageArray));
+
       const gender = selected;
       const params = {
         gender: gender
@@ -298,7 +337,7 @@ const Avatar = () => {
           avatarInfoFormData,
           config
         );
-        console.log('image Response Data:', JSON.stringify(response.data));
+        console.log('image Response Data:', response.data);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -321,42 +360,39 @@ const Avatar = () => {
 
         const responseData = response.data;
         console.log('GET 아바타 데이터:', responseData);
-        console.log(
-          'GET:',
-          responseData.topimg
-            ? URL.createObjectURL(
-                new Blob([responseData.topimg], { type: 'image/png' })
-              )
-            : ''
-        );
+        console.log('GET:', responseData.data.topimg);
+
+        const url = responseData.data.topimg;
+
+        setTesturl(url);
 
         if (responseData) {
           const selectedImages = [
             URL.createObjectURL(
-              new Blob([responseData.topimg], { type: 'image/png' })
+              new Blob([responseData.data.topimg], { type: 'image/png' })
             ),
             URL.createObjectURL(
-              new Blob([responseData.bottomimg], { type: 'image/png' })
+              new Blob([responseData.data.bottomimg], { type: 'image/png' })
             ),
             URL.createObjectURL(
-              new Blob([responseData.shoesimg], { type: 'image/png' })
+              new Blob([responseData.data.shoesimg], { type: 'image/png' })
             ),
             URL.createObjectURL(
-              new Blob([responseData.accimg], { type: 'image/png' })
+              new Blob([responseData.data.accimg], { type: 'image/png' })
             )
           ];
           const inventory = [
             URL.createObjectURL(
-              new Blob([responseData.topminimg], { type: 'image/png' })
+              new Blob([responseData.data.topminimg], { type: 'image/png' })
             ),
             URL.createObjectURL(
-              new Blob([responseData.bottomminimg], { type: 'image/png' })
+              new Blob([responseData.data.bottomminimg], { type: 'image/png' })
             ),
             URL.createObjectURL(
-              new Blob([responseData.shoesminimg], { type: 'image/png' })
+              new Blob([responseData.data.shoesminimg], { type: 'image/png' })
             ),
             URL.createObjectURL(
-              new Blob([responseData.accminimg], { type: 'image/png' })
+              new Blob([responseData.data.accminimg], { type: 'image/png' })
             )
           ];
           console.log('이미지 : ' + selectedImages);
