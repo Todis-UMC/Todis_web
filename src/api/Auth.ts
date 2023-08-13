@@ -40,11 +40,10 @@ export const getKakaologin = async (code: string) => {
 };
 
 export const getGoogleLogin = async (code: string) => {
-  console.log('구글 로그인 요청:', code);
   try {
     const res = await request.get({
-      url: '/user/google',
-      params: { code: code }
+      url: `/user/google?code=${code}`,
+      params: {}
     });
     console.log('구글 로그인 완료', res);
     return res;
