@@ -27,6 +27,22 @@ const EditProfile = () => {
     if (response.code === 200) {
       navigate('/user/edit/password');
     } else if (response.code === 400) {
+      console.log(response.message);
+    }
+  };
+  const handleChangeName = async () => {
+    const response = await putChangeNickname(data);
+    if (response.code === 200) {
+      localStorage.setItem('name', name);
+      toast('이름 변경이 완료되었습니다.', {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast'
+      });
+    } else {
       toast(response.message, {
         position: 'bottom-center',
         autoClose: 1000,
@@ -36,10 +52,6 @@ const EditProfile = () => {
         className: 'custom-toast'
       });
     }
-  };
-  const handleChangeName = async () => {
-    const response = await putChangeNickname(data);
-    console.log(response);
   };
   return (
     <>
