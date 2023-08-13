@@ -5,9 +5,10 @@ import FONT from '../../styles/Font';
 
 const SocialKakao = () => {
   const Rest_api_key = process.env.REACT_APP_KAKAO_REST_API_KEY;
-  const redirect_uri = 'http://localhost:3000/auth';
+  const redirect_uri = 'http://localhost:3000/kakao';
 
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${Rest_api_key}&redirect_uri=${redirect_uri}`;
+
   const handleLogin = () => {
     window.location.href = kakaoURL;
   };
