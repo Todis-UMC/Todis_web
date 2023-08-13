@@ -1,5 +1,6 @@
 import React from 'react';
 import { getKakaologin } from '../../api/Auth';
+import { getInfo } from '../../api/User';
 
 const Kakao = () => {
   const url = window.location.href;
@@ -8,6 +9,9 @@ const Kakao = () => {
     const response = await getKakaologin(code);
     if (response.code === 200) {
       localStorage.setItem('token', response.data);
+      const user = await getInfo();
+      localStorage.setItem('name', user.data.name);
+      localStorage.setItem('email', user.data.email);
       window.location.href = '/';
     } else {
       window.location.href = '/signin';
