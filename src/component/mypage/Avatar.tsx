@@ -126,8 +126,6 @@ const Avatar = () => {
     (string | undefined)[]
   >(Array(4).fill(undefined));
 
-  const [testurl, setTesturl] = useState<string>('');
-
   const MenuClickHandler = (menuIndex: number): void => {
     setSelectedMenuIndex(menuIndex);
   };
@@ -148,15 +146,6 @@ const Avatar = () => {
     updatedSelectedImages[selectedMenuIndex] = SameIndex
       ? undefined
       : ItemMenu[selectedMenuIndex].images[imageIndex];
-
-    console.log(
-      '아이템 인덱스: ',
-      ItemMenu[selectedMenuIndex].images[imageIndex]
-    );
-    console.log('인벤 인덱스: ', [
-      ItemMenu[selectedMenuIndex].buttonImages[imageIndex]
-    ]);
-
     setInventory(updatedInventory);
     setSelectedImages(updatedSelectedImages);
 
@@ -179,7 +168,7 @@ const Avatar = () => {
       }
     );
     setSelectedImageArray(selectedImageArray);
-    setSelectedImageArray(inventoryImageArray);
+    setInventoryImageArray(inventoryImageArray);
     console.log('아이템url배열: ', selectedImageArray);
     console.log('인벤url배열: ', inventoryImageArray);
   };
@@ -250,7 +239,6 @@ const Avatar = () => {
       avatarImgFormData.forEach((value, key) => {
         console.log(key, value);
       });
-
       const response = await fetch(baseURL + '/cody/all', {
         method: 'POST',
         headers: {
@@ -262,7 +250,6 @@ const Avatar = () => {
       console.log('all Response Data : ', responseData);
 
       // 아바타 상태 이미지 FormData 변환 + cody/image 연동
-
       interface ImageDataObject {
         [key: string]: Blob | File;
       }
@@ -272,8 +259,11 @@ const Avatar = () => {
       for (let i = 0; i < 4; i++) {
         const imageName = ['top', 'bottom', 'shoes', 'acc'][i];
         const itemImageName = ['topmin', 'bottommin', 'shoesmin', 'accmin'][i];
+        imageArray.push({
+          [itemImageName]: new Blob([''], { type: 'image/png' })
+        });
 
-        if (selectedImageArray[i]) {
+        if (selectedImageArray[i] !== undefined) {
           const imageUrl = selectedImageArray[i] || '';
           const response = await fetch(imageUrl);
           const buffer = await response.arrayBuffer(); // 데이터를 ArrayBuffer로 변환
@@ -290,14 +280,14 @@ const Avatar = () => {
           imageObject[imageName] = imageBlob;
           imageArray.push(imageObject);
           console.log('저장: ', JSON.stringify(imageArray));
+          console.log('아이템배열값: ', selectedImageArray[i]);
         } else {
           imageArray.push({
             [imageName]: new Blob([''], { type: 'image/png' })
           });
-          console.log('실패: ', JSON.stringify(imageArray));
         }
 
-        if (inventoryImageArray[i]) {
+        if (inventoryImageArray[i] !== undefined) {
           const itemImageUrl = inventoryImageArray[i] || '';
           const itemResponse = await fetch(itemImageUrl);
           const itemBuffer = await itemResponse.arrayBuffer();
@@ -313,6 +303,7 @@ const Avatar = () => {
           const itemImageObject: ImageDataObject = {};
           itemImageObject[itemImageName] = itemImageBlob;
           imageArray.push(itemImageObject);
+          console.log('인벤배열값: ', inventoryImageArray[i]);
         } else {
           imageArray.push({
             [itemImageName]: new Blob([''], { type: 'image/png' })
@@ -337,9 +328,14 @@ const Avatar = () => {
           avatarInfoFormData,
           config
         );
+        setSaveButtonText('저장 완료!');
+        setTimeout(() => {
+          setSaveButtonText('저장하기');
+        }, 1000);
         console.log('image Response Data:', response.data);
       } catch (error) {
         console.error('Error:', error);
+        console.log('/cody/image 오류');
       }
 
       // FormData 내용 확인
@@ -360,54 +356,31 @@ const Avatar = () => {
 
         const responseData = response.data;
         console.log('GET 아바타 데이터:', responseData);
-        console.log('GET:', responseData.data.topimg);
-
-        const url = responseData.data.topimg;
-
-        setTesturl(url);
 
         if (responseData) {
-          const selectedImages = [
-            URL.createObjectURL(
-              new Blob([responseData.data.topimg], { type: 'image/png' })
-            ),
-            URL.createObjectURL(
-              new Blob([responseData.data.bottomimg], { type: 'image/png' })
-            ),
-            URL.createObjectURL(
-              new Blob([responseData.data.shoesimg], { type: 'image/png' })
-            ),
-            URL.createObjectURL(
-              new Blob([responseData.data.accimg], { type: 'image/png' })
-            )
-          ];
-          const inventory = [
-            URL.createObjectURL(
-              new Blob([responseData.data.topminimg], { type: 'image/png' })
-            ),
-            URL.createObjectURL(
-              new Blob([responseData.data.bottomminimg], { type: 'image/png' })
-            ),
-            URL.createObjectURL(
-              new Blob([responseData.data.shoesminimg], { type: 'image/png' })
-            ),
-            URL.createObjectURL(
-              new Blob([responseData.data.accminimg], { type: 'image/png' })
-            )
-          ];
-          console.log('이미지 : ' + selectedImages);
-          console.log('인벤 : ' + inventory);
-        } else {
-          console.error('No data found in the response');
+          setSelectedImages([
+            responseData.data.topimg,
+            responseData.data.bottomimg,
+            responseData.data.shoesimg,
+            responseData.data.accimg
+          ]);
+          console.log('이미지 : ', selectedImages);
+
+          setInventory([
+            [responseData.data.topminimg],
+            [responseData.data.bottomminimg],
+            [responseData.data.shoesminimg],
+            [responseData.data.accminimg]
+          ]);
         }
+        console.log('인벤 : ', inventory);
       } catch (error) {
         console.error('Error fetching data:', error);
+        console.log('연동 오류');
       }
     };
 
     fetchData();
-    setSelectedImages(selectedImages);
-    setInventory(inventory);
 
     /*
     if (selectedImages.length === 0) {
@@ -445,17 +418,13 @@ const Avatar = () => {
           <AvatarImgBox showItemBox={showItemBox}>
             <img src={avatarImg} alt='avatar' width='125%' />
             {selectedImages.length > 0 &&
-              selectedImages.map(
-                (image, index) =>
-                  image !== undefined && (
-                    <SelectedImage
-                      key={index}
-                      src={image}
-                      alt='Selected Image'
-                      selectedMenuIndex={index}
-                    />
-                  )
-              )}
+              selectedImages.map((image, index) => (
+                <SelectedImage
+                  key={index}
+                  src={image}
+                  selectedMenuIndex={index}
+                />
+              ))}
           </AvatarImgBox>
         </AvatarCaptureBox>
         {showItemBox && (
