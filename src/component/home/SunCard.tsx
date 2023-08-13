@@ -24,8 +24,8 @@ const Weather = () => {
   
     const styles: { [key: string]: CSSProperties } = { 
       SunCard: {
-        background: Color.SkyBlue_03, // changed from 'Typo_White' to 'Sky_Blue_03'
-        width: '877px', // changed from '416px' to '877px'
+        background: Color.SkyBlue_03, 
+        width: '877px', 
         height: '327px',
         padding: '20px',
         paddingLeft: '30px',
@@ -76,7 +76,7 @@ const Weather = () => {
       
             const data = await response.json();
       
-            // Ensure data.list and data.list[0].main are not undefined.
+          
             if (!data.list) {
               data.list = [{ main: { uvi: 0 } }];
             } else if (!data.list[0]?.main) {
@@ -123,7 +123,7 @@ const Weather = () => {
       
             const pointData = [
                 {
-                  x: weatherData.list[0].main.uvi || 0, // Change -10 to 0
+                  x: weatherData.list[0].main.uvi || 0, 
                   y: 0,
                 },
               ];

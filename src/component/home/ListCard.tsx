@@ -48,7 +48,7 @@ interface WeatherResponse {
 }
 
 const WeatherItem: React.FC<WeatherData> = ({ index, day, weather, minTemp, maxTemp }) => (
-  <div className="weather-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', color: color.Gray_01, ...FONT.H6, marginBottom: index === 4 ? '0' : '5px' }}>
+  <div className="weather-item" style={{ zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', color: color.Gray_01, ...FONT.H6, marginBottom: index === 4 ? '0' : '5px' }}>
     <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
       <span className="day" style={{ marginRight: '5px' }}>{day}</span>
       <img 
@@ -60,8 +60,15 @@ const WeatherItem: React.FC<WeatherData> = ({ index, day, weather, minTemp, maxT
       <span className="min-temp" style={{ marginRight: '5px' }}>{minTemp}°C</span>
       <div className="graph" style={{ flexGrow: 1, marginRight: '5px', borderRadius: '20px', position: 'relative', height: '14px' }}>
         <div className="graph-background" style={{ width: '100%', height: '100%', backgroundColor: color.Gray_03, position: 'absolute', zIndex: 1, borderRadius: '20px' }} />
-        <div className="max-temp-bar" style={{ width: `${(maxTemp - 0) * 100 / 40}%`, backgroundImage: 'linear-gradient(to right, red, orange)', borderRadius: '20px', height: '100%', position: 'absolute', zIndex: 2 }}>
-  {index === 0 && <div className="circle" style={{width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'white', marginTop: 'px', position: 'absolute', right: '-8px', top: '-4px', zIndex: 3 }} />}
+        <div className="max-temp-bar" style={{ 
+  width: `${(maxTemp - 0) * 100 / 40}%`, 
+  backgroundImage: 'linear-gradient(to right, red, orange)', 
+  borderRadius: '20px', 
+  height: '100%', 
+  position: 'absolute', 
+  zIndex: 1 
+}}>
+  {index === 0 && <div className="circle" style={{width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'white', marginTop: 'px', position: 'absolute', right: '-8px', top: '-4px', zIndex: 2 }} />}
 </div>
       </div>
       <span className="max-temp">{maxTemp}°C</span>
@@ -95,7 +102,7 @@ const ListCard: React.FC = () => {
             existing.minTemp = Math.min(existing.minTemp, Math.round(forecast.main.temp_min));
             existing.maxTemp = Math.max(existing.maxTemp, Math.round(forecast.main.temp_max));
             existing.weather = forecast.weather[0].main;
-          } else if (acc.length < 5) { // limit to 5 days
+          } else if (acc.length < 5) { 
             acc.push({
               index: acc.length,
               day,

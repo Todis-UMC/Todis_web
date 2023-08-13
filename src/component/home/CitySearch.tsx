@@ -1,65 +1,61 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as GoBack } from '../../assets/icon/GoBack.svg';
 import { ReactComponent as Search } from '../../assets/icon/Search.svg';
 import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
-import Sky1 from '../../assets/img/Sky1.png';
+import sky1Background from '../../assets/img/Sky1.png';
+import sky2Background from '../../assets/img/Sky2.png';
+import sky3Background from '../../assets/img/Sky3.png';
 
-const CityBox = styled.div`
-  width: 550px;
-  height: 120px;
-  background-image: url(${Sky1});
-  background-repeat: no-repeat; // Add this line
-  background-size: 100% auto;   // 이미지가 CityBox를 꽉 채우도록 하되,
-  background-position: center;  // 이미지가 잘리더라도 중앙을 기준으로 잘리게 합니다.
-  color: ${(props) => props.theme.Typo_White};
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  position: relative;
-  // margin-left: -100px; removed this line
 
-  .city {
-    font-size: ${FONT.H6.fontSize};
-    font-weight: ${FONT.H6.fontWeight};
-  }
-
-  .time {
-    font-size: ${FONT.H7.fontSize};
-    font-weight: ${FONT.H7.fontWeight};
-  }
-
-  .temp {
-    font-size: ${FONT.L1.fontSize};
-    font-weight: ${FONT.L1.fontWeight};
-  }
-
-  .tempRange {
-    font-size: ${FONT.H7.fontSize};
-    font-weight: ${FONT.H7.fontWeight};
-  }
-`;
+interface WeatherDataType {
+  name?: string;
+  main?: {
+    temp?: number;
+    temp_max?: number;
+    temp_min?: number;
+  };
+  message?: string;
+}
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-const CitySearchModal = ({ onClose }: ModalProps) => {
-  // 도시,공항 검색 모달창 닫기
+const getBackgroundImageByTemperature = (temp: number | undefined) => {
+  if (!temp) return sky2Background; // default
+
+  if (temp <= 24) return sky1Background;
+  if (temp > 24 && temp <= 30) return sky2Background;
+  return sky3Background;
+};
+
+const CitySearch = ({ onClose }: ModalProps) => {
+  const KOREAN_CITIES = ['Seoul', 'Busan', 'Daegu', 'Incheon', 'Gwangju'];
+  const API_KEY = '4d4c41dc06bbf1741b3a628d64934b98';
+  const [weatherData, setWeatherData] = useState<(WeatherDataType | null)[]>([]);
+  const [searchInput, setSearchInput] = useState('');
+
+
+  useEffect(() => {
+    const cities = ['Seoul', 'Daegu', 'Busan'];
+    Promise.all(cities.map(city => fetchWeatherData(city)))
+      .then(data => {
+        setWeatherData(data);
+      });
+  }, []);
+  
   const handleClose = () => {
     onClose?.();
   };
+  const [isCityBoxVisible, setIsCityBoxVisible] = useState(true);
 
-  // 모달창 외부 클릭시 닫기
   const modalRef = useRef<HTMLDivElement>(null);
   useOutSideClick(modalRef, handleClose);
-
-  // 모달창 열렸을 때 외부 스크롤 막기
+  
   useEffect(() => {
     const $body = document.querySelector('body') as HTMLBodyElement;
     const overflow = $body.style.overflow;
@@ -68,47 +64,118 @@ const CitySearchModal = ({ onClose }: ModalProps) => {
       $body.style.overflow = overflow;
     };
   }, []);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchInput(value);
+  
+    if (value) {
+      setIsCityBoxVisible(false);
+      if (KOREAN_CITIES.includes(value)) {
+        fetchWeatherData(value).then(data => {
+          if (data === null || (data.name && data.name.toLowerCase() !== value.toLowerCase())) {
+            setWeatherData([]);
+          } else {
+            setIsCityBoxVisible(true); 
+            setWeatherData([data]);
+          }
+        });
+      }
+    } else {
+      setIsCityBoxVisible(true);  
+      const cities = ['Seoul', 'Daegu', 'Busan'];
+      Promise.all(cities.map(city => fetchWeatherData(city))).then(data => {
+        setWeatherData(data);
+      });
+    }
+  };
+  
+  const fetchWeatherData = async (cityName: string): Promise<WeatherDataType | null> => {
+    const UNITS = 'metric';
+    const endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=${UNITS}`;
+  
+    try {
+      const response = await fetch(endpoint);
+      if (response.status === 404) {
+        return null;  
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Failed fetching weather data:', error);
+      return null;
+    }
+  };
 
-  return (
-    <ModalContainer>
-      <Container className='container'>
-        <Box ref={modalRef}>
-          <SearchBox>
-            <FriendSearchBox style={FONT.M2} />
-            <SearchInput
-              style={FONT.L3}
-              placeholder='도시 검색...'
-              color='${(props) => props.theme.Gray_02}'
-            />
-            <span id='search'>
-              <Search />
-            </span>
-            <span id='goBack' onClick={handleClose}>
-              <GoBack />
-            </span>
-          </SearchBox>
-          <GradientTop />
-          <ListBox>
-            <CityBox>
-              <div>
-                <div className="city">서울</div>
-                <div className="time">현재 시간</div>
-              </div>
-              <div>
-                <div className="temp">현재 온도</div>
-                <div className="tempRange">최고/최저 기온</div>
-              </div>
-            </CityBox>
-          </ListBox>
+
+return (
+  <ModalContainer>
+    <Container className="container">
+      <Box ref={modalRef}>
+        <GoBackButton id="goBack" onClick={handleClose} />
+        <SearchBox>
+          <SearchIcon id='search'>
+            <Search />
+          </SearchIcon>
+          <SearchInput
+            style={FONT.L3}
+            placeholder="도시 검색..."
+            color="${(props) => props.theme.Gray_02}"
+            onChange={handleSearchChange} 
+            value={searchInput}
+          />
+        </SearchBox>
+        <GradientTop />
+
+        {weatherData === null && (
+          <p style={{ textAlign: 'center', marginTop: '50px', ...FONT.H4, color: '#ff0000' }}>
+            도시를 찾을 수 없습니다.
+          </p>
+        )}
+        {weatherData.length === 0 && searchInput && (
+      <p style={{ textAlign: 'center', marginTop: '50px', ...FONT.H4, color: '#ff0000' }}>
+        도시를 찾을 수 없습니다.
+      </p>
+    )}
+    
+    {isCityBoxVisible && weatherData?.map((data, index) => (
+  data && (
+    <CitySearchBox key={index} topOffset={130 + index * 200} temperature={data.main?.temp}>
+      <div>
+      {data && (
+        <>
+          <div style={{ textAlign: 'left', paddingLeft: '40px', paddingTop: '20px' }}>
+            <p style={{ ...FONT.H4, color: '#ffffff', marginBottom: '10px' }}>
+              {data.name}
+            </p>
+
+            <p style={{ ...FONT.H7, color: '#ffffff' }}>
+              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
+          </div>
+          <div style={{ textAlign: 'right', paddingRight: '40px', paddingBottom: '20px' }}>
+            <p style={{ ...FONT.L1, color: '#ffffff', marginBottom: '0px' }}>
+              {data.main?.temp ? Math.floor(data.main.temp) : 'N/A'}°
+            </p>
+            <p style={{ ...FONT.H7, color: '#ffffff', paddingTop: '40px' }}>
+              최고 {data.main?.temp_max ? Math.floor(data.main.temp_max) : 'N/A'}° 최저{' '}
+              {data.main?.temp_min ? Math.floor(data.main.temp_min) : 'N/A'}°
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+  </CitySearchBox>
+)
+))}
+
           <GradientBottom />
         </Box>
       </Container>
     </ModalContainer>
-  );
+  );  
 };
 
-export default CitySearchModal;
-
+export default CitySearch;
 
 const Container = styled.div`
   width: 100vw;
@@ -124,22 +191,29 @@ const Container = styled.div`
   left: 0px;
   z-index: 1;
 `;
+const GoBackButton = styled(GoBack)` 
+  cursor: pointer;
+  position: absolute;
+  top: 55px;
+  left: 45px;
+`;
+const SearchIcon = styled.span` 
+  margin-right: 10px; 
+`;
+
 const Box = styled.div`
   background-color: #fff;
-  width: 750px;
-  height: 600px;
+  width: 1031px;
+  height: 778px;
   border-radius: 47px;
   border: none;
-  justify-content: center;
   text-align: center;
   padding: 30px 40px;
   z-index: 999;
   position: relative;
-  #search {
-    position: absolute;
-    top: 58px;
-    left: 153px;
-  }
+  padding-top: 20px;
+  overflow-y: visible;
+
   #goBack {
     cursor: pointer;
     position: absolute;
@@ -153,30 +227,40 @@ const Box = styled.div`
     left: 461px;
   }
 `;
-const FriendSearchBox = styled.div`
-  width: 560px;
-  height: 46px;
+
+const CitySearchBox = styled.div<{ topOffset?: number, temperature?: number }>`
+  z-index: 500;  
+  width: 745px;
+  height: 154; 
   border: none;
   border-radius: 49px;
-  background-color: ${(props) => props.theme.Sky_Blue_04};
+  background-image: ${(props) => {
+    if (props.temperature !== undefined && props.temperature <= 24) return `url(${sky3Background})`;
+    if (props.temperature !== undefined && props.temperature > 24 && props.temperature <= 30) return `url(${sky1Background})`;
+    if (props.temperature !== undefined && props.temperature > 30) return `url(${sky2Background})`;
+    return `url(${sky2Background})`; // default
+  }};
+  background-size: cover; 
+  background-repeat: no-repeat;
   position: absolute;
-  top: 45px;
-  left: 113px;
+  top: ${(props) => props.topOffset || 130}px; 
+  left: 140px;
   text-align: left;
   &:focus {
     outline: 3px solid ${(props) => props.theme.Blue_Main};
   }
 `;
+
 const SearchInput = styled.input`
-  width: 350px;
-  height: 25px;
+  width: 640px;
+  height: 50px;
   border: none;
   border-radius: 49px;
   background-color: ${(props) => props.theme.Sky_Blue_04};
-  position: absolute;
-  top: 58px;
-  left: 185px;
+  position: relative; 
   text-align: left;
+  padding-left: 40px;  
+
   &:focus {
     outline: none;
   }
@@ -184,34 +268,30 @@ const SearchInput = styled.input`
     color: ${(props) => props.theme.Gray_02};
   }
 `;
-const SearchBox = styled.div``;
-
-
+const SearchBox = styled.div`
+position: absolute;
+top: 58px;
+left: 185px;
+display: flex;
+align-items: center;
+`;
 
 const ListBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 800px;
+  width: 437px;
   height: 412px;
   position: absolute;
   top: 141px;
   left: 123px;
   overflow-y: scroll;
-  padding-left: -500px
   &::-webkit-scrollbar {
+    //display: none;
     width: 5px;
   }
   &::-webkit-scrollbar-thumb {
     background-color: hsla(0, 0%, 42%, 0.49);
     border-radius: 100px;
   }
-
-  ${CityBox} {
-    margin-bottom: 10px;
-  }
 `;
-
 const GradientTop = styled.div`
   z-index: 1;
   width: 437px;
@@ -237,3 +317,7 @@ const GradientBottom = styled.div`
     rgba(255, 255, 255, 1) 100%
   );
 `;
+function setCity(value: string) {
+  throw new Error('Function not implemented.');
+}
+

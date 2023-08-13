@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
-import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
 
 interface ModalProps {
@@ -11,12 +10,10 @@ interface ModalProps {
 }
 
 const CityChoose = ({ name, onClose }: ModalProps) => {
-  // 도시,공항 검색 모달창 닫기
   const handleClose = () => {
     onClose?.();
   };
 
-  // 모달창 외부 클릭시 닫기
   const modalRef = useRef<HTMLDivElement>(null);
   useOutSideClick(modalRef, handleClose);
 

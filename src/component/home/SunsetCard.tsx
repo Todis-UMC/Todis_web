@@ -77,7 +77,7 @@ const Weather = () => {
     const period = hours >= 12 ? 'PM' : 'AM';
     
     hours %= 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12;
     
     return hours + ':' + minutes.substr(-2) + ' ' + period;
   };

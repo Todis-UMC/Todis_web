@@ -20,7 +20,7 @@ const convertWeatherToKorean = (weather: string | undefined) => {
       case 'Snow':
         return '눈이 올 것';
       default:
-        return weather ?? '정보 없음';  // undefined 경우 '정보 없음' 반환
+        return weather ?? '정보 없음'; 
     }
   };
 
@@ -94,7 +94,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
   const styles: { [key: string]: CSSProperties } = {
     mainCard: {
         backgroundColor: '#88CBFF',
-        width: '877px',  // Updated width
+        width: '877px',  
         height: '678px', 
         position: 'relative',
         borderRadius: '40px',
@@ -102,7 +102,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '20px', // Add some padding to avoid items sticking to the edges
+        padding: '20px', 
       },
       weatherIcon: {
         width: '211px',
@@ -120,9 +120,9 @@ const [locationName, setLocationName] = useState<string | null>(null);
         paddingTop: '20px',  
         paddingLeft: '40px',
         paddingRight: '40px',
-        position: 'absolute',   // Added to fix the position
-        top: '15px',  // Adjust to your preference
-        left: '10px', // Adjusted to place the header on the same Y axis as the WeatherBox
+        position: 'absolute',   
+        top: '15px',  
+        left: '10px', 
     },
     locationIcon: {
         marginRight: '5px',  
@@ -159,9 +159,9 @@ const [locationName, setLocationName] = useState<string | null>(null);
         width: '800px',
         height: '270px',
         display: 'flex',
-        flexDirection: 'column',  // Change flexDirection to column to place "1 hour later expected status" at the top
+        flexDirection: 'column', 
         alignItems: 'center', 
-        justifyContent: 'flex-start',  // Change justifyContent to center to align items in the middle
+        justifyContent: 'flex-start',  
         marginLeft: 'auto',
         marginRight: 'auto',
         borderRadius: '40px',
@@ -169,7 +169,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
         boxSizing: 'border-box',
         paddingLeft: '20px',
         overflow: 'auto', 
-        opacity: 0.8,borderTop: '1px solid #ffffff',  // 가로로 얇은 선 추가
+        opacity: 0.8,borderTop: '1px solid #ffffff',  
     },
     nextHourForecast: {
         ...FONT.L3,
@@ -177,14 +177,14 @@ const [locationName, setLocationName] = useState<string | null>(null);
         fontSize: '19px',
         display: 'flex',
         justifyContent: 'flex-start', 
-        marginTop: '20px',  // Add marginTop to add space at the top
+        marginTop: '20px',  
         marginBottom: '5px',
         marginLeft: '-450px',
       },
       forecastItem: { 
         display: 'flex',
-        flexDirection: 'column',  // Change flexDirection to column to align forecast items vertically
-            alignItems: 'center',  // Align the items in the center
+        flexDirection: 'column', 
+            alignItems: 'center',  
             marginRight: '40px', 
         marginTop: '5px',
         marginBottom: '20px',
@@ -194,9 +194,9 @@ const [locationName, setLocationName] = useState<string | null>(null);
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexGrow: 2,
-        paddingLeft: '10px', // Reverted the padding to original
+        paddingLeft: '10px', 
         paddingRight: '10px',
-        marginLeft: '-50px', // Added this line
+        marginLeft: '-50px', 
     },
       locationTemp: {
         ...FONT.H3,
@@ -206,9 +206,9 @@ const [locationName, setLocationName] = useState<string | null>(null);
         alignItems: 'center',
         justifyContent: 'space-between',
         height: 'auto', 
-        marginTop: '10px', // Set height to auto to allow internal items to take the space
-        marginBottom: '30px', // 도시와 온도 데이터 사이 간격 5px 추가
-        gap: '40px',  // Add gap to add space between items vertically
+        marginTop: '10px', 
+        marginBottom: '30px',
+        gap: '40px',  
       },
 
       verticalDivider: {
@@ -216,7 +216,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
         height: '80%',
         alignSelf: 'center',
         marginLeft: '10px',
-        marginRight: '30px', // Increase marginRight to pull the vertical line further to the left
+        marginRight: '30px', 
       },
     weatherDetails: {
         display: 'flex',
@@ -235,19 +235,19 @@ const [locationName, setLocationName] = useState<string | null>(null);
       width: '45%',
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: '5px', // 바람, 강수량, 습도, 대기질 데이터 사이 간격 반으로 줄임
+      marginRight: '5px', 
     },
     weatherDetailData: {
         ...FONT.H7,
         color: color.Typo_White,
       },
       forecastTime: {
-        ...FONT.L3, // Update style to L3, color to white
+        ...FONT.L3, 
         color: '#ffffff',
     },
 
     forecastTemp: {
-        ...FONT.H2, // Update style to H2, color to white
+        ...FONT.H2, 
         color: '#ffffff',
     },
   };
@@ -306,7 +306,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
           <img 
             src={getWeatherIcon(weatherData.main.temp, weatherData.weather[0].main)} 
             alt="Weather icon" 
-            style={styles.weatherIcon}  // Style 추가
+            style={styles.weatherIcon} 
           /> 
           <div style={styles.locationTemp}>
     <h1 style={FONT.H3}>{weatherData.name}</h1>
@@ -343,8 +343,8 @@ const [locationName, setLocationName] = useState<string | null>(null);
         <div style={styles.nextHourForecast}>
   1시간 뒤에 {convertWeatherToKorean(forecastData?.list[1]?.weather[0]?.main)} 으로 예상됩니다
 </div>
-        <hr style={{ width: '95%', border: '1px solid white' }} />  {/* Add a line under the text "1 hour later expected status" */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>  {/* Add a wrapper div with flex display */}
+        <hr style={{ width: '95%', border: '1px solid white' }} />  
+        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}> 
             {forecastData &&
             forecastData.list.map((item, index) => (
                 <div key={index} style={styles.forecastItem}>
