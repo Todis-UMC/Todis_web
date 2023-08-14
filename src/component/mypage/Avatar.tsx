@@ -113,6 +113,9 @@ const Avatar = () => {
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0); // 카테고리 인덱스
   const [selectedImages, setSelectedImages] = useState<string[]>([]); // 아바타에 적용될 옷
   const [inventory, setInventory] = useState<string[][]>([]); // 인벤토리 카테고리별 관리
+  const [showAvatarInit, setShowAvatarInit] = useState(true); // 초기 아바타 모습
+  const [selectedImagesinit, setSelectedImagesinit] = useState<string[]>([]); // 초기 아바타 적용 옷
+  const [inventoryinit, setInventoryinit] = useState<string[][]>([]); // 초기 인벤토리
   const selectedMenu = ItemMenu[selectedMenuIndex];
   const [saveButtonText, setSaveButtonText] = useState<string>('저장하기');
   // 아바타 최종 모습 이미지로 저장
@@ -131,6 +134,7 @@ const Avatar = () => {
   };
 
   const ImageButtonClickHandler = (imageIndex: number): void => {
+    setShowAvatarInit(false);
     const SameIndex =
       selectedImages[selectedMenuIndex] ===
       ItemMenu[selectedMenuIndex].images[imageIndex];
@@ -146,27 +150,26 @@ const Avatar = () => {
     updatedSelectedImages[selectedMenuIndex] = SameIndex
       ? undefined
       : ItemMenu[selectedMenuIndex].images[imageIndex];
+
     setInventory(updatedInventory);
     setSelectedImages(updatedSelectedImages);
 
+    console.log('현재 착용된: ', updatedSelectedImages);
+
     // 아이템 이미지 URL 배열
-    const selectedImageArray: (string | undefined)[] = ItemMenu.map(
-      (menu, index) => {
-        if (index === selectedMenuIndex) {
-          return ItemMenu[selectedMenuIndex].images[imageIndex];
-        }
-        return updatedSelectedImages[index];
+    const selectedImageArray: (string | '')[] = ItemMenu.map((menu, index) => {
+      if (index === selectedMenuIndex) {
+        return ItemMenu[selectedMenuIndex].images[imageIndex];
       }
-    );
+      return updatedSelectedImages[index];
+    });
     // 인벤 이미지 URL 배열
-    const inventoryImageArray: (string | undefined)[] = ItemMenu.map(
-      (menu, index) => {
-        if (index === selectedMenuIndex) {
-          return ItemMenu[selectedMenuIndex].buttonImages[imageIndex];
-        }
-        return updatedInventory[index];
+    const inventoryImageArray: (string | '')[] = ItemMenu.map((menu, index) => {
+      if (index === selectedMenuIndex) {
+        return ItemMenu[selectedMenuIndex].buttonImages[imageIndex];
       }
-    );
+      return updatedInventory[index];
+    });
     setSelectedImageArray(selectedImageArray);
     setInventoryImageArray(inventoryImageArray);
     console.log('아이템url배열: ', selectedImageArray);
@@ -212,15 +215,6 @@ const Avatar = () => {
   };
 
   const SaveHandler = async () => {
-    /*
-      localStorage.setItem('selectedImages', JSON.stringify(selectedImages));
-      console.log('선택된 옷 : ' + selectedImages);
-      localStorage.setItem('inventory', JSON.stringify(inventory));
-      console.log('인벤토리 이미지 : ' + inventory);
-
-      localStorage.setItem('newAvatarImg', JSON.stringify(avatarImg));*/
-
-    // 아바타 최종 화면 캡쳐
     if (captureRef.current) {
       const dataUrl = await domtoimage.toJpeg(captureRef.current, {
         quality: 0.8,
@@ -358,22 +352,22 @@ const Avatar = () => {
         console.log('GET 아바타 데이터:', responseData);
 
         if (responseData) {
-          setSelectedImages([
+          setSelectedImagesinit([
             responseData.data.topimg,
             responseData.data.bottomimg,
             responseData.data.shoesimg,
             responseData.data.accimg
           ]);
-          console.log('이미지 : ', selectedImages);
+          console.log('이미지 : ', selectedImagesinit);
 
-          setInventory([
+          setInventoryinit([
             [responseData.data.topminimg],
             [responseData.data.bottomminimg],
             [responseData.data.shoesminimg],
             [responseData.data.accminimg]
           ]);
+          console.log('인벤 : ', inventoryinit);
         }
-        console.log('인벤 : ', inventory);
       } catch (error) {
         console.error('Error fetching data:', error);
         console.log('연동 오류');
@@ -417,7 +411,17 @@ const Avatar = () => {
         <AvatarCaptureBox ref={captureRef} avatarSaveImg={avatarSaveImg}>
           <AvatarImgBox showItemBox={showItemBox}>
             <img src={avatarImg} alt='avatar' width='125%' />
-            {selectedImages.length > 0 &&
+            {showAvatarInit &&
+              selectedImagesinit.length > 0 &&
+              selectedImagesinit.map((image, index) => (
+                <SelectedImage
+                  key={index}
+                  src={image}
+                  selectedMenuIndex={index}
+                />
+              ))}
+            {!showAvatarInit &&
+              selectedImages.length > 0 &&
               selectedImages.map((image, index) => (
                 <SelectedImage
                   key={index}
@@ -438,15 +442,30 @@ const Avatar = () => {
               </SexIcon>
             </SexBtnBox>
             <InventoryBox>
-              {ItemMenu.map((_, index) => (
-                <Inventory
-                  key={index}
-                  style={{
-                    backgroundImage:
-                      inventory.length > index ? `url(${inventory[index]})` : ''
-                  }}
-                />
-              ))}
+              {showAvatarInit &&
+                ItemMenu.map((_, index) => (
+                  <Inventory
+                    key={index}
+                    style={{
+                      backgroundImage:
+                        inventoryinit.length > index
+                          ? `url(${inventoryinit[index]})`
+                          : ''
+                    }}
+                  />
+                ))}
+              {!showAvatarInit &&
+                ItemMenu.map((_, index) => (
+                  <Inventory
+                    key={index}
+                    style={{
+                      backgroundImage:
+                        inventory.length > index
+                          ? `url(${inventory[index]})`
+                          : ''
+                    }}
+                  />
+                ))}
             </InventoryBox>
             <ResetBtn onClick={ResetHandler}>
               <ResetIcon />
