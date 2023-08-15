@@ -31,7 +31,7 @@ const NavBar = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   flex: 1;
-  margin-left: 6.5rem;
+  margin-left: 5.6rem;
 `;
 
 const NavLink = styled(Link)`

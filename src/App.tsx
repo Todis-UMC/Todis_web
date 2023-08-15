@@ -33,6 +33,7 @@ function App() {
         
           <div className='App'>
             {!noLayout && <Nav />}
+            {!noLayout && <NavLogin />}
             <Routes>
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<SignUpBeforePage />} />

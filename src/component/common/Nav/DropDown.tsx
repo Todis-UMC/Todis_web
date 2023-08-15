@@ -30,11 +30,12 @@ text-align: center;
   top: 100%;
   right: 0;
   width: 120px; /* 가로 크기 조정 */
-  height: 69.5px; /* 세로 크기 조정 */
+  height: 77px; /* 세로 크기 조정 */
   background-color: white;
   border: none;
   border-radius: 7px;
   display: ${(props) => (props.isVisible ? 'block' : 'none')};
+  z-index: 10000;
 `;
 
 const MenuItem = styled.div`
