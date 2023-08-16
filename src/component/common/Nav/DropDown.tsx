@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineDown } from 'react-icons/ai';
 import FONT from '../../../styles/Font';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Button = styled.button`
   background-color: transparent;
@@ -25,12 +25,12 @@ const ButtonContainer = styled.div`
 `;
 
 const MenuContainer = styled.div<{ isVisible: boolean }>`
-position: absolute;
-text-align: center;
-  top: 100%;
+  position: absolute;
+  text-align: center;
+  top: 130%;
   right: 0;
-  width: 120px; /* 가로 크기 조정 */
-  height: 77px; /* 세로 크기 조정 */
+  width: 120px; 
+  height: 77px; 
   background-color: white;
   border: none;
   border-radius: 7px;
@@ -38,13 +38,17 @@ text-align: center;
   z-index: 10000;
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ active: boolean }>`
   color: black;
   padding: 10px;
   cursor: pointer;
   &:hover {
     background-color: #e9f0fb;
-    
+  }
+  a {
+    text-decoration: none;
+    color: ${(props) => (props.active ? '#437df6' : 'inherit')};
+    font-size: inherit;
   }
 `;
 
@@ -54,6 +58,7 @@ const DownIcon = styled(AiOutlineDown)`
 
 const DropDownButton: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
+    const location = useLocation();
   
     const items = ['회원정보 수정', '로그아웃'];
   
@@ -69,8 +74,9 @@ const DropDownButton: React.FC = () => {
         </Button>
         <MenuContainer isVisible={isVisible}>
           {items.map((item, index) => (
-            <MenuItem key={index}>
-              <Link to={item === '회원정보 수정' ? '/MyPage' : '/Main'}>{item}</Link>
+            <MenuItem key={index}
+            active={location.pathname === (item === '회원정보 수정' ? '/user/edit' : '/main')}>
+              <Link to={item === '회원정보 수정' ? '/user/edit' : '/main'}>{item}</Link>
             </MenuItem>
           ))}
         </MenuContainer>
