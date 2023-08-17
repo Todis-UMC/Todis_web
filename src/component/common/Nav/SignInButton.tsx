@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import FONT from '../../../styles/Font';
 import { Link } from 'react-router-dom';
 
-
 const SigninButton = () => {
+  const handleSignin = () => {
+    window.location.href = '/login';
+  };
   return (
-    <Link to="/Login">
-      <Button style={FONT.M3}>
-        로그인
-      </Button>
-    </Link>
+    <Button style={FONT.M3} onClick={() => handleSignin()}>
+      로그인
+    </Button>
   );
-}
+};
 export default SigninButton;
 
 const Button = styled.button`

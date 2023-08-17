@@ -34,7 +34,14 @@ export const PasswordReset = () => {
       });
     } else {
       const response = await putChangePassword(data);
-      navigate('/user/edit');
+      toast('비밀번호 변경이 완료되었습니다.', {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast'
+      });
     }
   };
   return (

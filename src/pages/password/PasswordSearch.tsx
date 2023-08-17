@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { getFindPassword } from '../../api/User';
+import { postFindPassword } from '../../api/User';
 import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import SmallModal from '../../component/common/SmallModal';
@@ -24,10 +24,7 @@ export const PasswordSearch = () => {
   const [notice, setNotice] = useState<boolean>(false);
 
   const handleButton = async () => {
-    const data = {
-      email: email
-    };
-    const response = await getFindPassword(data);
+    const response = await postFindPassword(email);
     console.log(response);
     if (response.code === 200) {
       setNotice(true);

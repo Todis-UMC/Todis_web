@@ -5,7 +5,7 @@ export const putChangeNickname = async (data: { name: string }) => {
 
   try {
     const res = await request.put({
-      url: '/user/change_nickname',
+      url: '/user/change_name',
       data: data
     });
     console.log('닉네임 변경 완료', res);
@@ -60,12 +60,13 @@ export const putChangePassword = async (data: { password: string }) => {
   }
 };
 
-export const getFindPassword = async (data: { email: string }) => {
-  console.log('비밀번호 찾기 요청:', data);
+export const postFindPassword = async (email: string) => {
+  console.log('비밀번호 찾기 요청:', email);
+  const data = { email: email };
   try {
-    const res = await request.get({
+    const res = await request.post({
       url: '/user/find_password',
-      params: data
+      data: data
     });
     console.log('비밀번호 찾기 완료', res);
     return res;
