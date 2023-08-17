@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { postFindPassword } from '../../api/User';
+import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import SmallModal from '../../component/common/SmallModal';
 import AuthContainer from '../../component/login/AuthContainer';
@@ -20,14 +22,15 @@ export const PasswordSearch = () => {
   const [email, setEmail] = useState<string>('');
   const [warn, setWarn] = useState<boolean>(false);
   const [notice, setNotice] = useState<boolean>(false);
-  const outside = useRef();
 
-  const handleButton = () => {
-    // API 전송 후 없는 이메일일 경우
-    // setWarn(true);
-
-    // 존재하는 이메일 & 전송 성공
-    setNotice(true);
+  const handleButton = async () => {
+    const response = await postFindPassword(email);
+    console.log(response);
+    if (response.code === 200) {
+      setNotice(true);
+    } else if (response.code === 400) {
+      setWarn(true);
+    }
   };
   return (
     <>
@@ -38,21 +41,25 @@ export const PasswordSearch = () => {
         value={email}
         onChange={(ev) => setEmail(ev.target.value)}
       />
-      <Button onClick={() => handleButton()}>전송하기</Button>
-
+      <ButtonBox>
+        {email.length > 0 ? (
+          <Button onClick={() => handleButton()}>비밀번호 재설정</Button>
+        ) : (
+          <Button disabled>비밀번호 설정</Button>
+        )}
+      </ButtonBox>
       {warn && (
         <SmallModal
           title={'이메일 확인 불가'}
           content={'가입되지 않은 이메일 입니다<br/>이메일 주소를 확인해주세요'}
           onClose={() => setWarn(false)}
-          //   ref={outside}
         />
       )}
       {notice && (
         <SmallModal
           title={'비밀번호 재설정'}
           content={
-            '비밀번호 재설정 메일을 통해<br/>비밀번호를 변경해 주시길 바랍니다.'
+            '비밀번호 재설정 메일을 통해<br/>임시 비밀번호를 확인해 주시길 바랍니다.'
           }
           onClose={() => setNotice(false)}
         />
@@ -61,16 +68,7 @@ export const PasswordSearch = () => {
   );
 };
 
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
+const ButtonBox = styled.div`
   margin-top: 22px;
   margin-bottom: 19px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
 `;

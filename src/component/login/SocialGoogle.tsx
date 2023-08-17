@@ -1,23 +1,18 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as Google } from '../../assets/icon/Google.svg';
+import { getGoogleLogin } from '../../api/Auth';
+import { useNavigate } from 'react-router-dom';
 const SocialGoogle = () => {
-  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const Client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const rediect_url = 'http://localhost:3000/google';
+  const googleURL = `https://accounts.google.com/o/oauth2/auth?client_id=${Client_id}&redirect_uri=${rediect_url}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
 
-  // client_id가 설정되어 있는지 확인
-  if (!client_id) {
-    console.error(
-      'Google Client ID가 설정되지 않았습니다. .env 파일에 REACT_APP_GOOGLE_CLIENT_ID를 설정하세요.'
-    );
-    return null;
-  }
-  const googleSocialLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => console.log(codeResponse),
-    flow: 'auth-code'
-  });
-
+  const googleSocialLogin = async () => {
+    window.location.href = googleURL;
+  };
   return (
     <Button onClick={() => googleSocialLogin()}>
       <Google />

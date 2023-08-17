@@ -13,14 +13,15 @@ import SignUpInfoPage from './pages/signup/SignUpInfo';
 import SignUpAfterPage from './pages/signup/SignUpAfter';
 import EditProfilePage from './pages/user/EditProfile';
 import PasswordResetPage from './pages/password/PasswordReset';
+import PasswordSearchPage from './pages/password/PasswordSearch';
 import FriendInvite from './pages/FriendInvite';
 import WithdrawalPage from './pages/Withdrawal';
 import Lank from './pages/Lank';
 import MyPage from './pages/MyPage';
+import Google from './pages/signup/Google';
+import Kakao from './pages/signup/Kakao';
 
 function App() {
-  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-
   const noLayout =
     window.location.pathname === '/login' ||
     window.location.pathname.startsWith('/signup') ||
@@ -30,11 +31,12 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        
           <div className='App'>
             {!noLayout && <Nav />}
             {!noLayout && <NavLogin />}
             <Routes>
+              <Route path='/kakao' element={<Kakao />} />
+              <Route path='/google' element={<Google />} />
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<SignUpBeforePage />} />
               <Route path='/signup/email' element={<SignUpEmailPage />} />
@@ -54,7 +56,6 @@ function App() {
             </Routes>
             {!noLayout && <Footer />}
           </div>
-        
       </BrowserRouter>
     </>
   );
