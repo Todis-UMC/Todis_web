@@ -1,6 +1,7 @@
 import React from 'react';
 import { getKakaologin } from '../../api/Auth';
 import { getInfo } from '../../api/User';
+import Loading from '../../component/common/Loading';
 
 const Kakao = () => {
   const url = window.location.href;
@@ -19,7 +20,11 @@ const Kakao = () => {
   };
   kakaoLogin();
 
-  return <div>카카오 로그인 중</div>;
+  return (
+    <>
+      <Loading />
+    </>
+  );
 };
 
 export default Kakao;

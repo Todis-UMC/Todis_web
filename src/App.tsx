@@ -24,6 +24,8 @@ import Kakao from './pages/signup/Kakao';
 function App() {
   const noLayout =
     window.location.pathname === '/login' ||
+    window.location.pathname === '/google' ||
+    window.location.pathname === '/kakao' ||
     window.location.pathname.startsWith('/signup') ||
     window.location.pathname.startsWith('/user') ||
     window.location.pathname === '/friend/invite';

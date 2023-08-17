@@ -26,6 +26,7 @@ const Login = () => {
     localStorage.getItem('password') || ''
   );
   const [memory, setMemory] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
@@ -47,6 +48,7 @@ const Login = () => {
       password: password
     };
     try {
+      setLoading(true);
       const response = await postLogin(login);
       if (response.code === 200) {
         localStorage.setItem('token', response.data);
@@ -65,6 +67,7 @@ const Login = () => {
     } catch (error) {
       console.log(error, 'error');
     }
+    setLoading(false);
   };
   return (
     <>

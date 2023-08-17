@@ -20,17 +20,21 @@ const EditProfile = () => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
   const data = { name: name };
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChangePassword = async () => {
     const data = { password: password };
+    setLoading(true);
     const response = await postPasswordCompare(data);
     if (response.code === 200) {
       navigate('/user/edit/password');
     } else if (response.code === 400) {
       console.log(response.message);
     }
+    setLoading(false);
   };
   const handleChangeName = async () => {
+    setLoading(true);
     const response = await putChangeNickname(data);
     if (response.code === 200) {
       localStorage.setItem('name', name);
@@ -52,6 +56,7 @@ const EditProfile = () => {
         className: 'custom-toast'
       });
     }
+    setLoading(false);
   };
   return (
     <>

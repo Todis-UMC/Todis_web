@@ -1,7 +1,11 @@
 import React from 'react';
+import { PuffLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import { getGoogleLogin } from '../../api/Auth';
 import { getInfo } from '../../api/User';
+import Loading from '../../component/common/Loading';
+import color from '../../styles/Color';
 
 const Google = () => {
   const url = window.location.href;
@@ -32,7 +36,11 @@ const Google = () => {
   };
   googleLogin();
 
-  return <div>Google</div>;
+  return (
+    <>
+      <Loading />
+    </>
+  );
 };
 
 export default Google;

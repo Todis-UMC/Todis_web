@@ -9,6 +9,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../component/common/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from '../../component/common/Loading';
 
 const SignUpInfoPage = () => (
   <AuthContainer title='마지막 단계에요!' component={<SignUpInfo />} />
@@ -22,6 +23,7 @@ const SignUpInfo = () => {
   const handleButtonClick = (selectedSex: number) => {
     setSex(selectedSex);
   };
+  const [loading, setLoading] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ const SignUpInfo = () => {
       password: location.state.password,
       gender: sex === 1 ? '남자' : '여자'
     };
+    setLoading(true);
     const response = await postSignup(data);
     console.log(response);
     if (response.code === 200) {
@@ -46,6 +49,7 @@ const SignUpInfo = () => {
         className: 'custom-toast'
       });
     }
+    setLoading(false);
   };
 
   return (
@@ -85,6 +89,7 @@ const SignUpInfo = () => {
           <Button disabled={true}>가입 완료하기</Button>
         )}
       </ButtonBox>
+      {loading && <Loading />}
       <ToastContainer />
     </>
   );

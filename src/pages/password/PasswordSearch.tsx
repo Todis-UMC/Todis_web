@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { postFindPassword } from '../../api/User';
 import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
+import Loading from '../../component/common/Loading';
 import SmallModal from '../../component/common/SmallModal';
 import AuthContainer from '../../component/login/AuthContainer';
 
@@ -21,8 +22,10 @@ export const PasswordSearch = () => {
   const [email, setEmail] = useState<string>('');
   const [warn, setWarn] = useState<boolean>(false);
   const [notice, setNotice] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleButton = async () => {
+    setLoading(true);
     const response = await postFindPassword(email);
     console.log(response);
     if (response.code === 200) {
@@ -30,6 +33,7 @@ export const PasswordSearch = () => {
     } else if (response.code === 400) {
       setWarn(true);
     }
+    setLoading(false);
   };
   return (
     <>
@@ -63,6 +67,7 @@ export const PasswordSearch = () => {
           onClose={() => setNotice(false)}
         />
       )}
+      {loading && <Loading />}
     </>
   );
 };
