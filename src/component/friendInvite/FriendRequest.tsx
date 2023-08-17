@@ -1,16 +1,20 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import useOutSideClick from '../friend/modal/useOutSideClick';
 import ModalContainer from '../friend/modal/ModalContainer';
+import { postFriendRequest } from '../../api/FriendInvite';
+import { getInfo } from '../../api/User';
+import { ToastContainer, toast } from 'react-toastify';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 interface ModalProps {
-  name: string;
+  friendEmail: string;
   open: boolean;
   onClose: () => void;
 }
 
-const FriendRequest = ({ name, onClose }: ModalProps) => {
+const FriendRequest = ({ friendEmail, onClose }: ModalProps) => {
   // 친구 수락 모달창 닫기
   const modalRef = useRef<HTMLDivElement>(null);
   const handleClose = () => {
@@ -27,22 +31,58 @@ const FriendRequest = ({ name, onClose }: ModalProps) => {
       $body.style.overflow = overflow;
     };
   }, []);
+  // 회원 정보 API 연동
+  const [email, setEmail] = useState(localStorage.getItem('email'));
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getInfo();
+      localStorage.setItem('email', response.data.email);
+    };
+    fetchData();
+  }, []);
+
+  // 친구 요청 API 연동
+  const handleFriendRequest = async () => {
+    if (friendEmail === email) {
+      toast('초대는 자신에게 보낼 수 없습니다.', {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast'
+      });
+      return;
+    }
+    try {
+      const response = await postFriendRequest(friendEmail);
+      console.log('친구 요청 성공.', response);
+    } catch (error) {
+      console.error('친구 요청 보내기 오류:', error);
+    }
+    onClose?.(); // 창 닫기
+  };
 
   return (
     <ModalContainer>
       <Container className='container'>
         <Box ref={modalRef}>
-          <Profile></Profile>
+          <Profile>
+            <img src={avatar} />
+          </Profile>
           <Name style={FONT.M2}>
-            <span>{name}</span>님께
+            <span>{friendEmail}</span>님께
           </Name>
           <Message style={FONT.M2}>친구요청하시겠습니까?</Message>
           <Cancel style={FONT.L4} onClick={handleClose}>
             취소
           </Cancel>
-          <Request style={FONT.L4}>요청</Request>
+          <Request style={FONT.L4} onClick={handleFriendRequest}>
+            요청
+          </Request>
         </Box>
       </Container>
+      <ToastContainer />
     </ModalContainer>
   );
 };
@@ -83,6 +123,16 @@ const Profile = styled.div`
   top: -52.5px;
   left: 128.5px;
   border: none;
+  overflow: hidden;
+  img {
+    position: absolute;
+    top: -13px;
+    left: -21px;
+    height: 320%;
+    width: 150%;
+    object-fit: cover;
+    border: 1px solid #111;
+  }
 `;
 const Name = styled.div`
   margin-top: 70px;
