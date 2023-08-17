@@ -31,7 +31,7 @@ const NavBar = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   flex: 1;
-  margin-left: 6.5rem;
+  margin-left: 5.6rem;
 `;
 
 const NavLink = styled(Link)`
@@ -61,13 +61,24 @@ cursor: pointer;
 const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     setActiveLink(location.pathname);
+
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+
   }, [location.pathname]);
 
   return (
     <NavBarContainer style={FONT.M3}>
+      {isLoggedIn && (
+      <>
       <LogoContainer>
         <Logo />
       </LogoContainer>
@@ -91,6 +102,8 @@ const Nav: React.FC = () => {
       <DropDownContainer>
         <DropDown />
       </DropDownContainer>
+      </>
+      )}
     </NavBarContainer>
   );
 };
