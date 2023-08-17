@@ -7,6 +7,8 @@ import { UserProps } from '../../types/User';
 import { postSignup } from '../../api/Auth';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../component/common/Button';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUpInfoPage = () => (
   <AuthContainer title='마지막 단계에요!' component={<SignUpInfo />} />
@@ -32,7 +34,18 @@ const SignUpInfo = () => {
     };
     const response = await postSignup(data);
     console.log(response);
-    navigate('/signup/complete');
+    if (response.code === 200) {
+      navigate('/signup/complete');
+    } else {
+      toast(response.message, {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast'
+      });
+    }
   };
 
   return (
@@ -72,6 +85,7 @@ const SignUpInfo = () => {
           <Button disabled={true}>가입 완료하기</Button>
         )}
       </ButtonBox>
+      <ToastContainer />
     </>
   );
 };
