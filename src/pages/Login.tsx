@@ -13,6 +13,7 @@ import { postLogin } from '../api/Auth';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from '../component/common/Loading';
 
 const LoginPage = () => <AuthContainer title='로그인' component={<Login />} />;
 
@@ -109,6 +110,7 @@ const Login = () => {
         <a href='/signup'> 회원가입</a>
       </SignUp>
       <ToastContainer />
+      {loading && <Loading />}
     </>
   );
 };

@@ -7,6 +7,7 @@ import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
 import { ToastContainer, toast } from 'react-toastify';
+import Loading from '../../component/common/Loading';
 
 const EditProfilePage = () => {
   return <AuthContainer title='회원정보 수정' component={<EditProfile />} />;
@@ -20,7 +21,7 @@ const EditProfile = () => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
   const data = { name: name };
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleChangePassword = async () => {
     const data = { password: password };
@@ -31,7 +32,7 @@ const EditProfile = () => {
     } else if (response.code === 400) {
       console.log(response.message);
     }
-    setLoading(false);
+    // setLoading(false);
   };
   const handleChangeName = async () => {
     setLoading(true);
@@ -56,7 +57,7 @@ const EditProfile = () => {
         className: 'custom-toast'
       });
     }
-    setLoading(false);
+    // setLoading(false);
   };
   return (
     <>
@@ -93,6 +94,7 @@ const EditProfile = () => {
         계정 삭제하기
       </A>
       <ToastContainer />
+      {loading && <Loading />}
     </>
   );
 };
