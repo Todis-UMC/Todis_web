@@ -5,10 +5,8 @@ import { Link } from 'react-router-dom';
 
 const SignUpButton = () => {
   return (
-    <Link to="/SignUp">
-      <Button style={FONT.M3}>
-        회원가입
-      </Button>
+    <Link to='/signup'>
+      <Button style={FONT.M3}>회원가입</Button>
     </Link>
   );
 };

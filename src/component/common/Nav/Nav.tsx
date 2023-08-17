@@ -7,7 +7,6 @@ import SignInButton from './SignInButton';
 import SignUpButton from './SignUpButton';
 import LanguageButton from './LanguageButton';
 
-
 const LogoContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
@@ -53,61 +52,71 @@ const ButtonSpacer = styled.div`
 `;
 
 const LanguageButtonContainer = styled.div`
-margin-top: 4rem;
-margin-bottom: 4rem;
-margin-right: 1rem;
-display: flex;
-justify-content: center;
-cursor: pointer;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  margin-right: 1rem;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     setActiveLink(location.pathname);
-
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
+    if (token) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-
   }, [location.pathname]);
 
   return (
     <NavBarContainer style={FONT.M3}>
       {!isLoggedIn && (
-      <>
-      <LogoContainer>
-        <Logo />
-      </LogoContainer>
-      <NavBar>
-        <NavLink to={'/home'} style={activeLink === '/home' ? { color: '#437df6' } : {}}>
-          홈
-        </NavLink>
-        <NavLink to={'/mypage'} style={activeLink === '/mypage' ? { color: '#437df6' } : {}}>
-          마이페이지
-        </NavLink>
-        <NavLink to={'/friend'} style={activeLink === '/friend' ? { color: '#437df6' } : {}}>
-          친구
-        </NavLink>
-        <NavLink to={'/lank'} style={activeLink === '/lank' ? { color: '#437df6' } : {}}>
-          더보기
-        </NavLink>
-      </NavBar>
-      <LanguageButtonContainer>
-        <LanguageButton />
-      </LanguageButtonContainer>
-      <ButtonContainer1>
-        <SignUpButton />
-        <ButtonSpacer />
-        <SignInButton />
-      </ButtonContainer1>
-      </>
+        <>
+          <LogoContainer>
+            <Logo />
+          </LogoContainer>
+          <NavBar>
+            <NavLink
+              to={'/'}
+              style={activeLink === '/home' ? { color: '#437df6' } : {}}
+            >
+              홈
+            </NavLink>
+            <NavLink
+              to={token ? '/mypage' : '/login'}
+              style={activeLink === '/mypage' ? { color: '#437df6' } : {}}
+            >
+              마이페이지
+            </NavLink>
+            <NavLink
+              to={token ? '/friend' : '/login'}
+              style={activeLink === '/friend' ? { color: '#437df6' } : {}}
+            >
+              친구
+            </NavLink>
+            <NavLink
+              to={token ? '/lank' : '/login'}
+              style={activeLink === '/lank' ? { color: '#437df6' } : {}}
+            >
+              더보기
+            </NavLink>
+          </NavBar>
+          <LanguageButtonContainer>
+            <LanguageButton />
+          </LanguageButtonContainer>
+          <ButtonContainer1>
+            <SignUpButton />
+            <ButtonSpacer />
+            <SignInButton />
+          </ButtonContainer1>
+        </>
       )}
     </NavBarContainer>
   );

@@ -31,31 +31,28 @@ function App() {
   return (
     <>
       <BrowserRouter>
-          <div className='App'>
-            {!noLayout && <Nav />}
-            {!noLayout && <NavLogin />}
-            <Routes>
-              <Route path='/kakao' element={<Kakao />} />
-              <Route path='/google' element={<Google />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/signup' element={<SignUpBeforePage />} />
-              <Route path='/signup/email' element={<SignUpEmailPage />} />
-              <Route path='/signup/info' element={<SignUpInfoPage />} />
-              <Route path='/signup/complete' element={<SignUpAfterPage />} />
-              <Route path='/user/edit' element={<EditProfilePage />} />
-              <Route path='/friend' element={<Friend />} />
-              <Route path='/friend/invite' element={<FriendInvite />} />
-              <Route path='/lank' element={<Lank />} />
-              <Route path='/mypage' element={<MyPage />} />
-              <Route
-                path='/user/edit/password'
-                element={<PasswordResetPage />}
-              />
-              <Route path='/user/delete' element={<WithdrawalPage />} />
-              <Route path='/terms/:id' Component={TermsPage} />
-            </Routes>
-            {!noLayout && <Footer />}
-          </div>
+        <div className='App'>
+          {!noLayout && <Nav />}
+          {!noLayout && <NavLogin />}
+          <Routes>
+            <Route path='/kakao' element={<Kakao />} />
+            <Route path='/google' element={<Google />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SignUpBeforePage />} />
+            <Route path='/signup/email' element={<SignUpEmailPage />} />
+            <Route path='/signup/info' element={<SignUpInfoPage />} />
+            <Route path='/signup/complete' element={<SignUpAfterPage />} />
+            <Route path='/user/edit' element={<EditProfilePage />} />
+            <Route path='/friend' element={<Friend />} />
+            <Route path='/friend/invite' element={<FriendInvite />} />
+            <Route path='/lank' element={<Lank />} />
+            <Route path='/mypage' element={<MyPage />} />
+            <Route path='/user/edit/password' element={<PasswordResetPage />} />
+            <Route path='/user/delete' element={<WithdrawalPage />} />
+            <Route path='/terms/:id' Component={TermsPage} />
+          </Routes>
+          {!noLayout && <Footer />}
+        </div>
       </BrowserRouter>
     </>
   );
