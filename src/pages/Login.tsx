@@ -95,7 +95,7 @@ const Login = () => {
           {memory ? <SmallCheck /> : <SmallUnCheck />}
           로그인 정보 기억하기
         </div>
-        <div style={FONT.L6} onClick={() => navigate('/login/password')}>
+        <div style={FONT.L6} onClick={() => navigate('/user/password')}>
           비밀번호 찾기
         </div>
       </Setting>

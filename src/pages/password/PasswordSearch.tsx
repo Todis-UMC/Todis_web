@@ -11,8 +11,7 @@ const PasswordSearchPage = () => (
     title='비밀번호 찾기'
     component={<PasswordSearch />}
     content='가입하신 이메일을 입력해 주세요.<br/>
-    비밀번호를 재설정할 수 있는 이메일을 보내드립니다.<br/>
-    발송된 이메일의 비밀번호 재설정은 15분 간 유효합니다.'
+    임시 비밀번호가 포함된 이메일을 보내드립니다.'
   />
 );
 

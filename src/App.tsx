@@ -38,6 +38,7 @@ function App() {
             <Route path='/kakao' element={<Kakao />} />
             <Route path='/google' element={<Google />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/user/password' element={<PasswordSearchPage />} />
             <Route path='/signup' element={<SignUpBeforePage />} />
             <Route path='/signup/email' element={<SignUpEmailPage />} />
             <Route path='/signup/info' element={<SignUpInfoPage />} />
