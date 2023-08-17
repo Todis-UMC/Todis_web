@@ -1,18 +1,51 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import { ReactComponent as GoBack } from '../assets/icon/GoBack.svg';
 import FriendRequestComponent from '../component/friendInvite/FriendRequestComponent';
 import FriendRequest from '../component/friendInvite/FriendRequest';
 import avatar from '../assets/img/avatar/M_Avatar.png';
+import { getInfo } from '../api/User';
+import { getFriendRequestList } from '../api/FriendInvite';
+import { ToastContainer, toast } from 'react-toastify';
+import { getUserDetail } from '../api/Friend';
+
+type FriendRequest = {
+  request_id: number;
+  name: string;
+  profileImageUrl: string;
+};
 
 const FriendInvite = () => {
+  // 회원 정보 API 연동(성공)
+  const [profile, setProfile] = useState('');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getInfo();
+      setEmail(response.data.email);
+      setName(response.data.name);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await getUserDetail();
+        setProfile(response.data.profileImageUrl);
+      } catch (error) {
+        console.error('사용자 프로필 이미지 가져오기 오류:', error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   // 아이디 검색 모달창 열기 & 이메일 유효성 검사
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [id, setId] = useState('');
-
-  const onClickButton = () => {
+  const handleSearchButton = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const isValidEmail = emailRegex.test(id);
     setIsValid(isValidEmail);
@@ -21,6 +54,21 @@ const FriendInvite = () => {
   const saveUserId = (event: ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
     setIsValid(true);
+  };
+
+  // 친구 요청 목록 API 연동(성공)
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  useEffect(() => {
+    fetchFriendRequestList();
+  }, []);
+
+  const fetchFriendRequestList = async () => {
+    try {
+      const response = await getFriendRequestList();
+      setFriendRequests(response.data);
+    } catch (error) {
+      console.error('친구 요청 오류:', error);
+    }
   };
 
   return (
@@ -43,18 +91,22 @@ const FriendInvite = () => {
           <GoBack />
         </span>
         <Profile>
-          <img src={avatar} alt='avatar' />
+          {profile === null ? (
+            <img src={avatar} alt='avatar' />
+          ) : (
+            <img src={profile} alt='profile' />
+          )}
         </Profile>
         <MyInfo>
           <table>
             <tbody>
               <tr>
                 <td>아이디</td>
-                <td>Todis@gmail.com</td>
+                <td>{email}</td>
               </tr>
               <tr>
                 <td>닉네임</td>
-                <td>TodaySunny</td>
+                <td>{name}</td>
               </tr>
             </tbody>
           </table>
@@ -68,28 +120,30 @@ const FriendInvite = () => {
             placeholder='아이디 입력'
             style={FONT.L5}
           ></Id>
-          <Search style={FONT.L5} onClick={onClickButton}>
+          <Search style={FONT.L5} onClick={handleSearchButton}>
             검색
           </Search>
         </IdBox>
         {isOpen && (
           <FriendRequest
-            name={id}
+            friendEmail={id}
             open={isOpen}
             onClose={() => {
               setIsOpen(false);
-              console.log('close버튼');
+              setId('');
             }}
           />
         )}
         <RequestText>받은 친구 요청</RequestText>
         <ListBox>
-          <FriendRequestComponent name='김우진' />
-          <FriendRequestComponent name='이민하' />
-          <FriendRequestComponent name='우소정' />
-          <FriendRequestComponent name='이민하' />
-          <FriendRequestComponent name='이은경' />
-          <FriendRequestComponent name='고민혁' />
+          {friendRequests.map((request, index) => (
+            <FriendRequestComponent
+              key={index}
+              request_id={request.request_id}
+              name={request.name}
+              profileImageUrl={request.profileImageUrl}
+            />
+          ))}
         </ListBox>
         <GradiBottom />
       </MainBox>
