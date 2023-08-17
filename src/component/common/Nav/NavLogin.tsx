@@ -61,13 +61,24 @@ cursor: pointer;
 const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     setActiveLink(location.pathname);
+
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+
   }, [location.pathname]);
 
   return (
     <NavBarContainer style={FONT.M3}>
+      {isLoggedIn && (
+      <>
       <LogoContainer>
         <Logo />
       </LogoContainer>
@@ -91,6 +102,8 @@ const Nav: React.FC = () => {
       <DropDownContainer>
         <DropDown />
       </DropDownContainer>
+      </>
+      )}
     </NavBarContainer>
   );
 };
