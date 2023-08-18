@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineDown } from 'react-icons/ai';
 import FONT from '../../../styles/Font';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Button = styled.button`
   background-color: transparent;
@@ -58,6 +58,7 @@ const DropDownButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const name = localStorage.getItem('name');
 
   const handleButtonClick = () => {
     setIsVisible(!isVisible);
@@ -70,7 +71,7 @@ const DropDownButton: React.FC = () => {
   return (
     <ButtonContainer>
       <Button onClick={handleButtonClick}>
-        <ButtonText style={FONT.M3}>김이름 님</ButtonText>
+        <ButtonText style={FONT.M3}>{name} 님</ButtonText>
         <DownIcon />
       </Button>
       <MenuContainer isVisible={isVisible}>
