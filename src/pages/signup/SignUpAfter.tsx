@@ -28,7 +28,7 @@ const SignUpAfter = () => {
       <Title style={FONT.H1}>
         반가워요, {localStorage.getItem('name')}님!{' '}
       </Title>
-      <img src={SignUpAfterLogo} alt='SignUpAfter' width={302} height={302} />
+      <ResponsiveImage src={SignUpAfterLogo} alt='SignUpAfter' />
       <BlueButton>
         <Button
           onClick={() => {
@@ -69,5 +69,14 @@ const WhiteButton = styled.button`
   }
   > div {
     margin-left: 5px;
+  }
+`;
+const ResponsiveImage = styled.img`
+  width: 302px;
+  height: 302px;
+
+  @media (max-width: 490px) {
+    width: 200px;
+    height: 200px;
   }
 `;
