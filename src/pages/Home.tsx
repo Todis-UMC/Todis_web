@@ -6,13 +6,14 @@ import CitySearch from '../component/home/CitySearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTint } from '@fortawesome/free-solid-svg-icons';
 import Button from '../component/common/Button';
-import HumidityCard from '../component/home/HumidityCard';
-import RainCard from '../component/home/RainCard';
-import AirQualityCard from '../component/home/AirQualityCard';
-import SunCard from '../component/home/SunCard';
-import SunsetCard from '../component/home/SunsetCard';
-import MainCard from '../component/home/MainCard';
-import ListCard from '../component/home/ListCard';
+import HumidityCardContent from '../component/home/HumidityCard';
+import RainCardContent from '../component/home/RainCard';
+import AirQualityCardContent from '../component/home/AirQualityCard';
+import SunCardContent from '../component/home/SunCard';
+import SunsetCardContent from '../component/home/SunsetCard';
+import MainCardContent from '../component/home/MainCard';
+import ListCardContent from '../component/home/ListCard';
+
 
 type ToggleBtnProps = {
   expanded: boolean;
@@ -47,18 +48,18 @@ const Home = () => {
         />
       )}
       <MainBox>
-        <MainCard />
-        <ListCard />
-        {expanded === true ? (
-          <>
-            <HumidityCard />
-            <RainCard />
-            <AirQualityCard />
-            <SunCard />
-            <SunsetCard />
-          </>
-        ) : null}
-      </MainBox>
+    <MainCardContent />
+    <ListCardContent />
+    {expanded === true ? (
+        <>
+            <HumidityCardContent />
+            <RainCardContent />
+            <AirQualityCardContent />
+            <SunCardContent />
+            <SunsetCardContent />
+        </>
+    ) : null}
+</MainBox>
       <ToggleBox>
         <ToggleBtn onClick={ToggleHandler} expanded={expanded} style={FONT.L3}>
           {toggleBtnText}
@@ -136,9 +137,54 @@ const MainBox = styled.div`
   justify-content: center;
 
   @media screen and (max-width: 768px) {
-    width: 100%;
     gap: 10px;
     flex-direction: column;
+  }
+`;
+
+const MainCard = styled.div`
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const ListCard = styled.div`
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const HumidityCard = styled.div`
+  @media screen and (max-width: 768px) {
+    width: 50%;
+  }
+`;
+
+const RainCard = styled.div`
+  /* 웹용 기본 스타일이 위치합니다. */
+  
+  @media screen and (max-width: 768px) {
+    width: 50%;
+  }
+`;
+
+const AirQualityCard = styled.div`
+  /* 웹용 기본 스타일이 위치합니다. */
+  
+  @media screen and (max-width: 768px) {
+    width: 50%;
+  }
+`;
+
+const SunCard = styled.div`
+  @media screen and (max-width: 768px) {
+    width: 50%;
+  }
+`;
+
+const SunsetCard = styled.div`
+  @media screen and (max-width: 768px) {
+    width: 100%;
   }
 `;
 

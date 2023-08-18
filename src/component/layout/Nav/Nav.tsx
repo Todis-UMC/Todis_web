@@ -33,8 +33,8 @@ const Nav: React.FC = () => {
       </LogoContainer>
       <NavBar>
         <NavLink
-          to={'/'}
-          style={activeLink === '/' ? { color: '#437df6' } : {}}
+          to={token ? '/home' : '/login'}
+          style={activeLink === '/home' ? { color: '#437df6' } : {}}
         >
           홈
         </NavLink>
