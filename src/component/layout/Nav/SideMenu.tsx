@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import styled, { keyframes } from 'styled-components';
-import { ReactComponent as Close } from '../../../assets/icon/Close.svg';
+import styled, { css, keyframes } from 'styled-components';
+import { ReactComponent as CloseButton } from '../../../assets/icon/Close.svg';
 import Routes from '../../../constants/Route';
 import FONT from '../../../styles/Font';
 import Button from '../../common/Button';
@@ -44,11 +44,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
           <div onClick={() => changeLanguage()}>
             <LanguageButton />
           </div>
-          <Close onClick={() => handleSlideout()} />
+          <CloseButton onClick={() => handleSlideout()} />
         </Top>
-        {token ? (
-          <></>
-        ) : (
+        {!token && (
           <>
             <Notice style={FONT.L6}>
               로그인 후 다양한 서비스를 이용하세요.
@@ -56,22 +54,22 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
             <Button height={45} onClick={() => handleLogin()}>
               로그인
             </Button>
-            <div style={{ marginTop: 40 }}>
-              {Routes.map((route, index) => (
-                <MenuLink
-                  onClick={() => {
-                    token ? navigate(route.path) : navigate('/login');
-                    onClose;
-                  }}
-                  key={index}
-                  style={activeLink === route.path ? { color: '#437df6' } : {}}
-                >
-                  <div style={FONT.H7}>{route.text}</div>
-                </MenuLink>
-              ))}
-            </div>
           </>
         )}
+        <div style={{ marginTop: 40 }}>
+          {Routes.map((route, index) => (
+            <MenuLink
+              onClick={() => {
+                token ? navigate(route.path) : navigate('/login');
+                onClose;
+              }}
+              key={index}
+              style={activeLink === route.path ? { color: '#437df6' } : {}}
+            >
+              <div style={FONT.H7}>{route.text}</div>
+            </MenuLink>
+          ))}
+        </div>
       </Menu>
       <Background
         close={close}
@@ -127,18 +125,21 @@ const Container = styled.div`
   z-index: 1000;
 `;
 
-const Menu = styled.div<{ close: boolean }>`
-  padding: 0 27px;
-  width: 80%;
-  max-width: 332px;
-  height: 100vh;
-  background-color: #fff;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1001;
-  animation: ${(props) => (props.close ? slideOut : slideIn)} 0.5s ease-in-out;
-`;
+const Menu = styled.div<{ close: boolean }>(
+  ({ close }) => css`
+    /* 스타일 설정 */
+    padding: 0 27px;
+    width: 80%;
+    max-width: 332px;
+    height: 100vh;
+    background-color: #fff;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1002;
+    animation: ${close ? slideOut : slideIn} 0.5s ease-in-out;
+  `
+);
 
 const Background = styled.div<{ close: boolean }>`
   width: 100%;
