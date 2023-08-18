@@ -1,44 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { putChangeNickname } from '../../api/User';
+import { postPasswordCompare, putChangeNickname } from '../../api/User';
 import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
-import { UserProps } from '../../types/User';
-
-const user = {
-  id: 0,
-  name: '김민수',
-  email: localStorage.getItem('email') || '',
-  password: localStorage.getItem('password') || '',
-  gender: '남자'
-};
+import { ToastContainer, toast } from 'react-toastify';
+import Loading from '../../component/common/Loading';
 
 const EditProfilePage = () => {
-  return (
-    <AuthContainer
-      title='회원정보 수정'
-      component={<EditProfile user={user} />}
-    />
-  );
+  return <AuthContainer title='회원정보 수정' component={<EditProfile />} />;
 };
 
 export default EditProfilePage;
 
-const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
-  const [name, setName] = useState<string>(user.name);
+const EditProfile = () => {
+  const [name, setName] = useState<string>(localStorage.getItem('name')!);
+  const [email, setEmail] = useState<string>(localStorage.getItem('email')!);
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
   const data = { name: name };
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChangePassword = () => {
-    navigate('/user/edit/password');
+  const handleChangePassword = async () => {
+    const data = { password: password };
+    setLoading(true);
+    const response = await postPasswordCompare(data);
+    if (response.code === 200) {
+      navigate('/user/edit/password');
+    } else if (response.code === 400) {
+      console.log(response.message);
+    }
+    setLoading(false);
   };
   const handleChangeName = async () => {
+    setLoading(true);
     const response = await putChangeNickname(data);
-    console.log(response);
+    if (response.code === 200) {
+      localStorage.setItem('name', name);
+      toast('이름 변경이 완료되었습니다.', {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast'
+      });
+    } else {
+      toast(response.message, {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast'
+      });
+    }
+    setLoading(false);
   };
   return (
     <>
@@ -50,7 +69,7 @@ const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
         placeholder='이름을 입력하세요'
       />
       <div style={{ height: 17 }} />
-      <Input label='아이디' type='email' value={user.email} disabled={true} />
+      <Input label='아이디' type='email' value={email} disabled={true} />
       <div style={{ height: 17 }} />
       <InputBox>
         <Input
@@ -74,6 +93,8 @@ const EditProfile: React.FC<{ user: UserProps }> = ({ user }) => {
       <A href='/user/delete' style={FONT.L6}>
         계정 삭제하기
       </A>
+      <ToastContainer />
+      {loading && <Loading />}
     </>
   );
 };

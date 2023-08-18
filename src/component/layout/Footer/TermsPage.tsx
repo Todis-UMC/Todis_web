@@ -10,12 +10,15 @@ interface Params {
 }
 
 const Container = styled.div`
-  padding: 150px;
-  color: ${(props) => props.theme.Gray_Main};
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 150px;
+  padding-right: 150px;
+  background-color: ${(props) => props.theme.Sky_Blue_04};
 `;
 
 const Title = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 50px;
   color: ${(props) => props.theme.Typo_Black};
 `;
 
@@ -48,11 +51,11 @@ const TermsPage: React.FC = () => {
 
   return (
     <Container>
-      <Title style={FONT.H0}>{term.title}</Title>
+      <Title style={FONT.H1}>{term.title}</Title>
       {term.content?.map((contentItem, index) => (
         <div key={index}>
-          <ContentTitle style={FONT.H0}>{contentItem.title}</ContentTitle>
-          <Content style={FONT.M3}>{contentItem.content}</Content>
+          <ContentTitle style={FONT.M2}>{contentItem.title}</ContentTitle>
+          <Content style={FONT.L5}>{contentItem.content}</Content>
         </div>
       ))}
     </Container>

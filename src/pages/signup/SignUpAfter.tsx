@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthContainer from '../../component/login/AuthContainer';
 import SignUpAfterLogo from '../../assets/img/SignUpAfterLogo.png';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import Button from '../../component/common/Button';
 import { useNavigate } from 'react-router-dom';
+import { getInfo } from '../../api/User';
 
 const SignUpAfterPage = () => (
   <AuthContainer title='회원가입에 성공했어요!' component={<SignUpAfter />} />
@@ -13,10 +14,20 @@ const SignUpAfterPage = () => (
 export default SignUpAfterPage;
 
 const SignUpAfter = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getInfo();
+      localStorage.setItem('name', response.data.name);
+      localStorage.setItem('email', response.data.email);
+    };
+    fetchData();
+  }, []);
   const navigate = useNavigate();
   return (
     <>
-      <Title style={FONT.H1}>반가워요, 이름님! </Title>
+      <Title style={FONT.H1}>
+        반가워요, {localStorage.getItem('name')}님!{' '}
+      </Title>
       <img src={SignUpAfterLogo} alt='SignUpAfter' width={302} height={302} />
       <BlueButton>
         <Button

@@ -28,13 +28,27 @@ export const postLogin = async (data: LoginProps) => {
 export const getKakaologin = async (code: string) => {
   try {
     const res = await request.get({
-      url: '/user/kakao',
-      params: { code: code }
+      url: `/user/kakao?code=${code}`,
+      params: {}
     });
     console.log('카카오 로그인 완료', res);
     return res;
   } catch (error) {
     console.error('카카오 로그인 오류:', error);
+    throw error;
+  }
+};
+
+export const getGoogleLogin = async (code: string) => {
+  try {
+    const res = await request.get({
+      url: `/user/google?code=${code}`,
+      params: {}
+    });
+    console.log('구글 로그인 완료', res);
+    return res;
+  } catch (error) {
+    console.error('구글 로그인 오류:', error);
     throw error;
   }
 };
