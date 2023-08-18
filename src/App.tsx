@@ -2,11 +2,9 @@ import React from 'react';
 import Login from './pages/Login';
 import Friend from './pages/Friend';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Nav from './component/common/Nav/Nav';
 import SignUpBeforePage from './pages/signup/SignUpBefore';
 import SignUpEmailPage from './pages/signup/SignUpEmail';
-import Footer from './component/common/Footer/Footer';
-import TermsPage from './component/common/Footer/TermsPage';
+import TermsPage from './component/layout/Footer/TermsPage';
 import SignUpInfoPage from './pages/signup/SignUpInfo';
 import SignUpAfterPage from './pages/signup/SignUpAfter';
 import EditProfilePage from './pages/user/EditProfile';
@@ -18,6 +16,8 @@ import Lank from './pages/Lank';
 import MyPage from './pages/MyPage';
 import Google from './pages/signup/Google';
 import Kakao from './pages/signup/Kakao';
+import Nav from './component/layout/Nav/Nav';
+import Footer from './component/layout/Footer/Footer';
 
 function App() {
   const noLayout =
