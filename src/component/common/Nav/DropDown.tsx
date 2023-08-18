@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineDown } from 'react-icons/ai';
 import FONT from '../../../styles/Font';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Button = styled.button`
   background-color: transparent;
@@ -16,12 +16,10 @@ const Button = styled.button`
 
 const ButtonText = styled.span`
   margin-right: 4px;
-  
 `;
 
 const ButtonContainer = styled.div`
   position: relative;
-  
 `;
 
 const MenuContainer = styled.div<{ isVisible: boolean }>`
@@ -29,8 +27,8 @@ const MenuContainer = styled.div<{ isVisible: boolean }>`
   text-align: center;
   top: 130%;
   right: 0;
-  width: 120px; 
-  height: 77px; 
+  width: 120px;
+  height: 77px;
   background-color: white;
   border: none;
   border-radius: 7px;
@@ -38,7 +36,7 @@ const MenuContainer = styled.div<{ isVisible: boolean }>`
   z-index: 10000;
 `;
 
-const MenuItem = styled.div<{ active: boolean }>`
+const MenuItem = styled.div`
   color: black;
   padding: 10px;
   cursor: pointer;
@@ -47,7 +45,7 @@ const MenuItem = styled.div<{ active: boolean }>`
   }
   a {
     text-decoration: none;
-    color: ${(props) => (props.active ? '#437df6' : 'inherit')};
+
     font-size: inherit;
   }
 `;
@@ -57,31 +55,32 @@ const DownIcon = styled(AiOutlineDown)`
 `;
 
 const DropDownButton: React.FC = () => {
-    const [isVisible, setIsVisible] = useState(false);
-    const location = useLocation();
-  
-    const items = ['회원정보 수정', '로그아웃'];
-  
-    const handleButtonClick = () => {
-      setIsVisible(!isVisible);
-    };
-  
-    return (
-      <ButtonContainer>
-        <Button onClick={handleButtonClick}>
-          <ButtonText style={FONT.M3}>김이름 님</ButtonText>
-          <DownIcon />
-        </Button>
-        <MenuContainer isVisible={isVisible}>
-          {items.map((item, index) => (
-            <MenuItem key={index}
-            active={location.pathname === (item === '회원정보 수정' ? '/user/edit' : '/main')}>
-              <Link to={item === '회원정보 수정' ? '/user/edit' : '/main'}>{item}</Link>
-            </MenuItem>
-          ))}
-        </MenuContainer>
-      </ButtonContainer>
-    );
+  const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    setIsVisible(!isVisible);
   };
-  
-  export default DropDownButton;
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
+  return (
+    <ButtonContainer>
+      <Button onClick={handleButtonClick}>
+        <ButtonText style={FONT.M3}>김이름 님</ButtonText>
+        <DownIcon />
+      </Button>
+      <MenuContainer isVisible={isVisible}>
+        <MenuItem onClick={() => navigate('/user/edit')}>
+          회원정보 수정
+        </MenuItem>
+        <MenuItem onClick={() => logout()}>로그아웃</MenuItem>
+      </MenuContainer>
+    </ButtonContainer>
+  );
+};
+
+export default DropDownButton;

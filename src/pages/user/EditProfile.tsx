@@ -21,7 +21,7 @@ const EditProfile = () => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
   const data = { name: name };
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChangePassword = async () => {
     const data = { password: password };
@@ -32,7 +32,7 @@ const EditProfile = () => {
     } else if (response.code === 400) {
       console.log(response.message);
     }
-    // setLoading(false);
+    setLoading(false);
   };
   const handleChangeName = async () => {
     setLoading(true);
@@ -57,7 +57,7 @@ const EditProfile = () => {
         className: 'custom-toast'
       });
     }
-    // setLoading(false);
+    setLoading(false);
   };
   return (
     <>

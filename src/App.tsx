@@ -1,10 +1,8 @@
 import React from 'react';
 import Login from './pages/Login';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import Friend from './pages/Friend';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Nav from './component/common/Nav/Nav';
-import NavLogin from './component/common/Nav/NavLogin';
 import SignUpBeforePage from './pages/signup/SignUpBefore';
 import SignUpEmailPage from './pages/signup/SignUpEmail';
 import Footer from './component/common/Footer/Footer';
@@ -35,7 +33,6 @@ function App() {
       <BrowserRouter>
         <div className='App'>
           {!noLayout && <Nav />}
-          {!noLayout && <NavLogin />}
           <Routes>
             <Route path='/kakao' element={<Kakao />} />
             <Route path='/google' element={<Google />} />

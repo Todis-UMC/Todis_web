@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../../styles/Font';
 import { ReactComponent as Logo } from '../../../assets/icon/SmallLogo.svg';
-import SignInButton from './SignInButton';
-import SignUpButton from './SignUpButton';
+import DropDown from './DropDown';
 import LanguageButton from './LanguageButton';
+import SignUpButton from './SignUpButton';
+import SignInButton from './SignInButton';
 
 const LogoContainer = styled.div`
   margin-top: 4rem;
@@ -19,26 +20,35 @@ const NavBarContainer = styled.div`
   padding: 1rem;
   background-color: #f3f6fc;
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media screen and (max-width: 768px) {
-    flex-direction: row;
-  }
+  justify-content: space-between;
 `;
 
 const NavBar = styled.div`
+  max-width: 800px;
   text-align: center;
   margin-top: 4rem;
   margin-bottom: 4rem;
   flex: 1;
-  margin-left: 15rem;
+  margin-left: 5rem;
+  padding: 0 6rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const NavLink = styled(Link)`
   text-decoration: none;
-  margin: 4rem;
   color: ${(props) => props.theme.Black_Main};
+  width: fit-content;
+  padding-right: min(5rem, 10px);
+`;
+
+const DropDownContainer = styled.div`
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  margin-right: 5.5rem;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 const ButtonContainer1 = styled.div`
@@ -64,10 +74,11 @@ const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const token = localStorage.getItem('token');
 
+  const token = localStorage.getItem('token');
   useEffect(() => {
     setActiveLink(location.pathname);
+
     if (token) {
       setIsLoggedIn(true);
     } else {
@@ -77,7 +88,7 @@ const Nav: React.FC = () => {
 
   return (
     <NavBarContainer style={FONT.M3}>
-      {!isLoggedIn && (
+      {isLoggedIn && (
         <>
           <LogoContainer>
             <Logo />
@@ -85,7 +96,7 @@ const Nav: React.FC = () => {
           <NavBar>
             <NavLink
               to={'/'}
-              style={activeLink === '/home' ? { color: '#437df6' } : {}}
+              style={activeLink === '/' ? { color: '#437df6' } : {}}
             >
               홈
             </NavLink>
@@ -111,11 +122,17 @@ const Nav: React.FC = () => {
           <LanguageButtonContainer>
             <LanguageButton />
           </LanguageButtonContainer>
-          <ButtonContainer1>
-            <SignUpButton />
-            <ButtonSpacer />
-            <SignInButton />
-          </ButtonContainer1>
+          {!token ? (
+            <ButtonContainer1>
+              <SignUpButton />
+              <ButtonSpacer />
+              <SignInButton />
+            </ButtonContainer1>
+          ) : (
+            <DropDownContainer>
+              <DropDown />
+            </DropDownContainer>
+          )}
         </>
       )}
     </NavBarContainer>

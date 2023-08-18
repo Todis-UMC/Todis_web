@@ -53,7 +53,7 @@ const Login = () => {
       const response = await postLogin(login);
       if (response.code === 200) {
         localStorage.setItem('token', response.data);
-        navigate('/signup/complete');
+        navigate('/');
       } else if (response.code === 400) {
         console.log(response.message);
         toast(response.message, {
