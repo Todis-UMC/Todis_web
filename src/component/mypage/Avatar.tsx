@@ -173,8 +173,8 @@ const Avatar = () => {
     });
     setSelectedImageArray(selectedImageArray);
     setInventoryImageArray(inventoryImageArray);
-    console.log('아이템url배열: ', selectedImageArray);
-    console.log('인벤url배열: ', inventoryImageArray);
+    // console.log('아이템url배열: ', selectedImageArray);
+    // console.log('인벤url배열: ', inventoryImageArray);
   };
 
   const ItemBoxHandler = () => {
@@ -189,13 +189,6 @@ const Avatar = () => {
       ? Images('./M_Avatar.png')
       : Images('./W_Avatar.png');
     setAvatarImg(newAvatarImg);
-
-    /* 성별에 따른 아바타 및 성별토글 상태 저장
-    localStorage.setItem('isFemale', selected ? 'true' : 'false');
-    const saveSexToLocalStorage = (value: boolean) => {
-      localStorage.setItem('selectedSex', JSON.stringify(value));
-    };
-    saveSexToLocalStorage(!selected);*/
 
     const E5_W_Image = Images('./E5_W.png');
     const E5_M_Image = Images('./E5_M.png');
@@ -292,7 +285,6 @@ const Avatar = () => {
             const imageObject: ImageDataObject = {};
             imageObject[imageName] = imageBlob;
             imageArray.push(imageObject);
-            console.log('저장: ', JSON.stringify(imageArray));
             console.log('아이템배열값: ', selectedImageArray[i]);
           } else {
             imageArray.push({
@@ -383,7 +375,7 @@ const Avatar = () => {
             responseData.data.shoesimg,
             responseData.data.accimg
           ]);
-          console.log('이미지 : ', selectedImagesinit);
+          // console.log('이미지 : ', selectedImagesinit);
 
           setInventoryinit([
             [responseData.data.topminimg],
@@ -391,7 +383,7 @@ const Avatar = () => {
             [responseData.data.shoesminimg],
             [responseData.data.accminimg]
           ]);
-          console.log('인벤 : ', inventoryinit);
+          // console.log('인벤 : ', inventoryinit);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -400,34 +392,6 @@ const Avatar = () => {
     };
 
     fetchData();
-
-    /*
-    if (selectedImages.length === 0) {
-      const initialSelectedImages = ItemMenu.map(() => '');
-      setSelectedImages(initialSelectedImages);
-    }*/
-    /*
-    // 로컬스토리지에 저장된 아이템 이미지 가져오기
-    const savedselectedImages = localStorage.getItem('selectedImages');
-    const savedInventory = localStorage.getItem('inventory');
-    // 로컬스토리지에 저장된 성별토글 상태와 아바타 가져오기 (초기상태-여자)
-    const isFemale = localStorage.getItem('isFemale');
-    setAvatarImg(
-      isFemale === 'true'
-        ? Images('./W_Avatar.png')
-        : isFemale === 'false'
-        ? Images('./M_Avatar.png')
-        : Images('./W_Avatar.png')
-    );
-    const savedSelectedSex = localStorage.getItem('selectedSex');
-    setSelected(savedSelectedSex === 'true');
-
-    setSelectedImages(
-      savedselectedImages ? JSON.parse(savedselectedImages) : selectedImages
-    );
-    setInventory(
-      savedInventory ? JSON.parse(savedInventory) : ItemMenu.map(() => [])
-    );*/
   }, []);
 
   return (
