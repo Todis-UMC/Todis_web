@@ -36,6 +36,11 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
     onClose();
     navigate('/login');
   };
+  const handleLogout = () => {
+    onClose();
+    localStorage.removeItem('token');
+    navigate('/');
+  };
 
   return (
     <Container>
@@ -46,7 +51,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
           </div>
           <CloseButton onClick={() => handleSlideout()} />
         </Top>
-        {!token && (
+        {!token ? (
           <>
             <Notice style={FONT.L6}>
               로그인 후 다양한 서비스를 이용하세요.
@@ -55,7 +60,14 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
               로그인
             </Button>
           </>
+        ) : (
+          <div style={{ marginTop: 30 }}>
+            <Button height={45} onClick={() => handleLogout()}>
+              로그아웃
+            </Button>
+          </div>
         )}
+
         <div style={{ marginTop: 40 }}>
           {Routes.map((route, index) => (
             <MenuLink
