@@ -9,11 +9,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import { Mobile, PC } from '../../common/Responsive';
 import { ReactComponent as Menu } from '../../../assets/icon/Hamburger.svg';
 import Routes from '../../../constants/Route';
+import SideMenu from './SideMenu';
 
 const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
-  const isMobile = window.innerWidth < 890;
+  const [menu, setMenu] = useState<boolean>(false);
 
   const token = localStorage.getItem('token');
   useEffect(() => {
@@ -57,12 +58,13 @@ const Nav: React.FC = () => {
       <MobileContainer>
         <Mobile>
           <Logo />
-          <MenuBox>
+          <MenuBox onClick={() => setMenu(!menu)}>
             <Menu />
           </MenuBox>
         </Mobile>
       </MobileContainer>
       <ToastContainer />
+      {menu && <SideMenu onClose={() => setMenu(false)} />}
     </>
   );
 };
