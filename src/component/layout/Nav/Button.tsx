@@ -62,11 +62,11 @@ const Language = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #e6e6e6;
   background-color: transparent;
   border-radius: 30px;
   padding: 5px 18px;
   color: #437df6;
+  border: 2px solid ${(props) => props.theme.SkyBlue_02};
 `;
 
 const ButtonSpacer = styled.div`
