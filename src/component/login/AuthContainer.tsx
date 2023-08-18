@@ -23,7 +23,9 @@ const AuthContainer = ({
             <ArrowBack />
           </Back>
         )}
-        <SmallLogo />
+        <div onClick={() => navigate('/')}>
+          <SmallLogo />
+        </div>
         <Title style={FONT.H5}>{title}</Title>
         {content ? (
           <Content>

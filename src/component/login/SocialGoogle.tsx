@@ -1,10 +1,7 @@
-import { useGoogleLogin } from '@react-oauth/google';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as Google } from '../../assets/icon/Google.svg';
-import { getGoogleLogin } from '../../api/Auth';
-import { useNavigate } from 'react-router-dom';
 const SocialGoogle = () => {
   const Client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const rediect_url = 'http://localhost:3000/google';

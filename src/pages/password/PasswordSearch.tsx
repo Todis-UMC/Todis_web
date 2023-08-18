@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { postFindPassword } from '../../api/User';
 import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
+import Loading from '../../component/common/Loading';
 import SmallModal from '../../component/common/SmallModal';
 import AuthContainer from '../../component/login/AuthContainer';
 
@@ -11,8 +12,7 @@ const PasswordSearchPage = () => (
     title='비밀번호 찾기'
     component={<PasswordSearch />}
     content='가입하신 이메일을 입력해 주세요.<br/>
-    비밀번호를 재설정할 수 있는 이메일을 보내드립니다.<br/>
-    발송된 이메일의 비밀번호 재설정은 15분 간 유효합니다.'
+    임시 비밀번호가 포함된 이메일을 보내드립니다.'
   />
 );
 
@@ -22,8 +22,10 @@ export const PasswordSearch = () => {
   const [email, setEmail] = useState<string>('');
   const [warn, setWarn] = useState<boolean>(false);
   const [notice, setNotice] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleButton = async () => {
+    setLoading(true);
     const response = await postFindPassword(email);
     console.log(response);
     if (response.code === 200) {
@@ -31,6 +33,7 @@ export const PasswordSearch = () => {
     } else if (response.code === 400) {
       setWarn(true);
     }
+    setLoading(false);
   };
   return (
     <>
@@ -64,6 +67,7 @@ export const PasswordSearch = () => {
           onClose={() => setNotice(false)}
         />
       )}
+      {loading && <Loading />}
     </>
   );
 };

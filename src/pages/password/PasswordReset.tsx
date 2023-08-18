@@ -6,6 +6,7 @@ import Button from '../../component/common/Button';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import { ToastContainer, toast } from 'react-toastify';
+import Loading from '../../component/common/Loading';
 
 const PasswordResetPage = () => (
   <AuthContainer
@@ -19,7 +20,7 @@ export default PasswordResetPage;
 
 export const PasswordReset = () => {
   const [password, setPassword] = useState<string>('');
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChangePassword = async () => {
     const data = { password: password };
@@ -33,6 +34,7 @@ export const PasswordReset = () => {
         className: 'custom-toast'
       });
     } else {
+      setLoading(true);
       const response = await putChangePassword(data);
       toast('비밀번호 변경이 완료되었습니다.', {
         position: 'bottom-center',
@@ -43,6 +45,7 @@ export const PasswordReset = () => {
         className: 'custom-toast'
       });
     }
+    setLoading(false);
   };
   return (
     <>
@@ -57,6 +60,7 @@ export const PasswordReset = () => {
         <Button onClick={() => handleChangePassword()}>변경하기</Button>
       </ButtonBox>
       <ToastContainer />
+      {loading && <Loading />}
     </>
   );
 };

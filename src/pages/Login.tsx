@@ -13,6 +13,7 @@ import { postLogin } from '../api/Auth';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from '../component/common/Loading';
 
 const LoginPage = () => <AuthContainer title='로그인' component={<Login />} />;
 
@@ -26,6 +27,7 @@ const Login = () => {
     localStorage.getItem('password') || ''
   );
   const [memory, setMemory] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
@@ -47,10 +49,11 @@ const Login = () => {
       password: password
     };
     try {
+      setLoading(true);
       const response = await postLogin(login);
       if (response.code === 200) {
         localStorage.setItem('token', response.data);
-        navigate('/signup/complete');
+        navigate('/');
       } else if (response.code === 400) {
         console.log(response.message);
         toast(response.message, {
@@ -65,6 +68,7 @@ const Login = () => {
     } catch (error) {
       console.log(error, 'error');
     }
+    setLoading(false);
   };
   return (
     <>
@@ -95,7 +99,7 @@ const Login = () => {
           {memory ? <SmallCheck /> : <SmallUnCheck />}
           로그인 정보 기억하기
         </div>
-        <div style={FONT.L6} onClick={() => navigate('/login/password')}>
+        <div style={FONT.L6} onClick={() => navigate('/user/password')}>
           비밀번호 찾기
         </div>
       </Setting>
@@ -106,6 +110,7 @@ const Login = () => {
         <a href='/signup'> 회원가입</a>
       </SignUp>
       <ToastContainer />
+      {loading && <Loading />}
     </>
   );
 };
