@@ -29,7 +29,6 @@ const Home = () => {
   const onClickButton = () => {
     setIsOpen(true);
   };
-
   return (
     <Container>
       <TitleBox></TitleBox>
