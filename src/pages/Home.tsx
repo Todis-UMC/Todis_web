@@ -14,7 +14,6 @@ import SunsetCardContent from '../component/home/SunsetCard';
 import MainCardContent from '../component/home/MainCard';
 import ListCardContent from '../component/home/ListCard';
 
-
 type ToggleBtnProps = {
   expanded: boolean;
 };

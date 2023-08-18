@@ -130,7 +130,6 @@ const ButtonContainer1 = styled.div`
 const ButtonSpacer = styled.div`
   margin-right: 0.5rem;
 `;
-
 const LanguageButtonContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
