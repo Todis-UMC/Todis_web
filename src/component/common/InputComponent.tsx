@@ -14,6 +14,7 @@ interface InputProps {
   value?: InputValue;
   onChange?: (ev: InputChangeEvent) => void;
   warn?: boolean;
+  disabled?: boolean;
 }
 
 export const Input = ({
@@ -23,7 +24,8 @@ export const Input = ({
   type = '',
   value = '',
   onChange,
-  warn = false
+  warn = false,
+  disabled = false
 }: InputProps) => {
   const [show, setShow] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<InputValue>(value);
@@ -47,6 +49,7 @@ export const Input = ({
           onChange={changeHandler}
           placeholder={placeholder}
           minLength={minLength}
+          disabled={disabled}
         />
         {type == 'password' ? (
           <Secret onClick={() => setShow(!show)}>

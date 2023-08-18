@@ -3,18 +3,36 @@ import styled from 'styled-components';
 import Input from '../../component/common/InputComponent';
 import AuthContainer from '../../component/login/AuthContainer';
 import FONT from '../../styles/Font';
+import { UserProps } from '../../types/User';
+import { postSignup } from '../../api/Auth';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import Button from '../../component/common/Button';
 
 const SignUpInfoPage = () => (
   <AuthContainer title='마지막 단계에요!' component={<SignUpInfo />} />
 );
 
 export default SignUpInfoPage;
+
 const SignUpInfo = () => {
   const [sex, setSex] = useState<number>(0);
   const [name, setName] = useState<string>('');
-
   const handleButtonClick = (selectedSex: number) => {
     setSex(selectedSex);
+  };
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleButton = async () => {
+    const data: UserProps = {
+      name: name,
+      email: location.state.email,
+      password: location.state.password,
+      gender: sex === 1 ? '남자' : '여자'
+    };
+    const response = await postSignup(data);
+    console.log(response);
+    navigate('/signup/complete');
   };
 
   return (
@@ -41,7 +59,19 @@ const SignUpInfo = () => {
           여자
         </GenderButton>
       </Sex>
-      <Button>가입 완료하기</Button>
+      <ButtonBox>
+        {name && sex ? (
+          <Button
+            onClick={() => {
+              handleButton();
+            }}
+          >
+            가입 완료하기
+          </Button>
+        ) : (
+          <Button disabled={true}>가입 완료하기</Button>
+        )}
+      </ButtonBox>
     </>
   );
 };
@@ -81,16 +111,9 @@ const GenderButton = styled.button<{ isSelected: boolean }>`
   &:hover {
     background-color: ${(props) => props.theme.Gray_03};
   }
+  //
 `;
-const Button = styled.button`
-  width: 100%;
-  height: 55px;
-  margin-top: 248px;
-  border: none;
-  border-radius: 14px;
-  background-color: ${(props) => props.theme.Blue_Main};
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
+
+const ButtonBox = styled.div`
+  margin-top: 268px;
 `;
