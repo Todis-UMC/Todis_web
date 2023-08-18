@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../../styles/Font';
@@ -15,6 +15,7 @@ const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
   const [menu, setMenu] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
   useEffect(() => {
@@ -41,7 +42,9 @@ const Nav: React.FC = () => {
             {Routes.map((route, index) => (
               <NavLink
                 key={index}
-                to={token ? route.path : '/login'}
+                onClick={() => {
+                  token ? navigate(route.path) : navigate('/login');
+                }}
                 style={activeLink === route.path ? { color: '#437df6' } : {}}
               >
                 {route.text}
@@ -111,7 +114,7 @@ const NavBar = styled.div`
   justify-content: space-between;
 `;
 
-const NavLink = styled(Link)`
+const NavLink = styled.div`
   text-decoration: none;
   color: ${(props) => props.theme.Black_Main};
   width: fit-content;

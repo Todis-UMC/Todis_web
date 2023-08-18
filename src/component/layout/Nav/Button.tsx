@@ -5,9 +5,14 @@ import { Link } from 'react-router-dom';
 
 export const SignUpButton = () => {
   return (
-    <Link to='/signup'>
-      <SignUp style={FONT.M3}>회원가입</SignUp>
-    </Link>
+    <SignUp
+      onClick={() => {
+        window.location.href = 'signup';
+      }}
+      style={FONT.M3}
+    >
+      회원가입
+    </SignUp>
   );
 };
 export const SignInButton = () => {

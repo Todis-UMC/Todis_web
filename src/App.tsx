@@ -27,7 +27,7 @@ function App() {
     window.location.pathname.startsWith('/signup') ||
     window.location.pathname.startsWith('/user') ||
     window.location.pathname === '/friend/invite';
-
+  console.log(window.location.pathname);
   return (
     <>
       <BrowserRouter>

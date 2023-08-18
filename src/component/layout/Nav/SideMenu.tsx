@@ -60,8 +60,8 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
               {Routes.map((route, index) => (
                 <MenuLink
                   onClick={() => {
-                    navigate(route.path);
-                    onClose();
+                    token ? navigate(route.path) : navigate('/login');
+                    onClose;
                   }}
                   key={index}
                   style={activeLink === route.path ? { color: '#437df6' } : {}}
