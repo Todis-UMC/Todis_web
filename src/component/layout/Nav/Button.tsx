@@ -24,6 +24,18 @@ export const LanguageButton: React.FC = () => {
   return <Language style={FONT.M3}>KR</Language>;
 };
 
+export const Buttons = () => {
+  return (
+    <ButtonContainer>
+      <SignUpButton />
+      <ButtonSpacer />
+      <SignInButton />
+    </ButtonContainer>
+  );
+};
+
+export default Buttons;
+
 const SignUp = styled.button`
   background-color: ${(props) => props.theme.SkyBlue_02};
   color: #437df6;
@@ -55,4 +67,14 @@ const Language = styled.button`
   border-radius: 30px;
   padding: 5px 18px;
   color: #437df6;
+`;
+
+const ButtonSpacer = styled.div`
+  margin-right: 0.5rem;
+`;
+
+const ButtonContainer = styled.div`
+  margin-right: 5.5rem;
+  display: flex;
+  align-items: center;
 `;

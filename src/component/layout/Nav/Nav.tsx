@@ -4,12 +4,16 @@ import styled from 'styled-components';
 import FONT from '../../../styles/Font';
 import { ReactComponent as Logo } from '../../../assets/icon/SmallLogo.svg';
 import DropDown from './DropDown';
-import { SignUpButton, SignInButton, LanguageButton } from './Button';
+import Buttons, { SignUpButton, SignInButton, LanguageButton } from './Button';
 import { toast, ToastContainer } from 'react-toastify';
+import { Mobile, PC } from '../../common/Responsive';
+import { ReactComponent as Menu } from '../../../assets/icon/Hamburger.svg';
+import Routes from '../../../constants/Route';
 
 const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
+  const isMobile = window.innerWidth < 890;
 
   const token = localStorage.getItem('token');
   useEffect(() => {
@@ -27,70 +31,70 @@ const Nav: React.FC = () => {
     });
   };
   return (
-    <NavBarContainer style={FONT.M3}>
-      <LogoContainer>
-        <Logo />
-      </LogoContainer>
-      <NavBar>
-        <NavLink
-          to={'/'}
-          style={activeLink === '/' ? { color: '#437df6' } : {}}
-        >
-          홈
-        </NavLink>
-        <NavLink
-          to={token ? '/mypage' : '/login'}
-          style={activeLink === '/mypage' ? { color: '#437df6' } : {}}
-        >
-          마이페이지
-        </NavLink>
-        <NavLink
-          to={token ? '/friend' : '/login'}
-          style={activeLink === '/friend' ? { color: '#437df6' } : {}}
-        >
-          친구
-        </NavLink>
-        <NavLink
-          to={token ? '/lank' : '/login'}
-          style={activeLink === '/lank' ? { color: '#437df6' } : {}}
-        >
-          더보기
-        </NavLink>
-      </NavBar>
-      <LanguageButtonContainer onClick={() => changeLanguage()}>
-        <LanguageButton />
-      </LanguageButtonContainer>
-      {!token ? (
-        <ButtonContainer1>
-          <SignUpButton />
-          <ButtonSpacer />
-          <SignInButton />
-        </ButtonContainer1>
-      ) : (
-        <DropDownContainer>
-          <DropDown />
-        </DropDownContainer>
-      )}
+    <>
+      {/* PC 디자인 */}
+      <PC>
+        <PcContainer style={FONT.M3}>
+          <Logo />
+          <NavBar>
+            {Routes.map((route, index) => (
+              <NavLink
+                key={index}
+                to={token ? route.path : '/login'}
+                style={activeLink === route.path ? { color: '#437df6' } : {}}
+              >
+                {route.text}
+              </NavLink>
+            ))}
+          </NavBar>
+          <LanguageButtonContainer onClick={() => changeLanguage()}>
+            <LanguageButton />
+          </LanguageButtonContainer>
+          {!token ? <Buttons /> : <DropDown />}
+        </PcContainer>{' '}
+      </PC>
+      {/* 모바일 디자인 */}
+      <MobileContainer>
+        <Mobile>
+          <Logo />
+          <MenuBox>
+            <Menu />
+          </MenuBox>
+        </Mobile>
+      </MobileContainer>
       <ToastContainer />
-    </NavBarContainer>
+    </>
   );
 };
 
 export default Nav;
 
-const LogoContainer = styled.div`
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-  margin-left: 5.5rem;
-  display: flex;
-  justify-content: center;
-`;
-
-const NavBarContainer = styled.div`
-  padding: 1rem;
-  background-color: #f3f6fc;
+const PcContainer = styled.div`
+  margin-bottom: -50px;
+  background-color: ${(props) => props.theme.Sky_Blue_04};
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  > svg {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    margin-left: 5.5rem;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const MobileContainer = styled.div`
+  padding: 2rem 1.5rem;
+  background-color: ${(props) => props.theme.Sky_Blue_04};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > svg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const NavBar = styled.div`
@@ -112,29 +116,16 @@ const NavLink = styled(Link)`
   padding-right: min(5rem, 10px);
 `;
 
-const DropDownContainer = styled.div`
+const LanguageButtonContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
-  margin-right: 5.5rem;
+  margin-right: 1rem;
   display: flex;
   justify-content: center;
   cursor: pointer;
 `;
 
-const ButtonContainer1 = styled.div`
-  margin-right: 5.5rem;
-  display: flex;
-  align-items: center;
-`;
-
-const ButtonSpacer = styled.div`
-  margin-right: 0.5rem;
-`;
-
-const LanguageButtonContainer = styled.div`
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-  margin-right: 1rem;
+const MenuBox = styled.div`
   display: flex;
   justify-content: center;
   cursor: pointer;
