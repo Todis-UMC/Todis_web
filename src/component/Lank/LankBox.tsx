@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import LikeButton from './LikeButton';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 const Box = styled.div`
   width: 67rem;
@@ -56,6 +57,13 @@ margin-left: 61rem;
 top: 8.5rem;
 `;
 
+const CenteredImage = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const LankBox = ({
     name,
     statusmessage,
@@ -73,6 +81,7 @@ const LankBox = ({
           <LankNum style={FONT.L1}>{lankNum}</LankNum>
         </Lanking>
         <OutfitPic>
+          <CenteredImage src={avatar} alt='OutfitPic' height='100%' />
         </OutfitPic>
         <ButtonStyling>
           <LikeButton />
