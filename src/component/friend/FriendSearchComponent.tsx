@@ -49,6 +49,11 @@ const Box = styled.div`
     background: ${(props) => props.theme.Gray_02};
     margin: 18px 0px;
   }
+  @media (max-width: 500px) {
+    max-width: 400px;
+    width: 80%;
+    height: 30px;
+  }
 `;
 const Profile = styled.div`
   width: 39px;
@@ -57,7 +62,7 @@ const Profile = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
 `;
 const Name = styled.div`
-  width: 42px;
+  width: fit-content;
   height: 19px;
   position: absolute;
   top: 11px;
@@ -74,4 +79,10 @@ const Delete = styled.button`
   border: none;
   color: #fff;
   cursor: pointer;
+  @media (max-width: 500px) {
+    width: 40px;
+    height: 30px;
+    top: 10px;
+    left: 150px;
+  }
 `;
