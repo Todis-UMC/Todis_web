@@ -18,6 +18,7 @@ import Google from './pages/signup/Google';
 import Kakao from './pages/signup/Kakao';
 import Nav from './component/layout/Nav/Nav';
 import Footer from './component/layout/Footer/Footer';
+import Home from './pages/Home';
 
 function App() {
   const noLayout =
@@ -34,6 +35,7 @@ function App() {
         <div className='App'>
           {!noLayout && <Nav />}
           <Routes>
+            <Route path='/' element={<Home />} />
             <Route path='/kakao' element={<Kakao />} />
             <Route path='/google' element={<Google />} />
             <Route path='/login' element={<Login />} />

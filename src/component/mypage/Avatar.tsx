@@ -8,6 +8,7 @@ import { ReactComponent as MaleIcon } from '../../assets/icon/MaleIcon.svg';
 import { ReactComponent as FemaleIcon } from '../../assets/icon/FemaleIcon.svg';
 import { ReactComponent as ResetIcon } from '../../assets/icon/ResetIcon.svg';
 import axios from 'axios';
+import { useMediaQuery } from 'react-responsive';
 
 type AvatarProps = {
   showItemBox: boolean;
@@ -108,6 +109,7 @@ const baseURL =
 const token = localStorage.getItem('token');
 
 const Avatar = () => {
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
   const [avatarImg, setAvatarImg] = useState(Images('./M_Avatar.png')); // 아바타 성별
@@ -473,7 +475,7 @@ const Avatar = () => {
                 key={menu.id}
                 onClick={() => MenuClickHandler(index)}
                 selected={selectedMenuIndex === index}
-                style={FONT.H4}
+                style={isMobile ? FONT.M3 : FONT.H4}
               >
                 {menu.label}
               </MenuItem>
@@ -504,6 +506,12 @@ const AvatarContainer = styled.div`
   flex-direction: column;
   width: 100%;
   margin-right: 40px;
+  @media (max-width: 500px) {
+    justify-content: center;
+    align-items: center;
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
 `;
 const AvatarBox = styled.div`
   display: flex;
@@ -566,6 +574,9 @@ const SettingContainer = styled.div`
   max-width: 764px;
   height: 590px;
   padding: 45px;
+  @media (max-width: 500px) {
+    padding: 20px;
+  }
 `;
 /* 성별 */
 const SexBtnBox = styled.div`
@@ -601,6 +612,9 @@ const InventoryBox = styled.div`
   right: 50px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 500px) {
+    right: 20px;
+  }
 `;
 const Inventory = styled.div`
   width: 49px;
@@ -611,6 +625,9 @@ const Inventory = styled.div`
   background-size: 90%;
   background-position: center;
   background-repeat: no-repeat;
+  @media (max-width: 500px) {
+    z-index: 1;
+  }
 `;
 /* 리셋 */
 const ResetBtn = styled.button`
@@ -673,6 +690,11 @@ const ImageButton = styled.button`
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 25px;
+  @media (max-width: 500px) {
+    width: 100px;
+    height: 100px;
+    margin: 10px 10px 10px 10px;
+  }
 `;
 const SaveBtn = styled.button<Pick<AvatarProps, 'saving'>>`
   display: flex;

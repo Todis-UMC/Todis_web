@@ -3,13 +3,17 @@ import styled from 'styled-components';
 import FONT from '../styles/Font';
 import CodiPoint from '../component/mypage/CodiPoint';
 import Avatar from '../component/mypage/Avatar';
+import { useMediaQuery } from 'react-responsive';
 
 const MyPage = () => {
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
   return (
     <Container>
       <Title>
         <div style={{ ...FONT.L4, paddingBottom: '13px' }}>날씨에 따른</div>
-        <div style={FONT.H1}>오늘의 코디 추천 포인트는?</div>
+        <div style={isMobile ? FONT.H6 : FONT.H1}>
+          오늘의 코디 추천 포인트는?
+        </div>
       </Title>
       <CodiContainer>
         <Avatar />
@@ -42,4 +46,8 @@ const CodiContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   margin-top: 80px;
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;

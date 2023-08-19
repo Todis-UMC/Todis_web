@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as CodiCheck } from '../../assets/icon/CodiCheck.svg';
 import { ReactComponent as CodiUnCheck } from '../../assets/icon/CodiUnCheck.svg';
+import { useMediaQuery } from 'react-responsive';
 
 type CheckProps = {
   isChecked: boolean;
@@ -16,6 +17,7 @@ type CodiBoxData = {
 
 const CodiPoint = () => {
   const [coditexts, setCoditexts] = useState<CodiBoxData[]>([]);
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
 
   useEffect(() => {
     // 예시 데이터
@@ -62,7 +64,11 @@ const CodiPoint = () => {
   return (
     <div>
       {coditexts.map((item) => (
-        <CodiBox key={item.id} style={FONT.L3} isChecked={item.isChecked}>
+        <CodiBox
+          key={item.id}
+          style={isMobile ? FONT.L5 : FONT.L3}
+          isChecked={item.isChecked}
+        >
           {item.text}
           <CheckBtn
             onClick={() => CodiCheckHandler(item.id)}
@@ -94,6 +100,9 @@ const CodiBox = styled.div<CheckProps>`
   max-width: 531px;
   min-height: 130px;
   white-space: pre-line;
+  @media (max-width: 500px) {
+    padding: 30px 65px;
+  }
 `;
 
 const CheckBtn = styled.button<CheckProps>`
@@ -107,4 +116,13 @@ const CheckBtn = styled.button<CheckProps>`
   width: 48px;
   height: 48px;
   cursor: pointer;
+  @media (max-width: 500px) {
+    top: 20px;
+    left: 20px;
+    width: 25px;
+    height: 25px;
+    > svg {
+      width: 10px;
+      height: 10px;
+  }
 `;
