@@ -59,7 +59,7 @@ const Header = styled.div`
 const HeaderContainer = styled.div`
   width: 50rem;
   margin: 0 auto;
-  padding-top: 5rem;
+  padding-top: 50px;
   padding-bottom: 6rem;
 `;
 const Text1 = styled.div`
