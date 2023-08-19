@@ -12,16 +12,12 @@ import PasswordResetPage from './pages/password/PasswordReset';
 import PasswordSearchPage from './pages/password/PasswordSearch';
 import FriendInvite from './pages/FriendInvite';
 import WithdrawalPage from './pages/Withdrawal';
-
-import MyPage from './pages/MyPage';
-
 import Lank from './pages/Lank';
 import MyPage from './pages/MyPage';
 import Google from './pages/signup/Google';
 import Kakao from './pages/signup/Kakao';
 import Nav from './component/layout/Nav/Nav';
 import Footer from './component/layout/Footer/Footer';
-
 
 function App() {
   const noLayout =
@@ -35,31 +31,6 @@ function App() {
   return (
     <>
       <BrowserRouter>
-
-        <GoogleOAuthProvider clientId={client_id}>
-          <div className='App'>
-            {!noLayout && <Nav />}
-            <Routes>
-              <Route path='/login' element={<Login />} />
-              <Route path='/signup' element={<SignUpBeforePage />} />
-              <Route path='/signup/email' element={<SignUpEmailPage />} />
-              <Route path='/signup/info' element={<SignUpInfoPage />} />
-              <Route path='/signup/complete' element={<SignUpAfterPage />} />
-              <Route path='/user/edit' element={<EditProfilePage />} />
-              <Route path='/mypage' element={<MyPage />} />
-              <Route path='/friend' element={<Friend />} />
-              <Route path='/friend/invite' element={<FriendInvite />} />
-              <Route
-                path='/user/edit/password'
-                element={<PasswordResetPage />}
-              />
-              <Route path='/user/delete' element={<WithdrawalPage />} />
-              <Route path='/terms/:id' Component={TermsPage} />
-            </Routes>
-            {!noLayout && <Footer />}
-          </div>
-        </GoogleOAuthProvider>
-
         <div className='App'>
           {!noLayout && <Nav />}
           <Routes>
@@ -82,7 +53,6 @@ function App() {
           </Routes>
           {!noLayout && <Footer />}
         </div>
-
       </BrowserRouter>
     </>
   );
