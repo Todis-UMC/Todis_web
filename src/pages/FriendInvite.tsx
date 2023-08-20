@@ -135,6 +135,11 @@ const FriendInvite = () => {
           />
         )}
         <RequestText>받은 친구 요청</RequestText>
+        <span id='message' style={FONT.L4}>
+          도착한 친구 요청이 없습니다.
+          <br />
+          친구를 초대해보세요!
+        </span>
         <ListBox>
           {friendRequests.map((request, index) => (
             <FriendRequestComponent
@@ -192,6 +197,14 @@ const MainBox = styled.div`
     top: 42px;
     left: 49px;
     cursor: pointer;
+  }
+  #message {
+    line-height: 20px;
+    width: 437px;
+    height: 181px;
+    position: absolute;
+    top: 486px;
+    left: 71px;
   }
 `;
 const Profile = styled.div`
