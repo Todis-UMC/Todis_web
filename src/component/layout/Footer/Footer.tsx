@@ -26,32 +26,66 @@ const FooterWrapper = styled.div`
   flex: 1;
 `;
 
-
 const Footer: React.FC = () => {
+  const token = localStorage.getItem('token');
   return (
     <FooterContainer>
       <FooterWrapper>
-      <div className="inner" style={FONT.L6}>
-        <Message>
-          <Link to="/login" style={{ color: 'inherit', textDecoration: 'none' }}>
-            로그인
-          </Link>
-          {' | '}
-          <Link to="/signup" style={{ color: 'inherit', textDecoration: 'none' }}>
-            회원가입
-          </Link>
-          {' | '}
-          <Link to="/terms/0" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <div className='inner' style={FONT.L6}>
+          <Message>
+            {!token ? (
+              <span
+                onClick={() => {
+                  window.location.href = '/login';
+                }}
+                style={{
+                  color: 'inherit',
+                  textDecoration: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                로그인
+              </span>
+            ) : (
+              <span
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  window.location.href = '/';
+                }}
+                style={{
+                  color: 'inherit',
+                  textDecoration: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                로그아웃
+              </span>
+            )}
+            {' | '}
+            <Link
+              to='/signup'
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
+              회원가입
+            </Link>
+            {' | '}
+            <Link
+              to='/terms/0'
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
               이용약관
             </Link>
             {' | '}
-            <Link to="/terms/1" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link
+              to='/terms/1'
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
               개인정보처리방침
             </Link>
             {' | @TODIS Corp.'}
-        </Message>
-        <Copyright>저작권 ⓒ Todis. All rights reserved</Copyright>
-      </div>
+          </Message>
+          <Copyright>저작권 ⓒ Todis. All rights reserved</Copyright>
+        </div>
       </FooterWrapper>
     </FooterContainer>
   );
