@@ -52,15 +52,27 @@ const FriendRequest = ({ friendEmail, onClose }: ModalProps) => {
         progress: undefined,
         className: 'custom-toast'
       });
-      return;
+    } else {
+      try {
+        const response = await postFriendRequest(friendEmail);
+        if (response.code === 200) {
+          console.log('친구 요청 성공.', response);
+          onClose?.(); // 창 닫기
+        } else if (response.code === 400) {
+          console.log(response.message);
+          toast(response.message, {
+            position: 'bottom-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            progress: undefined,
+            className: 'custom-toast2'
+          });
+        }
+      } catch (error) {
+        console.error('친구 요청 보내기 오류:', error);
+      }
     }
-    try {
-      const response = await postFriendRequest(friendEmail);
-      console.log('친구 요청 성공.', response);
-    } catch (error) {
-      console.error('친구 요청 보내기 오류:', error);
-    }
-    onClose?.(); // 창 닫기
   };
 
   return (
