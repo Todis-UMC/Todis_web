@@ -155,7 +155,7 @@ const Avatar = () => {
     setInventory(updatedInventory);
     setSelectedImages(updatedSelectedImages);
 
-    console.log('현재 착용된: ', updatedSelectedImages);
+    // console.log('현재 착용된: ', updatedSelectedImages);
 
     // 아이템 이미지 URL 배열
     const selectedImageArray: (string | '')[] = ItemMenu.map((menu, index) => {
@@ -195,11 +195,7 @@ const Avatar = () => {
 
     const updatedImages = [...ItemMenu];
     // 성별에 따라 소품 '안경' 이미지 변경
-    if (selected) {
-      updatedImages[3].images[4] = E5_W_Image;
-    } else {
-      updatedImages[3].images[4] = E5_M_Image;
-    }
+    updatedImages[3].images[4] = selected ? E5_M_Image : E5_W_Image;
     // 아이템도 초기화
     setSelectedImages([]);
     setInventory([]);
@@ -235,9 +231,9 @@ const Avatar = () => {
         const avatarImgFormData = new FormData();
         const blob = await fetch(avatarSaveImg).then((r) => r.blob()); // 이미지 데이터를 Blob으로 변환
         avatarImgFormData.append('file', blob, 'file');
-        avatarImgFormData.forEach((value, key) => {
+        /* avatarImgFormData.forEach((value, key) => {
           console.log(key, value);
-        });
+        }); */
         try {
           const response = await axios.post(
             `${baseURL}/cody/all`,
@@ -343,7 +339,6 @@ const Avatar = () => {
           console.log('image Response Data:', response.data);
         } catch (error) {
           console.error('Error:', error);
-          console.log('/cody/image 오류');
         }
       }
     }
@@ -359,14 +354,19 @@ const Avatar = () => {
         });
 
         const responseData = response.data;
-        console.log('GET 아바타 데이터:', responseData);
+        // console.log('GET 아바타 데이터:', responseData);
 
         const gender = responseData.data.gender;
         setAvatarImg(
           gender === true ? Images('./W_Avatar.png') : Images('./M_Avatar.png')
         );
         setSelected(gender === true ? true : false);
-        console.log('GET 성별:', gender);
+        const E5_W_Image = Images('./E5_W.png');
+        const E5_M_Image = Images('./E5_M.png');
+        const updatedImages = [...ItemMenu];
+        // 성별에 따라 소품 '안경' 이미지 변경
+        updatedImages[3].images[4] = gender ? E5_W_Image : E5_M_Image;
+        // console.log('GET 성별:', gender);
 
         if (responseData) {
           setSelectedImagesinit([
