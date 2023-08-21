@@ -3,11 +3,28 @@ import FONT from '../../styles/Font';
 import color from '../../styles/Color';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-
 import sun from '../../assets/img/Sun.png';
 import cloudSun from '../../assets/img/Cloud&Sun.png';
 import cloud from '../../assets/img/Cloud.png';
 import rain from '../../assets/img/Rain.png';
+import styled from 'styled-components';
+
+const StyledMainCard = styled.div`
+  background-color: #88CBFF;
+  width: 877px;
+  height: 678px;
+  position: relative;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+
+  @media screen and (max-width: 768px) {
+    transform: scale(0.45);
+  }
+`;
 
 const convertWeatherToKorean = (weather: string | undefined) => {
     switch(weather) {
@@ -79,10 +96,10 @@ interface MainCardWeatherData {
 }
 
 const getWeatherIcon = (temp: number, weather: string) => {
-    if (weather === 'Rain') return weatherIcons.rain;
-    if (temp >= 31) return weatherIcons.sun;
-    if (temp <= 19) return weatherIcons.cloud;
-    return weatherIcons.cloudSun;
+  if (weather === 'Rain') return weatherIcons.rain;
+  if (temp >= 27) return weatherIcons.sun;
+  if (temp <= 23) return weatherIcons.cloud;
+  if (temp >= 24 && temp <= 26) return weatherIcons.cloudSun; 
 };
 
 const MainCard = () => {
@@ -92,18 +109,7 @@ const [forecastData, setForecastData] = useState<ForecastData | null>(null);
 const [locationName, setLocationName] = useState<string | null>(null);
 
   const styles: { [key: string]: CSSProperties } = {
-    mainCard: {
-        backgroundColor: '#88CBFF',
-        width: '877px',  
-        height: '678px', 
-        position: 'relative',
-        borderRadius: '40px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '20px', 
-      },
+
       weatherIcon: {
         width: '211px',
         height: '211px',
@@ -295,7 +301,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
   }
 
   return (
-    <div style={styles.mainCard}>
+    <StyledMainCard className="main-card">
       <div style={styles.header}>
         <FontAwesomeIcon icon={faMapMarkerAlt} style={styles.locationIcon} />
         <span style={styles.headerSpan}>{locationName || '위치를 설정해주세요'}</span>
@@ -362,7 +368,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
         </div>
     </div>
     </div>
-    </div>
+    </StyledMainCard>
   );
 };
 export default MainCard;

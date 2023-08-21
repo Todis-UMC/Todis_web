@@ -3,7 +3,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmog } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
+import styled from 'styled-components';
 import { Chart, LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, ChartData, Point } from 'chart.js';
+
+const StyledAirQualityCard = styled.div`
+background: ${Color.Typo_White};
+width: 416px;
+height: 327px;
+padding: 20px;
+padding-left: 30px;
+color: ${Color.Black_Main};
+border-radius: 40px;
+display: flex;
+flex-direction: column;
+box-shadow: 0px 0px 10px ${Color.Gray_03};
+align-items: flex-start;
+justify-content: flex-start;
+
+@media screen and (max-width: 768px) {
+  transform: scale(0.5);
+}
+`;
 
 Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
 
@@ -23,20 +43,6 @@ const Weather = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
   const styles: { [key: string]: CSSProperties } = {
-    AirQualityCard: {
-      background: Color.Typo_White,
-      width: '416px',
-      height: '327px',
-      padding: '20px',
-      paddingLeft: '30px',
-      color: Color.Black_Main,
-      borderRadius: '40px',
-      boxShadow: `0px 0px 10px ${Color.Gray_03}`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-    },
     qualityInfo: {
       display: 'flex',
       alignItems: 'center',
@@ -183,7 +189,7 @@ const Weather = () => {
 
 
   return (
-    <div style={styles.AirQualityCard}>
+    <StyledAirQualityCard className="AirQuality-card">
       <div style={styles.qualityInfo}>
         <FontAwesomeIcon icon={faSmog} />
         <div style={styles.qualityLabel}>대기질</div>
@@ -193,7 +199,7 @@ const Weather = () => {
       <div style={styles.graph}>
         <canvas ref={chartContainer} />
       </div>
-    </div>
+    </StyledAirQualityCard>
   );
 };
 

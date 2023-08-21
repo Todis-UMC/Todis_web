@@ -4,9 +4,32 @@ import { faSun } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
 import { Chart, LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, ChartData, Point } from 'chart.js';
+import styled from 'styled-components';
 
 Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
 
+const SunCardStyles = styled.div`
+  background: ${Color.SkyBlue_03}; 
+  width: 877px; 
+  height: 327px;
+  padding: 20px;
+  paddingLeft: 30px;
+  color: ${Color.Black_Main};
+  border-radius: 40px;
+  box-shadow: 0px 0px 10px ${Color.Gray_03};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 768px) {
+    transform: scale(0.55);
+
+    > div:last-child {
+      margin-top: auto;
+    }
+  }
+`;
 interface Main {
   uvi: number;
 }
@@ -16,52 +39,38 @@ interface WeatherData {
     main: Main;
   }[];
 }
-
 const Weather = () => {
     const chartContainer = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   
     const styles: { [key: string]: CSSProperties } = { 
-      SunCard: {
-        background: Color.SkyBlue_03, 
-        width: '877px', 
-        height: '327px',
-        padding: '20px',
-        paddingLeft: '30px',
-        color: Color.Black_Main,
-        borderRadius: '40px',
-        boxShadow: `0px 0px 10px ${Color.Gray_03}`,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-      },
       SunInfo: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        marginTop: '37px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          marginTop: '37px',
       },
       SunLabel: {
-        ...Font.H6,
-        color: Color.Gray_01,
+          ...Font.H6,
+          color: Color.Gray_01,
       },
       SunValue: {
-        ...Font.M1,
-        color: Color.Gray_00,
-        marginTop: '26.5px',
+          ...Font.M1,
+          color: Color.Gray_00,
+          marginTop: '26.5px',
       },
       SunLevel: {
-        ...Font.L3,
-        color: Color.Gray_01,
-        marginTop: '26.5px',
+          ...Font.L3,
+          color: Color.Gray_01,
+          marginTop: '26.5px',
       },
       graph: {
-        width: '100%',
-        marginTop: '-130px',
+          width: '100%',
+          marginTop: '-130px',
       },
-    };
+  };
+    
   
     useEffect(() => {
         const fetchData = async (position: GeolocationPosition) => {
@@ -202,7 +211,7 @@ const Weather = () => {
   const sunLevel = SunLevel(weatherData.list[0].main.uvi);
 
   return (
-    <div style={styles.SunCard}>
+    <SunCardStyles>
       <div style={styles.SunInfo}>
         <FontAwesomeIcon icon={faSun} />
         <div style={styles.SunLabel}>자외선 지수</div>
@@ -212,7 +221,7 @@ const Weather = () => {
       <div style={styles.graph}>
         <canvas ref={chartContainer} />
       </div>
-    </div>
+    </SunCardStyles>
   );
 };
 

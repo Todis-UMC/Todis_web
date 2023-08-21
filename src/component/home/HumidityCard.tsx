@@ -5,6 +5,25 @@ import { faTint } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
 
+const StyledhumidityCard= styled.div`
+background: ${Color.Typo_White};
+width: 416px;
+height: 327px;
+padding: 20px;
+padding-left: 30px;
+color: ${Color.Black_Main};
+border-radius: 40px;
+display: flex;
+flex-direction: column;
+box-shadow: 0px 0px 10px ${Color.Gray_03};
+align-items: flex-start;
+justify-content: flex-start;
+
+@media screen and (max-width: 768px) {
+  transform: scale(0.5);
+}
+`;
+
 interface WeatherData {
   main: {
     humidity: number;
@@ -15,20 +34,6 @@ const Weather = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
   const styles: { [key: string]: CSSProperties } = {
-    humidityCard: {
-      background: Color.Typo_White,
-      width: '416px',
-      height: '327px',
-      padding: '20px',
-      paddingLeft: '30px',
-      color: Color.Black_Main,
-      borderRadius: '40px',
-      boxShadow: `0px 0px 10px ${Color.Gray_03}`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-    },
     humidityInfo: {
       display: 'flex',
       alignItems: 'center',
@@ -70,7 +75,7 @@ const Weather = () => {
   const humidityLevel = weatherData.main.humidity > 50 ? '높음' : '낮음';
 
   return (
-    <div style={styles.humidityCard}>
+    <StyledhumidityCard className="humidity-card">
       {weatherData.main && weatherData.main.humidity && (
         <div>
           <div style={styles.humidityInfo}>
@@ -81,7 +86,7 @@ const Weather = () => {
           <p style={styles.humidityLevel}>{humidityLevel}</p>
         </div>
       )}
-    </div>
+    </StyledhumidityCard>
   );
 };
 

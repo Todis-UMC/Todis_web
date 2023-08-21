@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudRain } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
+import styled from 'styled-components';
 
 interface WeatherData {
   rain?: {
@@ -11,25 +12,31 @@ interface WeatherData {
   };
 }
 
+const StyledRainCard = styled.div`
+  background: ${Color.Typo_White};
+  width: 416px;
+  height: 327px;
+  padding: 20px;
+  padding-left: 30px;
+  color: ${Color.Black_Main};
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 10px ${Color.Gray_03};
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 768px) {
+    transform: scale(0.5);
+  }
+`;
+
+
 const Rain = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [rainfall, setRainfall] = useState<number | null>(null);
 
   const styles: { [key: string]: CSSProperties } = {
-    RainCard: {
-      background: Color.Typo_White,
-      width: '416px',
-      height: '327px',
-      padding: '20px',
-      paddingLeft: '30px',
-      color: Color.Black_Main,
-      borderRadius: '40px',
-      boxShadow: `0px 0px 10px ${Color.Gray_03}`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-    },
     RainCardInfo: {
       display: 'flex',
       alignItems: 'center',
@@ -72,7 +79,7 @@ const Rain = () => {
   }
 
   return (
-    <div style={styles.RainCard}>
+    <StyledRainCard className="rain-card">
       {rainfall !== null && (
         <div>
           <div style={styles.RainCardInfo}>
@@ -83,7 +90,7 @@ const Rain = () => {
           <p style={styles.RainCardLevel}>지난 3시간</p>
         </div>
       )}
-    </div>
+    </StyledRainCard>
   );
 };
 
