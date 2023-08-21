@@ -4,6 +4,7 @@ import FONT from '../../styles/Font';
 import { Mobile, PC } from '../common/Responsive';
 import LikeButton from './LikeButton';
 import SignUpBeforeLogo from '../../assets/img/SignUpBeforeLogo.png';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 const Box = styled.div`
   width: 67rem;
@@ -106,25 +107,34 @@ const MobileLike = styled.div`
   position: absolute;
 `;
 
+interface DataItem {
+  name: string;
+  id: number;
+  codyImage: string | null;
+  comment: string;
+}
+
 const LankBox = ({
   name,
-  statusmessage,
-  lankNum
-}: {
-  name: string;
-  statusmessage: string;
-  lankNum: string;
-}) => {
+  id,
+  codyImage,
+  comment
+}: DataItem) => {
   return (
     <>
       <PC>
         <Box>
           <Name style={FONT.H2}>{name}</Name>
-          <StatusMessage style={FONT.L4}>{statusmessage}</StatusMessage>
+          <StatusMessage style={FONT.L4}>{comment}</StatusMessage>
           <Lanking>
-            <LankNum style={FONT.L1}>{lankNum}</LankNum>
           </Lanking>
-          <OutfitPic></OutfitPic>
+          <OutfitPic style={{ display: 'flex', justifyContent: 'center' }}>
+          {codyImage === null ? (
+          <img src={avatar} alt='avatar-codyImage' height='100%' />
+          ) : (
+          <img src={codyImage} alt='codyImage' height='100%' />
+          )}
+          </OutfitPic>
           <ButtonStyling>
             <LikeButton />
           </ButtonStyling>
@@ -135,11 +145,10 @@ const LankBox = ({
         <MobileBox>
           <TopBox>
             <MobileLank>
-              <div style={FONT.L4}>{lankNum}</div>
             </MobileLank>
             <Text style={FONT.H7}>
               {name}
-              <div style={FONT.L6}>{statusmessage}</div>
+              <div style={FONT.L6}>{comment}</div>
             </Text>
           </TopBox>
           <ImgBox>

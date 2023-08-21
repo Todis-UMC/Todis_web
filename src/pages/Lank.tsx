@@ -1,47 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import LankBox from '../component/Lank/LankBox';
-
-const lankData = [
-  {
-    name: '박소정',
-    statusmessage: '난 오늘 핑크색 상의 입었다!',
-    lankNum: '1'
-  },
-  {
-    name: '강혜원',
-    statusmessage: '와 너무 더워... 근데 실내는 에어컨 때문에 추움',
-    lankNum: '2'
-  },
-  {
-    name: '추민정',
-    statusmessage:
-      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
-    lankNum: '3'
-  },
-  {
-    name: '김이름',
-    statusmessage:
-      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
-    lankNum: '4'
-  },
-  {
-    name: '김이름',
-    statusmessage:
-      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
-    lankNum: '5'
-  },
-  {
-    name: '김이름',
-    statusmessage:
-      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
-    lankNum: '6'
-  }
-];
+import { getFriendListDetail } from '../api/Friend';
 
 type MoreButtonProps = {
   expanded: boolean;
+};
+
+type DataItem = {
+  id: number;
+  name: string;
+  codyImage: string | null;
+  comment: string;
+  lankNum: string;
 };
 
 const Lank = () => {
@@ -51,6 +23,22 @@ const Lank = () => {
     setExpanded(!expanded);
   };
   const isMobile = window.innerWidth < 768;
+
+  const [lankList, setlankList] = useState<DataItem[]>([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const response = await getFriendListDetail(10);
+      setlankList(response.data);
+    } catch (error) {
+      console.error('데이터 로딩 오류:', error);
+    }
+  };
+
+  const lankData1 = lankList.slice(0, 4);
+  const lankData2 = lankList.slice(7);
 
   return (
     <Content>
@@ -63,26 +51,30 @@ const Lank = () => {
         </HeaderContainer>
       </Header>
       <Body>
-        {lankData.map((data, index) => (
-          <LankBox
-            key={index}
-            name={data.name}
-            statusmessage={data.statusmessage}
-            lankNum={data.lankNum}
-          />
-        ))}
-        {expanded === true
-          ? lankData
-              .slice(3)
-              .map((data, index) => (
-                <LankBox
-                  key={index}
-                  name={data.name}
-                  statusmessage={data.statusmessage}
-                  lankNum={data.lankNum}
-                />
-              ))
-          : null}
+          {lankData1.map((data, index) => (
+            <LankBox
+              key={index}
+              id={data.id}
+              name={data.name}
+              comment={data.comment}
+              codyImage={data.codyImage}
+             
+            />
+          ))}
+          {expanded && (
+          <>
+          {lankData2.map((data, index) => (
+            <LankBox
+              key={index}
+              id={data.id}
+              name={data.name}
+              comment={data.comment}
+              codyImage={data.codyImage}
+             
+            />
+          ))}
+          </>
+          )}
       </Body>
       <MoreBox>
         <MoreButton onClick={ButtonHandler} expanded={expanded} style={FONT.L3}>
