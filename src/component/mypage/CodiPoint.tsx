@@ -14,7 +14,6 @@ import {
   AirTextData
 } from './CodiText';
 
-
 type CheckProps = {
   isChecked: boolean;
   text: string;
@@ -27,8 +26,6 @@ type CodiBoxData = {
 };
 
 const CodiPoint = () => {
-
-  const [coditexts, setCoditexts] = useState<CodiBoxData[]>([]);
   const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
 
   const [coditexts, setCoditexts] = useState<CodiBoxData[]>([
@@ -48,7 +45,6 @@ const CodiPoint = () => {
       isChecked: false
     }
   ]);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,14 +172,9 @@ const CodiPoint = () => {
       {coditexts.map((item) => (
         <CodiBox
           key={item.id}
-
           style={isMobile ? { ...FONT.L5, lineHeight: '1.5' } : { ...FONT.L3 }}
           isChecked={item.isChecked}
-
-          style={FONT.L3}
-          isChecked={item.isChecked}
           text={item.text}
-
         >
           {item.text}
           <CheckBtn
