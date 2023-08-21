@@ -66,9 +66,9 @@ const FriendRequestList = ({
     <Box>
       <Profile>
         {profileImageUrl === null ? (
-          <img src={avatar} />
-        ) : (
           <img src={profileImageUrl} />
+        ) : (
+          <img src={avatar} />
         )}
       </Profile>
       <Name>{name}</Name>
@@ -121,7 +121,8 @@ const Profile = styled.div`
 `;
 
 const Name = styled.div`
-  width: 42px;
+  text-align: left;
+  width: 150px;
   height: 19px;
   position: absolute;
   top: 11px;

@@ -2,8 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import FriendDelete from './FriendDelete';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
-const FriendSearchComponent = ({ name }: { name: string }) => {
+const FriendSearchComponent = ({
+  name,
+  email,
+  profileImageUrl,
+  onFriendRefresh
+}: {
+  name: string;
+  email: string;
+  profileImageUrl: string;
+  onFriendRefresh: (keyword: string) => void;
+}) => {
   // 친구 삭제 모달창 열기
   const [isOpen, setIsOpen] = useState(false);
   const onClickButton = () => {
@@ -12,7 +23,13 @@ const FriendSearchComponent = ({ name }: { name: string }) => {
 
   return (
     <Box>
-      <Profile></Profile>
+      <Profile>
+        {profileImageUrl === null ? (
+          <img src={avatar} alt='avatar-profile' />
+        ) : (
+          <img src={profileImageUrl} alt='profile' />
+        )}
+      </Profile>
       <Name>{name}</Name>
       <Delete style={FONT.L5} onClick={onClickButton}>
         삭제
@@ -21,7 +38,10 @@ const FriendSearchComponent = ({ name }: { name: string }) => {
       {isOpen && (
         <FriendDelete
           name={name}
+          friend_email={email}
           open={isOpen}
+          profileImageUrl={profileImageUrl}
+          onFriendRefresh={onFriendRefresh}
           onClose={() => {
             setIsOpen(false);
           }}
@@ -55,9 +75,21 @@ const Profile = styled.div`
   height: 39px;
   border-radius: 50%;
   background-color: ${(props) => props.theme.SkyBlue_03};
+  overflow: hidden;
+  position: relative;
+  img {
+    position: absolute;
+    top: -3px;
+    left: -8px;
+    height: 300%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 const Name = styled.div`
-  width: 42px;
+  text-align: left;
+  width: 150px;
   height: 19px;
   position: absolute;
   top: 11px;
