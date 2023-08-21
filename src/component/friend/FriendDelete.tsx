@@ -3,27 +3,59 @@ import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
+import { deleteFriendListDelete } from '../../api/Friend';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 interface ModalProps {
   name: string;
   open: boolean;
+  profileImageUrl: string | null;
+  friend_email: string;
+  onFriendRefresh: (keyword: string) => void;
   onClose: () => void;
 }
 
-const FriendDelete = ({ name, onClose }: ModalProps) => {
+const FriendDelete = ({
+  name,
+  friend_email,
+  profileImageUrl,
+  onFriendRefresh,
+  onClose
+}: ModalProps) => {
   // 친구 삭제 모달창 닫기
   const handleClose = () => {
     onClose?.();
   };
-
   // 모달창 외부 클릭시 닫기
   const modalRef = useRef<HTMLDivElement>(null);
   useOutSideClick(modalRef, handleClose);
 
+  // 친구 삭제 API 연동(성공)
+  const handleFriendDelete = async () => {
+    try {
+      const response = await deleteFriendListDelete(friend_email);
+      if (response.success) {
+        console.log('친구 삭제 성공:', response.message);
+        onFriendRefresh(''); // 친구 삭제 후 친구 리스트 다시 불러오기
+        handleClose(); // 모달창 닫기
+      } else {
+        console.error('친구 삭제 실패:', response.message);
+      }
+    } catch (error) {
+      console.error('친구 삭제 오류:', error);
+    }
+  };
+
   return (
     <Container className='container'>
       <Box ref={modalRef}>
-        <Profile></Profile>
+        <Profile>
+          {profileImageUrl === null ? (
+            <img src={avatar} alt='avatar-profile' height='100%' />
+          ) : (
+            <img src={profileImageUrl} alt='profile' height='100%' />
+          )}
+        </Profile>
         <Name style={FONT.M2}>
           <span>{name}</span>님을
         </Name>
@@ -31,7 +63,9 @@ const FriendDelete = ({ name, onClose }: ModalProps) => {
         <Cancel style={FONT.L4} onClick={handleClose}>
           취소
         </Cancel>
-        <Delete style={FONT.L4}>삭제</Delete>
+        <Delete style={FONT.L4} onClick={handleFriendDelete}>
+          삭제
+        </Delete>
       </Box>
     </Container>
   );
@@ -75,6 +109,16 @@ const Profile = styled.div`
   top: -52.5px;
   left: 128.5px;
   border: none;
+  overflow: hidden;
+  img {
+    position: absolute;
+    top: -5px;
+    left: -21px;
+    height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 const Name = styled.div`
   margin-top: 70px;
