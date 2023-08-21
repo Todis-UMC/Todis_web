@@ -6,6 +6,7 @@ import { ReactComponent as CodiUnCheck } from '../../assets/icon/CodiUnCheck.svg
 
 type CheckProps = {
   isChecked: boolean;
+  text: string;
 };
 
 type CodiBoxData = {
@@ -13,9 +14,6 @@ type CodiBoxData = {
   text: string;
   isChecked: boolean;
 };
-interface ForecastData {
-  temp: number;
-}
 
 const CodiPoint = () => {
   const [coditexts, setCoditexts] = useState<CodiBoxData[]>([
@@ -152,7 +150,8 @@ const CodiPoint = () => {
           ];
           const AirTextData = [
             '대기질 수치가 ‘나쁨’이에요\n:( 긴 소매의 옷을 추천합니다!',
-            '마스크를 고를 때 식품의약품안전처의 인증을 받았는지 확인해 보세요!\n식약처에 의약외품으로 허가한 보건용 마스크에는 ‘KF+숫자’표시가 붙어 있어요.'
+            '마스크를 고를 때 식품의약품안전처의 인증을 받았는지 확인해 보세요!\n식약처에 의약외품으로 허가한 보건용 마스크에는 ‘KF+숫자’표시가 붙어 있어요.\nKF 뒤에 오는 숫자가 높을수록 차단 효과가 크지만 호흡에 불편함을 느낄 수 있으므로, 본인의 호흡량과 황사, 미세먼지 발생 수준 등을 고려해 적당한 제품을 선택하는 것이 바람직합니다.',
+            '대기질 수치는 ‘보통’이에요! 일부 오염 물질의 경우 공기 오염에 민감한 소수의 사람들에게는 건강상 안 좋은 영향을 끼칠 수 있으니 마스크 챙기는 것을 권장 드릴게요!'
           ];
           const ForecastData = [
             '여름철 장마에는 꿉꿉함을 없애기 위해서 실내에는 에어컨을 틀어 놓는 경우가 많은데요.\n이로 인해 쌀쌀함을 느낄 수 있으니 가디건이나 남방을 챙겨서 아우터로 입기 바라요!',
@@ -162,51 +161,67 @@ const CodiPoint = () => {
             '눈밭에서 방수가 어느 정도 되고 발도 따뜻하게 해주는\n부츠를 신는 것을 추천해요!',
             '눈이 많이 오면 머리나 옷이 젖을 수 있으니,\n우산을 챙기는 게 좋을 것 같아요!'
           ];
-          let TempText = '';
-          let TempText2 = '';
-          let AirText = '';
+          const HumidityData = [
+            '섬유에 따라 습기에 강하거나 약한 재질이 있는데요.\n습기에 강한 면 종류를 맨 아래에 두고 습기에 약한 합성섬유나 실크는 위에 두어 옷감이 상하지 않도록 예방하는 것이 좋습니다!',
+            '신문지와 숯은 옷 주변 습기를 흡수하기에\n이를 이용해 옷의 뽀송함을 유지하는 것도 좋아요 :)'
+          ];
+          let FirstText = '';
+          let SecondText = '';
+          let ThirdText = '';
+          // 1. 기온
           for (const range of TempRanges) {
             if (temp >= range.min && temp <= range.max) {
               const randomIndex = Math.floor(Math.random() * range.text.length);
-              TempText = range.text[randomIndex];
-
-              const availableIndices = range.text
-                .map((_, index) => index)
-                .filter((index) => index !== randomIndex);
-              const randomIndexTemp2 =
-                availableIndices[
-                  Math.floor(Math.random() * availableIndices.length)
-                ];
-              TempText2 = range.text[randomIndexTemp2];
-              console.log('템프텍스트2', TempText2);
-
-              if (airQuality >= 150) {
-                const randomAirIndex = Math.floor(
-                  Math.random() * AirTextData.length
-                );
-                AirText = AirTextData[randomAirIndex];
-              } else {
-                AirText = TempText2;
-              }
-              console.log('에어텍스트2', AirText);
+              FirstText = range.text[randomIndex];
               break;
             }
+          }
+          // 2. 습도, Rain, Snow
+          if (
+            humidity >= 50 ||
+            forecastData === 'Rain' ||
+            forecastData === 'Snow'
+          ) {
+            const randomHumIndex = Math.floor(
+              Math.random() * HumidityData.length
+            );
+            const randomRainIndex = Math.floor(Math.random() * 4);
+            const randomSnowIndex = Math.floor(Math.random() * 2) + 4;
+            SecondText =
+              humidity >= 50
+                ? HumidityData[randomHumIndex]
+                : forecastData === 'Rain'
+                ? ForecastData[randomRainIndex]
+                : ForecastData[randomSnowIndex];
+          }
+          // 3. 자외선, 대기질
+          if (uvi >= 6 || airQuality >= 150) {
+            const randomUviIndex = Math.floor(
+              Math.random() * UviTextData.length
+            );
+            const randomAirIndex = Math.floor(Math.random() * 2);
+            ThirdText =
+              uvi >= 6
+                ? UviTextData[randomUviIndex]
+                : AirTextData[randomAirIndex];
+          } else {
+            ThirdText = AirTextData[2];
           }
 
           setCoditexts((prevCoditexts) => [
             {
               id: 1,
-              text: TempText,
+              text: FirstText,
               isChecked: false
             },
             {
               id: 2,
-              text: AirText,
+              text: SecondText,
               isChecked: false
             },
             {
               id: 3,
-              text: '',
+              text: ThirdText,
               isChecked: false
             }
           ]);
@@ -228,8 +243,6 @@ const CodiPoint = () => {
         }
         return item;
       });
-
-      localStorage.setItem('coditexts', JSON.stringify(updatedData));
       return updatedData;
     });
   };
@@ -237,7 +250,12 @@ const CodiPoint = () => {
   return (
     <div>
       {coditexts.map((item) => (
-        <CodiBox key={item.id} style={FONT.L3} isChecked={item.isChecked}>
+        <CodiBox
+          key={item.id}
+          style={FONT.L3}
+          isChecked={item.isChecked}
+          text={item.text}
+        >
           {item.text}
           <CheckBtn
             onClick={() => CodiCheckHandler(item.id)}
@@ -263,7 +281,8 @@ const CodiBox = styled.div<CheckProps>`
   letter-spacing: -0.41px;
   border: 2px solid ${(props) => props.theme.Blue_Main};
   border-radius: 40px;
-  padding: 30px 42px 30px 92px;
+  padding: ${(props) =>
+    props.text === 'Loading..' ? '40px 42px 30px 92px' : '30px 42px 30px 92px'};
   margin-bottom: 10px;
   width: 100vw;
   max-width: 531px;
@@ -271,7 +290,7 @@ const CodiBox = styled.div<CheckProps>`
   white-space: pre-line;
 `;
 
-const CheckBtn = styled.button<CheckProps>`
+const CheckBtn = styled.button<Pick<CheckProps, 'isChecked'>>`
   position: absolute;
   top: 37px;
   left: 25px;
