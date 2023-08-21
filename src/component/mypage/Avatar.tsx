@@ -204,6 +204,8 @@ const Avatar = () => {
   const ResetHandler = () => {
     setSelectedImages([]);
     setInventory([]);
+    setSelectedImagesinit([]);
+    setInventoryinit([]);
   };
 
   const SaveHandler = async () => {
