@@ -66,7 +66,7 @@ const CodiPoint = () => {
       {coditexts.map((item) => (
         <CodiBox
           key={item.id}
-          style={isMobile ? FONT.L5 : FONT.L3}
+          style={isMobile ? { ...FONT.L5, lineHeight: '1.5' } : { ...FONT.L3 }}
           isChecked={item.isChecked}
         >
           {item.text}
@@ -94,21 +94,26 @@ const CodiBox = styled.div<CheckProps>`
   letter-spacing: -0.41px;
   border: 2px solid ${(props) => props.theme.Blue_Main};
   border-radius: 40px;
-  padding: 30px 92px;
+  padding: 30px 42px 30px 92px;
   margin-bottom: 10px;
   width: 100vw;
   max-width: 531px;
   min-height: 130px;
   white-space: pre-line;
   @media (max-width: 500px) {
-    padding: 30px 65px;
+    width: 90vw;
+    max-width: 431px;
+    padding: 25px 38px 25px 70px;
+    min-height: 80px;
+    line-height: 40px;
   }
 `;
 
 const CheckBtn = styled.button<CheckProps>`
   position: absolute;
   top: 37px;
-  left: 25px;
+  left: 5%;
+  padding-top: 5px;
   background-color: white;
   border-radius: 50px;
   border: ${(props) =>
@@ -117,12 +122,13 @@ const CheckBtn = styled.button<CheckProps>`
   height: 48px;
   cursor: pointer;
   @media (max-width: 500px) {
-    top: 20px;
-    left: 20px;
-    width: 25px;
-    height: 25px;
+    top: 32px;
+    left: 7.5%;
+    width: 32px;
+    height: 32px;
     > svg {
-      width: 10px;
-      height: 10px;
+      margin-left: -2px;
+      width: 13px;
+      height: 13px;
   }
 `;

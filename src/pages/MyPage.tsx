@@ -33,6 +33,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: 500px) {
+    padding-bottom: 80px;
+  }
 `;
 
 const Title = styled.div`

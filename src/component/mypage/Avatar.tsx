@@ -492,7 +492,7 @@ const Avatar = () => {
               ))}
           </ImageButtonsContainer>
           <SaveBtn onClick={SaveHandler} saving={saving}>
-            <div style={FONT.H4}>{saveButtonText}</div>
+            <div style={isMobile ? FONT.H5 : FONT.H4}>{saveButtonText}</div>
           </SaveBtn>
         </ItemBox>
       )}
@@ -524,6 +524,11 @@ const AvatarBox = styled.div`
   max-width: 764px;
   height: 590px;
   position: relative;
+  @media (max-width: 500px) {
+    width: 90vw;
+    max-width: 664px;
+    height: 390px;
+  }
 `;
 
 /* 아바타 단독 이미지 */
@@ -536,6 +541,11 @@ const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   transition: top 0.3s ease-in-out;
   left: 51%;
   transform: translate(-50%, -50%);
+  @media (max-width: 500px) {
+    top: ${(props) => (props.showItemBox ? '47%' : '55%')};
+    width: 30%;
+    transform: translate(-52%, -53%);
+  }
 `;
 /* 아바타 최종 캡쳐 화면 */
 const AvatarCaptureBox = styled.div<Pick<AvatarProps, 'avatarSaveImg'>>`
@@ -566,6 +576,11 @@ const UpDownBtn = styled.button<Pick<AvatarProps, 'showItemBox'>>`
   cursor: pointer;
   transition: margin-bottom 0.3s ease-in-out;
   margin-bottom: ${(props) => (props.showItemBox ? '80px' : '20px')};
+  @media (max-width: 500px) {
+    margin-bottom: ${(props) => (props.showItemBox ? '69px' : '20px')};
+    width: 50px;
+    height: 47px;
+  }
 `;
 const SettingContainer = styled.div`
   position: relative;
@@ -592,6 +607,11 @@ const SexBtnBox = styled.div`
   margin-left: 10px;
   padding: 0px 3px;
   position: absolute;
+  @media (max-width: 500px) {
+    width: 75px;
+    height: 28px;
+    margin-left: 20px;
+  }
 `;
 const SexIcon = styled.div<Pick<AvatarProps, 'selected'>>`
   width: 57px;
@@ -605,6 +625,14 @@ const SexIcon = styled.div<Pick<AvatarProps, 'selected'>>`
   svg {
     cursor: pointer;
   }
+  @media (max-width: 500px) {
+    width: 47px;
+    height: 22px;
+    > svg {
+      width: 60%;
+      height: 60%;
+    }
+  }
 `;
 /* 인벤토리 */
 const InventoryBox = styled.div`
@@ -613,7 +641,7 @@ const InventoryBox = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 500px) {
-    right: 20px;
+    right: 40px;
   }
 `;
 const Inventory = styled.div`
@@ -627,6 +655,9 @@ const Inventory = styled.div`
   background-repeat: no-repeat;
   @media (max-width: 500px) {
     z-index: 1;
+    width: 39px;
+    height: 37px;
+    margin-bottom: 5px;
   }
 `;
 /* 리셋 */
@@ -643,6 +674,15 @@ const ResetBtn = styled.button`
   position: absolute;
   bottom: 20px;
   right: 50px;
+  @media (max-width: 500px) {
+    width: 36px;
+    height: 34px;
+    right: 40px;
+    > svg {
+      width: 90%;
+      height: 90%;
+    }
+  }
 `;
 /* 아이템 */
 const ItemBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
@@ -656,6 +696,13 @@ const ItemBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   height: 624px;
   margin: -60px 0 120px 0;
   padding: 50px;
+  @media (max-width: 500px) {
+    width: 90vw;
+    max-width: 664px;
+    height: 320px;
+    padding: 30px 30px 10px 30px;
+    margin-bottom: 10px;
+  }
 `;
 const MenuItemBox = styled.div`
   display: flex;
@@ -670,6 +717,9 @@ const MenuItem = styled.div<Pick<AvatarProps, 'selected'>>`
   cursor: pointer;
   margin-left: -20px;
   color: ${(props) => (props.selected ? props.theme.Blue_Main : 'black')};
+  @media (max-width: 500px) {
+    margin-left: -13px;
+  }
 `;
 const ImageButtonsContainer = styled.div`
   display: flex;
@@ -691,9 +741,11 @@ const ImageButton = styled.button`
   background-repeat: no-repeat;
   border-radius: 25px;
   @media (max-width: 500px) {
-    width: 100px;
-    height: 100px;
-    margin: 10px 10px 10px 10px;
+    width: 77px;
+    height: 78px;
+    background-size: 75%;
+    margin: -13px 7px 25px 7px;
+    border-radius: 10px;
   }
 `;
 const SaveBtn = styled.button<Pick<AvatarProps, 'saving'>>`
@@ -713,4 +765,9 @@ const SaveBtn = styled.button<Pick<AvatarProps, 'saving'>>`
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 30px;
+  @media (max-width: 500px) {
+    width: 160px;
+    height: 36px;
+    bottom: -10px;
+  }
 `;
