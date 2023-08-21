@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon } from '@fortawesome/free-solid-svg-icons'; // moon icon
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
+import Loading from '../common/Loading';
 
 interface Sys {
   sunset: number;
@@ -29,28 +30,28 @@ const Weather = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-start'
     },
     sunsetInfo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     sunsetLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     sunsetValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     sunriseValue: {
       ...Font.L3,
       color: Color.Gray_01,
-      marginTop: '26.5px',
-    },
+      marginTop: '26.5px'
+    }
   };
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const Weather = () => {
   }, []);
 
   if (!weatherData) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const convertUnixToHourMinute = (unixTimestamp: number) => {
@@ -75,15 +76,16 @@ const Weather = () => {
     let hours = date.getHours();
     const minutes = '0' + date.getMinutes();
     const period = hours >= 12 ? 'PM' : 'AM';
-    
+
     hours %= 12;
     hours = hours ? hours : 12;
-    
+
     return hours + ':' + minutes.substr(-2) + ' ' + period;
   };
 
   const sunsetTime = convertUnixToHourMinute(weatherData.sys.sunset);
-  const sunriseTime = '일출 : ' + convertUnixToHourMinute(weatherData.sys.sunrise);
+  const sunriseTime =
+    '일출 : ' + convertUnixToHourMinute(weatherData.sys.sunrise);
 
   return (
     <div style={styles.SunsetCard}>

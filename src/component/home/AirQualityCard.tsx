@@ -3,9 +3,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmog } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
-import { Chart, LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, ChartData, Point } from 'chart.js';
+import {
+  Chart,
+  LinearScale,
+  PointElement,
+  CategoryScale,
+  BarController,
+  BarElement,
+  LineController,
+  LineElement,
+  ScatterController,
+  ChartData,
+  Point
+} from 'chart.js';
+import Loading from '../common/Loading';
 
-Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
+Chart.register(
+  LinearScale,
+  PointElement,
+  CategoryScale,
+  BarController,
+  BarElement,
+  LineController,
+  LineElement,
+  ScatterController,
+  PointElement
+);
 
 interface Main {
   aqi: number;
@@ -35,32 +58,32 @@ const Weather = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-start'
     },
     qualityInfo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     qualityLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     qualityValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     qualityLevel: {
       ...Font.L3,
       color: Color.Gray_01,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     graph: {
       width: '100%',
-      marginTop: '-25px',
-    },
+      marginTop: '-25px'
+    }
   };
 
   useEffect(() => {
@@ -87,7 +110,12 @@ const Weather = () => {
 
       const ctx = chartContainer.current.getContext('2d');
       if (ctx) {
-        const gradient = ctx.createLinearGradient(0, 0, chartContainer.current.width, 0);
+        const gradient = ctx.createLinearGradient(
+          0,
+          0,
+          chartContainer.current.width,
+          0
+        );
         gradient.addColorStop(0, 'red');
         gradient.addColorStop(0.2, 'orange');
         gradient.addColorStop(0.4, 'yellow');
@@ -97,14 +125,14 @@ const Weather = () => {
 
         const lineData = Array.from({ length: 251 }, (_, i) => ({
           x: i,
-          y: 0,
+          y: 0
         }));
 
         const pointData = [
           {
             x: weatherData.list[0].main.aqi,
-            y: 0,
-          },
+            y: 0
+          }
         ];
 
         const chartData: ChartData<'scatter', Point[], number> = {
@@ -112,7 +140,7 @@ const Weather = () => {
             {
               data: pointData,
               pointRadius: 10,
-              pointBackgroundColor: 'white',
+              pointBackgroundColor: 'white'
             },
             {
               data: lineData,
@@ -120,9 +148,9 @@ const Weather = () => {
               backgroundColor: gradient,
               borderWidth: 8,
               showLine: true,
-              pointRadius: 0,
-            },
-          ],
+              pointRadius: 0
+            }
+          ]
         };
 
         const newChartInstance = new Chart(ctx, {
@@ -134,20 +162,20 @@ const Weather = () => {
                 left: 15,
                 right: 15,
                 top: 20,
-                bottom: 20,
-              },
+                bottom: 20
+              }
             },
             scales: {
               x: {
                 min: -10,
                 max: 260,
-                display: false,
+                display: false
               },
               y: {
                 min: -1,
                 max: 1,
-                display: false,
-              },
+                display: false
+              }
             },
             interaction: {
               mode: 'nearest',
@@ -156,10 +184,10 @@ const Weather = () => {
             },
             plugins: {
               tooltip: {
-                enabled: false,
-              },
-            },
-          },
+                enabled: false
+              }
+            }
+          }
         });
 
         setChartInstance(newChartInstance);
@@ -168,7 +196,7 @@ const Weather = () => {
   }, [weatherData]);
 
   if (!weatherData) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const getQualityLevel = (index: number) => {
@@ -180,7 +208,6 @@ const Weather = () => {
   };
 
   const qualityLevel = getQualityLevel(weatherData.list[0].main.aqi);
-
 
   return (
     <div style={styles.AirQualityCard}>
