@@ -66,9 +66,9 @@ const FriendRequestList = ({
     <Box>
       <Profile>
         {profileImageUrl === null ? (
-          <img src={profileImageUrl} />
-        ) : (
           <img src={avatar} />
+        ) : (
+          <img src={profileImageUrl} />
         )}
       </Profile>
       <Name>{name}</Name>
@@ -79,7 +79,9 @@ const FriendRequestList = ({
         수락
       </Yes>
       <hr />
-      {isShown && <FriendAccept name={name} />}
+      {isShown && (
+        <FriendAccept name={name} profileImageUrl={profileImageUrl} />
+      )}
     </Box>
   );
 };

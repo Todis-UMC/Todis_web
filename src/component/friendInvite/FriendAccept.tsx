@@ -3,8 +3,15 @@ import styled, { keyframes } from 'styled-components';
 import FONT from '../../styles/Font';
 import useOutSideClick from '../friend/modal/useOutSideClick';
 import ModalContainer from '../friend/modal/ModalContainer';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
-const FriendAccept = ({ name }: { name: string }) => {
+const FriendAccept = ({
+  name,
+  profileImageUrl
+}: {
+  name: string;
+  profileImageUrl: string;
+}) => {
   /* 모달창 백그라운드 스크롤 방지
   useEffect(() => {
     const $body = document.querySelector('body') as HTMLBodyElement;
@@ -19,7 +26,13 @@ const FriendAccept = ({ name }: { name: string }) => {
   return (
     <Container className='container'>
       <Box>
-        <Profile></Profile>
+        <Profile>
+          {profileImageUrl === null ? (
+            <img src={avatar} />
+          ) : (
+            <img src={profileImageUrl} />
+          )}
+        </Profile>
         <Name style={FONT.M2}>
           <span>{name}</span>님과
         </Name>
@@ -76,6 +89,15 @@ const Profile = styled.div`
   top: -52.5px;
   left: 128.5px;
   border: none;
+  overflow: hidden;
+  img {
+    position: absolute;
+    top: -13px;
+    left: -21px;
+    height: 320%;
+    width: 150%;
+    object-fit: cover;
+  }
 `;
 const Name = styled.div`
   margin-top: 70px;
