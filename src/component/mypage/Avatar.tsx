@@ -89,7 +89,7 @@ const ItemMenu = [
       Images('./E2_hat.png'),
       Images('./E3_sunglasses.png'),
       Images('./E4_watch.png'),
-      Images('./E5_W.png'),
+      Images('./E5_M.png'),
       Images('./E6_umbrella.png')
     ],
     buttonImages: [
@@ -497,17 +497,12 @@ const Avatar = () => {
                 />
               ))}
           </ImageButtonsContainer>
-
           <SaveBtn
             onClick={SaveHandler}
             saving={saving}
             style={{ pointerEvents: saving ? 'none' : 'auto' }}
           >
-            <div style={FONT.H4}>{saveButtonText}</div>
-
-          <SaveBtn onClick={SaveHandler} saving={saving}>
             <div style={isMobile ? FONT.H5 : FONT.H4}>{saveButtonText}</div>
-
           </SaveBtn>
         </ItemBox>
       )}
