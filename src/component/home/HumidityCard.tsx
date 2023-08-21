@@ -27,11 +27,12 @@ justify-content: flex-start;
 interface WeatherData {
   main: {
     humidity: number;
+    aqi: number;
   };
 }
 
 const Weather = () => {
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [humidity] = useState<number>(82); 
 
   const styles: { [key: string]: CSSProperties } = {
     humidityInfo: {
@@ -57,35 +58,41 @@ const Weather = () => {
     },
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=4d4c41dc06bbf1741b3a628d64934b98`
       )
       .then((res) => res.json())
-      .then((data) => setWeatherData(data))
+      .then((data) => {
+        if (!data.main) {
+          data.main = { humidity: 0, aqi: 0 };
+        }
+
+        data.main.aqi = 65;
+
+        setWeatherData(data);
+      })
       .catch((err) => console.error(err));
     });
-  }, []);
+  }, []);*/
 
-  if (!weatherData) {
+  if (!humidity) {
     return <div>Loading...</div>
   }
 
-  const humidityLevel = weatherData.main.humidity > 50 ? '높음' : '낮음';
+  const humidityLevel = humidity > 50 ? '높음' : '낮음';
 
   return (
     <StyledhumidityCard className="humidity-card">
-      {weatherData.main && weatherData.main.humidity && (
-        <div>
-          <div style={styles.humidityInfo}>
-            <FontAwesomeIcon icon={faTint} />
-            <p style={styles.humidityLabel}>습도</p>
-          </div>
-          <p style={styles.humidityValue}>{weatherData.main.humidity} %</p>
-          <p style={styles.humidityLevel}>{humidityLevel}</p>
+      <div>
+        <div style={styles.humidityInfo}>
+          <FontAwesomeIcon icon={faTint} />
+          <p style={styles.humidityLabel}>습도</p>
         </div>
-      )}
+        <p style={styles.humidityValue}>{humidity} %</p>
+        <p style={styles.humidityLevel}>{humidityLevel}</p>
+      </div>
     </StyledhumidityCard>
   );
 };

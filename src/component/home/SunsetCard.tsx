@@ -1,4 +1,4 @@
-import React, { useEffect, useState, CSSProperties, useRef } from 'react';
+import React, { CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon } from '@fortawesome/free-solid-svg-icons'; // moon icon
 import Color from '../../styles/Color';
@@ -24,18 +24,7 @@ justify-content: flex-start;
 }
 `;
 
-interface Sys {
-  sunset: number;
-  sunrise: number;
-}
-
-interface WeatherData {
-  sys: Sys;
-}
-
 const Weather = () => {
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-
   const styles: { [key: string]: CSSProperties } = {
     sunsetInfo: {
       display: 'flex',
@@ -59,37 +48,8 @@ const Weather = () => {
     },
   };
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      fetch(
-        `http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=4d4c41dc06bbf1741b3a628d64934b98`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setWeatherData(data);
-        })
-        .catch((err) => console.error(err));
-    });
-  }, []);
-
-  if (!weatherData) {
-    return <div>Loading...</div>;
-  }
-
-  const convertUnixToHourMinute = (unixTimestamp: number) => {
-    const date = new Date(unixTimestamp * 1000);
-    let hours = date.getHours();
-    const minutes = '0' + date.getMinutes();
-    const period = hours >= 12 ? 'PM' : 'AM';
-    
-    hours %= 12;
-    hours = hours ? hours : 12;
-    
-    return hours + ':' + minutes.substr(-2) + ' ' + period;
-  };
-
-  const sunsetTime = convertUnixToHourMinute(weatherData.sys.sunset);
-  const sunriseTime = '일출 : ' + convertUnixToHourMinute(weatherData.sys.sunrise);
+  const sunsetTime = '7:19PM';
+  const sunriseTime = '일출 : 5:54AM';
 
   return (
     <StyledSunsetCard className="Sunset-card">

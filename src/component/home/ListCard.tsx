@@ -10,6 +10,49 @@ import cloud from '../../assets/img/Cloud.png';
 import rain from '../../assets/img/Rain.png';
 import styled from 'styled-components';
 
+const mockWeatherData = [
+  {
+    index: 0,
+    day: '오늘',
+    weather: 'Rain',
+    temp: 25,
+    minTemp: 24,
+    maxTemp: 28,
+  },
+  {
+    index: 1,
+    day: '목',
+    weather: 'Rain',
+    temp: 24,
+    minTemp: 23,
+    maxTemp: 30,
+  },
+  {
+    index: 2,
+    day: '금',
+    weather: 'cloudSun',
+    temp: 25,
+    minTemp: 23,
+    maxTemp: 28,
+  },
+  {
+    index: 3,
+    day: '토',
+    weather: 'cloudSun',
+    temp: 26,
+    minTemp: 24,
+    maxTemp: 28,
+  },
+  {
+    index: 4,
+    day: '일',
+    weather: 'cloud',
+    temp: 25,
+    minTemp: 23,
+    maxTemp: 27,
+  },
+];
+
 type ListCardProps = {
   className?: string;
 };
@@ -22,17 +65,17 @@ const ListCardStyles = styled.div`
   padding: 20px;
   overflow: hidden;
   color: ${color.Gray_01};
-  font-size: ${FONT.H6.fontSize}; // FONT.H6에서 필요한 속성만 적용하세요
-  font-weight: ${FONT.H6.fontWeight}; // 예시로 적었습니다. 실제 속성을 확인하고 적용하십시오
+  font-size: ${FONT.H6.fontSize}; 
+  font-weight: ${FONT.H6.fontWeight}; 
   @media screen and (max-width: 768px) {
     width: 390px;
     height: 419px;
-    > * {  // 직접적인 자식 요소들 선택
+    > * {  
       transform: scale(0.75);
-      transform-origin: center; // 축소될 때의 기준점 설정 (여기서는 좌측 상단)
+      transform-origin: center; 
     }
     > *:not(:last-child) {
-      margin-bottom: -5px; // 원하는 간격으로 조절
+      margin-bottom: -5px;
     }
 `;
 
@@ -77,24 +120,24 @@ interface WeatherItemProps {
 }
 
 const WeatherItemStyles = styled.div<WeatherItemProps>`
-z-index: 0.1;  // 수정된 부분
+z-index: 0.1;  
 display: flex;
-flex-direction: column;  // 수정된 부분
-align-items: center;  // 수정된 부분
+flex-direction: column;  
+align-items: center; 
 padding: 20px 0;
 color: ${color.Gray_01};
 font-size: ${FONT.H6.fontSize};
 font-weight: ${FONT.H6.fontWeight};
-margin-bottom: ${props => (props.index === 4 ? '0' : '5px')};  // 수정된 부분
+margin-bottom: ${props => (props.index === 4 ? '0' : '5px')};  
 
 div.graph {
   position: relative;
-  z-index: 1;  // 수정된 부분 // 추가된 부분
+  z-index: 1;  
 }
 
 div.graph-background,
 div.max-temp-bar {
-  z-index: 1;  // 수정된 부분
+  z-index: 1;  
 }
 
 
@@ -127,18 +170,29 @@ const WeatherItem: React.FC<WeatherData> = ({ index, day, weather, minTemp, maxT
       />
       <span className="min-temp" style={{ marginRight: '5px' }}>{minTemp}°C</span>
       <div className="graph" style={{ flexGrow: 1, marginRight: '5px', borderRadius: '20px', position: 'relative', height: '14px' }}>
-        <div className="graph-background" style={{ width: '100%', height: '100%', backgroundColor: color.Gray_03, position: 'absolute', zIndex: 1, borderRadius: '20px' }} />
-        <div className="max-temp-bar" style={{ 
-  width: `${(maxTemp - 0) * 100 / 40}%`, 
-  backgroundImage: 'linear-gradient(to right, red, orange)', 
-  borderRadius: '20px', 
-  height: '100%', 
-  position: 'absolute', 
-  marginBottom: '10px',
-  zIndex: 1 
-}}>
-  {index === 0 && <div className="circle" style={{width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'white', marginTop: 'px', position: 'absolute', right: '-8px', top: '-4px', zIndex: 2 }} />}
-</div>
+      <div className="graph-background" style={{ width: '100%', height: '100%', backgroundColor: color.Gray_03, position: 'absolute', zIndex: 1, borderRadius: '20px' }} />
+
+      <div className="min-temp-bar" style={{
+        width: `${(minTemp - 0) * 100 / 40}%`,
+        backgroundImage: 'linear-gradient(to right, blue, lightblue)',
+        borderRadius: '20px',
+        height: '100%',
+        position: 'absolute',
+        marginBottom: '10px',
+        zIndex: 1
+      }} />
+
+      <div className="max-temp-bar" style={{
+        width: `${(maxTemp - 0) * 100 / 40}%`,
+        backgroundImage: 'linear-gradient(to right, red, orange)',
+        borderRadius: '20px',
+        height: '100%',
+        position: 'absolute',
+        marginBottom: '10px',
+        zIndex: 2 
+      }}>
+        {index === 0 && <div className="circle" style={{width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'white', marginTop: 'px', position: 'absolute', right: '-8px', top: '-4px', zIndex: 3 }} />}
+      </div>
       </div>
       <span className="max-temp">{maxTemp}°C</span>
     </div>
@@ -148,9 +202,10 @@ const WeatherItem: React.FC<WeatherData> = ({ index, day, weather, minTemp, maxT
 
 
 const ListCard: React.FC = () => {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [weatherData, setWeatherData] = useState<WeatherData[]>(mockWeatherData);
 
-  useEffect(() => {
+
+  /*useEffect(() => {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=4d4c41dc06bbf1741b3a628d64934b98`
@@ -190,7 +245,7 @@ const ListCard: React.FC = () => {
     }, function (error) {
       console.error('Geolocation API error:', error);
     });
-  }, []);
+  }, []);*/
   
   return (
     <ListCardStyles>

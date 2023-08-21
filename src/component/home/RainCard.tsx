@@ -34,7 +34,7 @@ const StyledRainCard = styled.div`
 
 const Rain = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [rainfall, setRainfall] = useState<number | null>(null);
+  const [rainfall, setRainfall] = useState<number>(47);
 
   const styles: { [key: string]: CSSProperties } = {
     RainCardInfo: {
@@ -60,7 +60,7 @@ const Rain = () => {
     },
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=4d4c41dc06bbf1741b3a628d64934b98`
@@ -76,20 +76,18 @@ const Rain = () => {
 
   if (rainfall === null) {
     return <div>Loading...</div>
-  }
+  }*/
 
   return (
     <StyledRainCard className="rain-card">
-      {rainfall !== null && (
-        <div>
-          <div style={styles.RainCardInfo}>
-            <FontAwesomeIcon icon={faCloudRain} />
-            <p style={styles.RainCardLabel}>강수량</p>
-          </div>
-          <p style={styles.RainCardValue}>{rainfall} mm</p>
-          <p style={styles.RainCardLevel}>지난 3시간</p>
+      <div>
+        <div style={styles.RainCardInfo}>
+          <FontAwesomeIcon icon={faCloudRain} />
+          <p style={styles.RainCardLabel}>강수량</p>
         </div>
-      )}
+        <p style={styles.RainCardValue}>{rainfall} mm</p>
+        <p style={styles.RainCardLevel}>지난 3시간</p>
+      </div>
     </StyledRainCard>
   );
 };

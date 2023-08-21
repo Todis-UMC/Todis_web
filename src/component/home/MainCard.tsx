@@ -28,7 +28,7 @@ const StyledMainCard = styled.div`
 
 const convertWeatherToKorean = (weather: string | undefined) => {
     switch(weather) {
-      case 'Clouds':
+      case 'Cloud':
         return '흐릴 것';
       case 'Rain':
         return '비가 올 것';
@@ -94,19 +94,79 @@ interface MainCardWeatherData {
         main: string;
     }];
 }
-
+//임시 데이터를 위해 수정함. 이후 재수정 필요
 const getWeatherIcon = (temp: number, weather: string) => {
   if (weather === 'Rain') return weatherIcons.rain;
-  if (temp >= 27) return weatherIcons.sun;
-  if (temp <= 23) return weatherIcons.cloud;
-  if (temp >= 24 && temp <= 26) return weatherIcons.cloudSun; 
+  if (temp <= 24) return weatherIcons.cloud;
+  if (temp <= 27) return weatherIcons.cloudSun; 
 };
 
 const MainCard = () => {
-const [weatherData, setWeatherData] = useState<MainCardWeatherData | null>(null);
+/*const [weatherData, setWeatherData] = useState<MainCardWeatherData | null>(null);
 const [airQualityData, setAirQualityData] = useState<AirQualityData | null>(null);
 const [forecastData, setForecastData] = useState<ForecastData | null>(null);
-const [locationName, setLocationName] = useState<string | null>(null);
+const [locationName, setLocationName] = useState<string | null>(null);*/
+
+const [weatherData, setWeatherData] = useState<MainCardWeatherData | null>({
+  main: {
+      temp: 26, 
+      humidity: 70,
+  },
+  wind: {
+      speed: 5,
+  },
+  name: '서울시',  
+  weather: [{
+      main: 'Cloud',  
+  }],
+});
+
+const [airQualityData, setAirQualityData] = useState<AirQualityData | null>({
+  list: [
+      {
+          main: {
+              aqi: 2
+          }
+      }
+  ]
+});
+const [forecastData, setForecastData] = useState<ForecastData | null>({
+  list: [
+      {
+          dt: Date.now() / 1000,  
+          main: { temp: 26 },
+          weather: [{ main: 'Rain', icon: '' }]
+      },
+      {
+          dt: (Date.now() + 21600) / 1000,  
+          main: { temp: 26 },
+          weather: [{ main: 'cloudSun', icon: '' }]
+      },
+      {
+          dt: (Date.now() + 43200) / 1000,  
+          main: { temp: 25 },
+          weather: [{ main: 'cloudSun', icon: '' }]
+      },
+      {
+        dt: Date.now() / 1000, 
+        main: { temp: 24 },
+        weather: [{ main: 'Cloud', icon: '' }]
+    },
+    {
+        dt: (Date.now() + 21600) / 1000,  
+        main: { temp: 23 },
+        weather: [{ main: 'Clear', icon: '' }]
+    },
+    {
+        dt: (Date.now() + 43200) / 1000, 
+        main: { temp: 22 },
+        weather: [{ main: 'Clear', icon: '' }]
+    }
+  ]
+});
+
+
+
 
   const styles: { [key: string]: CSSProperties } = {
 
@@ -187,12 +247,22 @@ const [locationName, setLocationName] = useState<string | null>(null);
         marginBottom: '5px',
         marginLeft: '-450px',
       },
+      sixHourForeCast: {
+        ...FONT.L3,
+        color: '#ffffff',
+        fontSize: '19px',
+        display: 'flex',
+        justifyContent: 'flex-start', 
+        marginTop: '7px',  
+        marginBottom: '5px',
+        marginRight: '560px',
+      },
       forecastItem: { 
         display: 'flex',
         flexDirection: 'column', 
             alignItems: 'center',  
             marginRight: '40px', 
-        marginTop: '5px',
+        marginTop: '-15px',
         marginBottom: '20px',
     },
     currentWeather: {
@@ -258,7 +328,7 @@ const [locationName, setLocationName] = useState<string | null>(null);
     },
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     navigator.geolocation.getCurrentPosition(
         function (position) {
             fetch(
@@ -294,17 +364,18 @@ const [locationName, setLocationName] = useState<string | null>(null);
             console.error(error);
         }
     );
-}, []);
+}, []);*/
 
   if (!weatherData) {
     return <div>Loading...</div>;
   }
 
+//예상 데이터 {convertWeatherToKorean(forecastData?.list[1]?.weather[0]?.main)}
   return (
     <StyledMainCard className="main-card">
       <div style={styles.header}>
         <FontAwesomeIcon icon={faMapMarkerAlt} style={styles.locationIcon} />
-        <span style={styles.headerSpan}>{locationName || '위치를 설정해주세요'}</span>
+        <span style={styles.headerSpan}>서울시 공덕</span>
       </div>
       <div style={styles.cardsContainer}>
         <div style={styles.weatherBox}>
@@ -347,15 +418,23 @@ const [locationName, setLocationName] = useState<string | null>(null);
       </div> 
       <div style={styles.forecastBox}>
         <div style={styles.nextHourForecast}>
-  1시간 뒤에 {convertWeatherToKorean(forecastData?.list[1]?.weather[0]?.main)} 으로 예상됩니다
+  1시간 뒤에 흐릴 것 으로 예상됩니다
 </div>
         <hr style={{ width: '95%', border: '1px solid white' }} />  
+        <div style={styles.sixHourForeCast}>6시간간의 일기 예보
+</div>
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}> 
+        <div></div>
             {forecastData &&
             forecastData.list.map((item, index) => (
+              
                 <div key={index} style={styles.forecastItem}>
+                  
                     <div style={styles.forecastTime}>
-                        {new Date(item.dt * 1000).getHours()}:00
+                    <div></div>
+                    <div style={styles.nextHourForecast}>
+        
+</div>   
                     </div>
                     <img
                         style={styles.forecastIcon}

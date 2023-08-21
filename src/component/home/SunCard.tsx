@@ -28,8 +28,13 @@ const SunCardStyles = styled.div`
     > div:last-child {
       margin-top: auto;
     }
+
+    .graph {
+      display: none; 
+    }
   }
 `;
+
 interface Main {
   uvi: number;
 }
@@ -39,12 +44,13 @@ interface WeatherData {
     main: Main;
   }[];
 }
+const fixedUVI = 7;
+
 const Weather = () => {
     const chartContainer = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
-    const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   
-    const styles: { [key: string]: CSSProperties } = { 
+    const styles = {
       SunInfo: {
           display: 'flex',
           alignItems: 'center',
@@ -67,12 +73,12 @@ const Weather = () => {
       },
       graph: {
           width: '100%',
-          marginTop: '-130px',
-      },
-  };
+          marginTop: '-150px',  
+      }
+    };
     
   
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchData = async (position: GeolocationPosition) => {
           try {
             const response = await fetch(
@@ -99,10 +105,10 @@ const Weather = () => {
         };
       
         navigator.geolocation.getCurrentPosition(fetchData);
-      }, []);
+      }, []);*/
 
       useEffect(() => {
-        if (!chartContainer.current || !weatherData) {
+        if (!chartContainer.current) {
           return;
         }
 
@@ -131,11 +137,11 @@ const Weather = () => {
             }));
       
             const pointData = [
-                {
-                  x: weatherData.list[0].main.uvi || 0, 
-                  y: 0,
-                },
-              ];
+              {
+                x: fixedUVI, 
+                y: 0,
+              },
+          ];
       
             const chartData: ChartData<'scatter', Point[], number> = {
               datasets: [
@@ -169,8 +175,8 @@ const Weather = () => {
                 },
                 scales: {
                   x: {
-                    min: -10, 
-                    max: 780,
+                    min: 0, 
+                    max: 15, 
                     display: false,
                   },
                   y: {
@@ -193,9 +199,12 @@ const Weather = () => {
             });
       
             setChartInstance(newChartInstance);
-      }, [weatherData]); 
+            return () => {
+              newChartInstance.destroy();
+            };
+          }, []); 
 
-  if (!weatherData) {
+  if (!fixedUVI) {
     return <div>Loading...</div>;
   }
 
@@ -208,21 +217,21 @@ const Weather = () => {
   };
 
 
-  const sunLevel = SunLevel(weatherData.list[0].main.uvi);
+  const sunLevel = SunLevel(fixedUVI);
 
-  return (
-    <SunCardStyles>
-      <div style={styles.SunInfo}>
-        <FontAwesomeIcon icon={faSun} />
-        <div style={styles.SunLabel}>자외선 지수</div>
-      </div>
-      <div style={styles.SunValue}>{weatherData.list[0].main.uvi}</div>
-      <div style={styles.SunLevel}>{sunLevel}</div>
-      <div style={styles.graph}>
-        <canvas ref={chartContainer} />
-      </div>
-    </SunCardStyles>
-  );
+    return (
+        <SunCardStyles>
+            <div style={styles.SunInfo}>
+                <FontAwesomeIcon icon={faSun} />
+                <div style={styles.SunLabel}>자외선 지수</div>
+            </div>
+            <div style={styles.SunValue}>{fixedUVI}</div>
+            <div style={styles.SunLevel}>{sunLevel}</div>
+            <div className="graph" style={styles.graph}>
+    <canvas ref={chartContainer} />
+</div>
+        </SunCardStyles>
+    );
 };
 
 export default Weather;
