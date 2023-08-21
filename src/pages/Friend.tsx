@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import { ReactComponent as Search } from '../assets/icon/Search.svg';
@@ -6,9 +6,17 @@ import MyProfile from '../component/friend/MyProfile';
 import FriendProfile from '../component/friend/FriendProfile';
 import FriendInviteButton from '../component/friend/FriendInviteButton';
 import FriendSearch from '../component/friend/FriendSearch';
+import { getFriendListDetail, getUserDetail } from '../api/Friend';
 
 type ToggleBtnProps = {
   expanded: boolean;
+};
+type DataItem = {
+  id: number;
+  name: string;
+  profileImageUrl: string | null;
+  codyImage: string | null;
+  comment: string | null;
 };
 
 const Friend = () => {
@@ -24,6 +32,44 @@ const Friend = () => {
   const onClickButton = () => {
     setIsOpen(true);
   };
+
+  // 내 프로필 API 연동
+  const [id, setId] = useState(0);
+  const [name, setName] = useState('');
+  const [cody, setCody] = useState('');
+  const [profile, setProfile] = useState('');
+  const [comment, setComment] = useState('');
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserDetail();
+      setId(response.data.id);
+      setName(response.data.name);
+      setCody(response.data.codyImage);
+      setProfile(response.data.profileImageUrl);
+      setComment(response.data.comment);
+    } catch (error) {
+      console.error('사용자 프로필 가져오기 오류:', error);
+    }
+  };
+
+  // 친구 프로필 리스트 API 연동
+  const [friendList, setFriendList] = useState<DataItem[]>([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const response = await getFriendListDetail(10);
+      setFriendList(response.data);
+    } catch (error) {
+      console.error('친구 프로필 목록 가져오기 오류:', error);
+    }
+  };
+  const fiveFriendList = friendList.slice(0, 5); // 처음부터 5개까지 자르기
+  const toggleFriendList = friendList.slice(5);
 
   return (
     <Container>
@@ -46,30 +92,39 @@ const Friend = () => {
         />
       )}
       <MainBox>
-        <MyProfile name='김민서' message='얘들아 진짜 덥다...' />
-        <FriendProfile name='박소정' message='난 오늘 핑크색 상의 입었다!' />
-        <FriendProfile name='권은지' message='반팔 필수' />
-        <FriendProfile
-          name='심규민'
-          message='오늘 미세먼지 매우 나쁨임. 마스크 써라!!'
+        <MyProfile
+          key={id}
+          name={name}
+          profileImageUrl={profile}
+          codyImage={cody}
+          comment={comment}
         />
-        <FriendProfile
-          name='황승희'
-          message='얘들아 나 오늘 꾸꾸로 나왔으니까 다들 꾸며서 와'
-        />
-        <FriendProfile name='강혜원' message='와 너무 더워' />
-        <FriendProfile name='박진경' message=':)' />
-        <FriendProfile name='이유빈' message='~~~' />
-        <FriendProfile name='김이름' message='...' />
-        {expanded === true ? (
+
+        {fiveFriendList.map((request, index) => (
+          <FriendProfile
+            key={index}
+            id={request.id}
+            name={request.name}
+            profileImageUrl={request.profileImageUrl}
+            codyImage={request.codyImage}
+            comment={request.comment}
+          />
+        ))}
+
+        {expanded && (
           <>
-            <FriendProfile name='김이름' message='...' />
-            <FriendProfile name='김이름' message='...' />
-            <FriendProfile name='김이름' message='...' />
-            <FriendProfile name='김이름' message='...' />
-            <FriendProfile name='김이름' message='...' />
+            {toggleFriendList.map((request, index) => (
+              <FriendProfile
+                key={index}
+                id={request.id}
+                name={request.name}
+                profileImageUrl={request.profileImageUrl}
+                codyImage={request.codyImage}
+                comment={request.comment}
+              />
+            ))}
           </>
-        ) : null}
+        )}
       </MainBox>
       <ToggleBox>
         <ToggleBtn onClick={ToggleHandler} expanded={expanded} style={FONT.L3}>
