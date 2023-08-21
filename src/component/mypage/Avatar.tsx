@@ -8,6 +8,7 @@ import { ReactComponent as MaleIcon } from '../../assets/icon/MaleIcon.svg';
 import { ReactComponent as FemaleIcon } from '../../assets/icon/FemaleIcon.svg';
 import { ReactComponent as ResetIcon } from '../../assets/icon/ResetIcon.svg';
 import axios from 'axios';
+import { useMediaQuery } from 'react-responsive';
 
 type AvatarProps = {
   showItemBox: boolean;
@@ -108,6 +109,7 @@ const baseURL =
 const token = localStorage.getItem('token');
 
 const Avatar = () => {
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
   const [showItemBox, setShowItemBox] = useState(false);
   const [selected, setSelected] = useState(false);
   const [avatarImg, setAvatarImg] = useState(Images('./M_Avatar.png')); // 아바타 성별
@@ -479,7 +481,7 @@ const Avatar = () => {
                 key={menu.id}
                 onClick={() => MenuClickHandler(index)}
                 selected={selectedMenuIndex === index}
-                style={FONT.H4}
+                style={isMobile ? FONT.M3 : FONT.H4}
               >
                 {menu.label}
               </MenuItem>
@@ -495,12 +497,17 @@ const Avatar = () => {
                 />
               ))}
           </ImageButtonsContainer>
+
           <SaveBtn
             onClick={SaveHandler}
             saving={saving}
             style={{ pointerEvents: saving ? 'none' : 'auto' }}
           >
             <div style={FONT.H4}>{saveButtonText}</div>
+
+          <SaveBtn onClick={SaveHandler} saving={saving}>
+            <div style={isMobile ? FONT.H5 : FONT.H4}>{saveButtonText}</div>
+
           </SaveBtn>
         </ItemBox>
       )}
@@ -514,6 +521,12 @@ const AvatarContainer = styled.div`
   flex-direction: column;
   width: 100%;
   margin-right: 40px;
+  @media (max-width: 500px) {
+    justify-content: center;
+    align-items: center;
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
 `;
 const AvatarBox = styled.div`
   display: flex;
@@ -526,6 +539,11 @@ const AvatarBox = styled.div`
   max-width: 764px;
   height: 590px;
   position: relative;
+  @media (max-width: 500px) {
+    width: 90vw;
+    max-width: 664px;
+    height: 390px;
+  }
 `;
 
 /* 아바타 단독 이미지 */
@@ -538,6 +556,11 @@ const AvatarImgBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   transition: top 0.3s ease-in-out;
   left: 51%;
   transform: translate(-50%, -50%);
+  @media (max-width: 500px) {
+    top: ${(props) => (props.showItemBox ? '47%' : '55%')};
+    width: 30%;
+    transform: translate(-52%, -53%);
+  }
 `;
 /* 아바타 최종 캡쳐 화면 */
 const AvatarCaptureBox = styled.div<Pick<AvatarProps, 'avatarSaveImg'>>`
@@ -568,6 +591,11 @@ const UpDownBtn = styled.button<Pick<AvatarProps, 'showItemBox'>>`
   cursor: pointer;
   transition: margin-bottom 0.3s ease-in-out;
   margin-bottom: ${(props) => (props.showItemBox ? '80px' : '20px')};
+  @media (max-width: 500px) {
+    margin-bottom: ${(props) => (props.showItemBox ? '69px' : '20px')};
+    width: 50px;
+    height: 47px;
+  }
 `;
 const SettingContainer = styled.div`
   position: relative;
@@ -576,6 +604,9 @@ const SettingContainer = styled.div`
   max-width: 764px;
   height: 590px;
   padding: 45px;
+  @media (max-width: 500px) {
+    padding: 20px;
+  }
 `;
 /* 성별 */
 const SexBtnBox = styled.div`
@@ -591,6 +622,11 @@ const SexBtnBox = styled.div`
   margin-left: 10px;
   padding: 0px 3px;
   position: absolute;
+  @media (max-width: 500px) {
+    width: 75px;
+    height: 28px;
+    margin-left: 20px;
+  }
 `;
 const SexIcon = styled.div<Pick<AvatarProps, 'selected'>>`
   width: 57px;
@@ -604,6 +640,14 @@ const SexIcon = styled.div<Pick<AvatarProps, 'selected'>>`
   svg {
     cursor: pointer;
   }
+  @media (max-width: 500px) {
+    width: 47px;
+    height: 22px;
+    > svg {
+      width: 60%;
+      height: 60%;
+    }
+  }
 `;
 /* 인벤토리 */
 const InventoryBox = styled.div`
@@ -611,6 +655,9 @@ const InventoryBox = styled.div`
   right: 50px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 500px) {
+    right: 40px;
+  }
 `;
 const Inventory = styled.div`
   width: 49px;
@@ -621,6 +668,12 @@ const Inventory = styled.div`
   background-size: 90%;
   background-position: center;
   background-repeat: no-repeat;
+  @media (max-width: 500px) {
+    z-index: 1;
+    width: 39px;
+    height: 37px;
+    margin-bottom: 5px;
+  }
 `;
 /* 리셋 */
 const ResetBtn = styled.button`
@@ -636,6 +689,15 @@ const ResetBtn = styled.button`
   position: absolute;
   bottom: 20px;
   right: 50px;
+  @media (max-width: 500px) {
+    width: 36px;
+    height: 34px;
+    right: 40px;
+    > svg {
+      width: 90%;
+      height: 90%;
+    }
+  }
 `;
 /* 아이템 */
 const ItemBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
@@ -649,6 +711,13 @@ const ItemBox = styled.div<Pick<AvatarProps, 'showItemBox'>>`
   height: 624px;
   margin: -60px 0 120px 0;
   padding: 50px;
+  @media (max-width: 500px) {
+    width: 90vw;
+    max-width: 664px;
+    height: 320px;
+    padding: 30px 30px 10px 30px;
+    margin-bottom: 10px;
+  }
 `;
 const MenuItemBox = styled.div`
   display: flex;
@@ -663,6 +732,9 @@ const MenuItem = styled.div<Pick<AvatarProps, 'selected'>>`
   cursor: pointer;
   margin-left: -20px;
   color: ${(props) => (props.selected ? props.theme.Blue_Main : 'black')};
+  @media (max-width: 500px) {
+    margin-left: -13px;
+  }
 `;
 const ImageButtonsContainer = styled.div`
   display: flex;
@@ -683,6 +755,13 @@ const ImageButton = styled.button`
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 25px;
+  @media (max-width: 500px) {
+    width: 77px;
+    height: 78px;
+    background-size: 75%;
+    margin: -13px 7px 25px 7px;
+    border-radius: 10px;
+  }
 `;
 const SaveBtn = styled.button<Pick<AvatarProps, 'saving'>>`
   display: flex;
@@ -701,4 +780,9 @@ const SaveBtn = styled.button<Pick<AvatarProps, 'saving'>>`
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 30px;
+  @media (max-width: 500px) {
+    width: 160px;
+    height: 36px;
+    bottom: -10px;
+  }
 `;

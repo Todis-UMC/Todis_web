@@ -7,14 +7,16 @@ interface ButtonProps {
   backgroundColor?: string;
   font?: (typeof FONT)[keyof typeof FONT];
   disabled?: boolean;
+  width?: number;
+  height?: number;
 }
 
 const Button = styled.button<ButtonProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 55px;
+  width: ${(props) => (props.width ? props.width + 'px' : '100%')};
+  height: ${(props) => props.height || 55}px;
   background-color: ${(props) => props.backgroundColor || Color.Blue_Main};
   color: ${Color.Typo_White};
   font-size: ${(props) => props.font?.fontSize || FONT.H7.fontSize};

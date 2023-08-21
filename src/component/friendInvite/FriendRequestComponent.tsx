@@ -100,6 +100,10 @@ const Box = styled.div`
     background: ${(props) => props.theme.Gray_02};
     margin: 18px 0px;
   }
+  @media (max-width: 500px) {
+    max-width: 400px;
+    height: 30px;
+  }
 `;
 
 const Profile = styled.div`
@@ -138,6 +142,11 @@ const No = styled.button`
   border-radius: 14px;
   border: 1px solid ${(props) => props.theme.Blue_Main};
   cursor: pointer;
+  @media (max-width: 500px) {
+    width: 60px;
+    height: 30px;
+    left: 150px;
+  }
 `;
 const Yes = styled.button`
   width: 91px;
@@ -150,4 +159,9 @@ const Yes = styled.button`
   border: none;
   color: #fff;
   cursor: pointer;
+  @media (max-width: 500px) {
+    width: 60px;
+    height: 30px;
+    left: 220px;
+  }
 `;

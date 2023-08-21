@@ -33,6 +33,9 @@ const Box = styled.div`
   border-radius: 47px;
   border: none;
   position: relative;
+  @media (max-width: 500px) {
+    margin-top: 36px;
+  }
 `;
 const Avatar = styled.div`
   width: 415px;
