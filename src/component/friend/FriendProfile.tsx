@@ -3,24 +3,40 @@ import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import avatar from '../../assets/img/avatar/M_Avatar.png';
 
+interface DataItem {
+  name: string;
+  id: number;
+  profileImageUrl: string | null;
+  codyImage: string | null;
+  comment: string | null;
+}
+
 const FriendProfile = ({
   name,
-  message
-}: {
-  name: string;
-  message: string;
-}) => {
+  id,
+  codyImage,
+  profileImageUrl,
+  comment
+}: DataItem) => {
   return (
     <Box>
       <Avatar>
-        <img src={avatar} alt='avatar' height='100%' />
+        {codyImage === null ? (
+          <img src={avatar} alt='avatar-codyImage' height='100%' />
+        ) : (
+          <img src={codyImage} alt='codyImage' height='100%' />
+        )}
       </Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
-        <Message style={FONT.L5}>{message}</Message>
+        <Message style={FONT.L5}>{comment}</Message>
       </MessageBox>
       <Profile>
-        <img src={avatar} alt='avatar-face' />
+        {profileImageUrl === null ? (
+          <img src={avatar} alt='avatar-profile' height='100%' />
+        ) : (
+          <img src={profileImageUrl} alt='profile' height='100%' />
+        )}
       </Profile>
     </Box>
   );

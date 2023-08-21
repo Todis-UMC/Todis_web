@@ -5,7 +5,14 @@ import { ReactComponent as ProfilePlus } from '../../assets/icon/ProfilePlus.svg
 import MyMessage from './MyMessage';
 import avatar from '../../assets/img/avatar/M_Avatar.png';
 
-const MyProfile = ({ name, message }: { name: string; message: string }) => {
+interface DataItem {
+  name: string;
+  profileImageUrl: string | null;
+  codyImage: string | null;
+  comment: string | null;
+}
+
+const MyProfile = ({ name, codyImage, profileImageUrl, comment }: DataItem) => {
   // 글쓰기 모달창 열기
   const [isOpen, setIsOpen] = useState(false);
   const onClickButton = () => {
@@ -15,15 +22,23 @@ const MyProfile = ({ name, message }: { name: string; message: string }) => {
   return (
     <Box>
       <Avatar>
-        <img src={avatar} alt='avatar' height='100%' />
+        {codyImage === null ? (
+          <img src={avatar} alt='avatar' height='100%' />
+        ) : (
+          <img src={codyImage} alt='avatar' height='100%' />
+        )}
       </Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
-        <Message style={FONT.L5}>{message}</Message>
+        <Message style={FONT.L5}>{comment}</Message>
       </MessageBox>
       <ProfileLine />
       <Profile>
-        <img src={avatar} alt='avatar-face' />
+        {profileImageUrl === null ? (
+          <img src={avatar} alt='avatar-profile' height='100%' />
+        ) : (
+          <img src={profileImageUrl} alt='profile' height='100%' />
+        )}
       </Profile>
       <ProfileCircle />
       <ProfileBlueCircle onClick={onClickButton}>
