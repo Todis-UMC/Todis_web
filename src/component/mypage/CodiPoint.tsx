@@ -26,17 +26,17 @@ const CodiPoint = () => {
   const [coditexts, setCoditexts] = useState<CodiBoxData[]>([
     {
       id: 1,
-      text: 'Loading..',
+      text: '오늘의 추천 코디 생각 중..',
       isChecked: false
     },
     {
       id: 2,
-      text: 'Loading..',
+      text: '오늘의 추천 코디 생각 중..',
       isChecked: false
     },
     {
       id: 3,
-      text: 'Loading..',
+      text: '오늘의 추천 코디 생각 중..',
       isChecked: false
     }
   ]);
@@ -197,7 +197,9 @@ const CodiBox = styled.div<CheckProps>`
   border: 2px solid ${(props) => props.theme.Blue_Main};
   border-radius: 40px;
   padding: ${(props) =>
-    props.text === 'Loading..' ? '40px 42px 30px 92px' : '30px 42px 30px 92px'};
+    props.text === '오늘의 추천 코디 생각 중..'
+      ? '40px 42px 30px 92px'
+      : '30px 42px 30px 92px'};
   margin-bottom: 10px;
   width: 100vw;
   max-width: 531px;
