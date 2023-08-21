@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudRain } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
+import Loading from '../common/Loading';
 
 interface WeatherData {
   rain?: {
@@ -28,29 +29,29 @@ const Rain = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-start'
     },
     RainCardInfo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     RainCardLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     RainCardValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     RainCardLevel: {
       ...Font.L3,
       color: Color.Gray_01,
       marginTop: '26.5px',
-      marginLeft: '-50px', 
-    },
+      marginLeft: '-50px'
+    }
   };
 
   useEffect(() => {
@@ -58,17 +59,17 @@ const Rain = () => {
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=4d4c41dc06bbf1741b3a628d64934b98`
       )
-      .then((res) => res.json())
-      .then((data) => {
-        setWeatherData(data);
-        setRainfall(data.rain && data.rain['3h'] ? data.rain['3h'] : 0);
-      })
-      .catch((err) => console.error(err));
+        .then((res) => res.json())
+        .then((data) => {
+          setWeatherData(data);
+          setRainfall(data.rain && data.rain['3h'] ? data.rain['3h'] : 0);
+        })
+        .catch((err) => console.error(err));
     });
   }, []);
 
   if (rainfall === null) {
-    return <div>Loading...</div>
+    return <Loading />;
   }
 
   return (

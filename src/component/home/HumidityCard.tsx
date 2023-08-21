@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTint } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
+import Loading from '../common/Loading';
 
 interface WeatherData {
   main: {
@@ -27,29 +28,29 @@ const Weather = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-start'
     },
     humidityInfo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     humidityLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     humidityValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     humidityLevel: {
       ...Font.L3,
       color: Color.Gray_01,
       marginTop: '26.5px',
-      marginLeft: '-95px', 
-    },
+      marginLeft: '-95px'
+    }
   };
 
   useEffect(() => {
@@ -57,14 +58,14 @@ const Weather = () => {
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=4d4c41dc06bbf1741b3a628d64934b98`
       )
-      .then((res) => res.json())
-      .then((data) => setWeatherData(data))
-      .catch((err) => console.error(err));
+        .then((res) => res.json())
+        .then((data) => setWeatherData(data))
+        .catch((err) => console.error(err));
     });
   }, []);
 
   if (!weatherData) {
-    return <div>Loading...</div>
+    return <Loading />;
   }
 
   const humidityLevel = weatherData.main.humidity > 50 ? '높음' : '낮음';

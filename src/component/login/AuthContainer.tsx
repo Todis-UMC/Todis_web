@@ -66,6 +66,9 @@ const Box = styled.div`
   border-radius: 47px;
   justify-content: center;
   padding: 44px 65px 50px 65px;
+  @media (max-width: 390px) {
+    padding: 44px 20px 50px 20px;
+  }
   text-align: center;
 `;
 const Title = styled.div`
