@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import LikeButton from './LikeButton';
-import avatar from '../../assets/img/avatar/M_Avatar.png';
-import axios from 'axios';
 
 const Box = styled.div`
   width: 67rem;
@@ -58,19 +56,6 @@ margin-left: 61rem;
 top: 8.5rem;
 `;
 
-const CenteredImage = styled.img`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-
-const baseURL =
-  'http://ec2-13-209-15-210.ap-northeast-2.compute.amazonaws.com:8080';
-
-const token = localStorage.getItem('token');
-
 const LankBox = ({
     name,
     statusmessage,
@@ -80,28 +65,6 @@ const LankBox = ({
     statusmessage: string;
     lankNum: string; 
   }) => {
-
-    const [avatarSaveImg, setAvatarSaveImg] = useState<string>('');
-
-    useEffect(() => {
-      const fetchAvatarImage = async () => {
-        try {
-          const responseAvatar = await axios.get(`${baseURL}/cody/getimage`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          const avatarSaveImg = responseAvatar.data;
-          setAvatarSaveImg(avatarSaveImg.data.image);
-          console.log('GET 아바타 이미지:', avatarSaveImg);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          console.log('연동 오류');
-        }
-      };
-        fetchAvatarImage();
-      }, []);
-
     return (
       <Box>
         <Name style={FONT.H2}>{name}</Name>
@@ -110,8 +73,6 @@ const LankBox = ({
           <LankNum style={FONT.L1}>{lankNum}</LankNum>
         </Lanking>
         <OutfitPic>
-          <CenteredImage src={avatarSaveImg || avatar} alt='OutfitPic' height='100%' />
-          
         </OutfitPic>
         <ButtonStyling>
           <LikeButton />
