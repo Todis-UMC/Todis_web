@@ -207,6 +207,10 @@ const Avatar = () => {
   };
 
   const SaveHandler = async () => {
+    if (saving) {
+      return; // 이미 저장 중인 경우 중복 요청 막음
+    }
+
     // 아이템 변경 없이 저장하기 클릭 시
     setSaveButtonText('저장 완료!');
 
@@ -489,7 +493,11 @@ const Avatar = () => {
                 />
               ))}
           </ImageButtonsContainer>
-          <SaveBtn onClick={SaveHandler} saving={saving}>
+          <SaveBtn
+            onClick={SaveHandler}
+            saving={saving}
+            style={{ pointerEvents: saving ? 'none' : 'auto' }}
+          >
             <div style={FONT.H4}>{saveButtonText}</div>
           </SaveBtn>
         </ItemBox>
