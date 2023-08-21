@@ -3,10 +3,21 @@ import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as CodiCheck } from '../../assets/icon/CodiCheck.svg';
 import { ReactComponent as CodiUnCheck } from '../../assets/icon/CodiUnCheck.svg';
+
 import { useMediaQuery } from 'react-responsive';
+
+import {
+  TempRanges,
+  UviTextData,
+  HumidityData,
+  ForecastData,
+  AirTextData
+} from './CodiText';
+
 
 type CheckProps = {
   isChecked: boolean;
+  text: string;
 };
 
 type CodiBoxData = {
@@ -16,48 +27,147 @@ type CodiBoxData = {
 };
 
 const CodiPoint = () => {
+
   const [coditexts, setCoditexts] = useState<CodiBoxData[]>([]);
   const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
 
-  useEffect(() => {
-    // 예시 데이터
-    const data = [
-      {
-        id: 1,
-        text: '오후에 비가 내린다고 했어요!\n스웨이드 재질의 신발은 피해주세요!',
-        isChecked: false
-      },
-      {
-        id: 2,
-        text: '오늘은 일교차가 커서 지금은 덥더라도 얇은 겉옷을 챙기는 걸 추천해요!\n통풍이 좋은 매쉬 소재나 린넨 소재를 입어도 좋을 것 같아요 :)',
-        isChecked: false
-      },
-      {
-        id: 3,
-        text: '하의는 반바지 혹은 어두운 색의 긴바지를 추천해요! 바지가 비에 젖을 수 있으니 밝은 회색, 하늘 계열의 색은 추천하지 않아요 :(',
-        isChecked: false
-      }
-    ];
+  const [coditexts, setCoditexts] = useState<CodiBoxData[]>([
+    {
+      id: 1,
+      text: '오늘의 추천 코디 생각 중..',
+      isChecked: false
+    },
+    {
+      id: 2,
+      text: '오늘의 추천 코디 생각 중..',
+      isChecked: false
+    },
+    {
+      id: 3,
+      text: '오늘의 추천 코디 생각 중..',
+      isChecked: false
+    }
+  ]);
 
-    // 로컬 스토리지에 저장된 상태 불러옴
-    const savedCoditexts = localStorage.getItem('coditexts');
-    savedCoditexts
-      ? setCoditexts(JSON.parse(savedCoditexts))
-      : setCoditexts(data);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const latitude = 37;
+      const longitude = 126;
+      try {
+        const [weatherResponse, airQualityResponse, uviResponse] =
+          await Promise.all([
+            fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=4d4c41dc06bbf1741b3a628d64934b98&lang=kr`
+            ),
+            fetch(
+              `http://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=4d4c41dc06bbf1741b3a628d64934b98&lang=kr`
+            ),
+            fetch(
+              `http://api.openweathermap.org/data/2.5/uvi?lat=${latitude}&lon=${longitude}&appid=4d4c41dc06bbf1741b3a628d64934b98`
+            )
+          ]);
+
+        if (!weatherResponse.ok || !airQualityResponse.ok || !uviResponse.ok) {
+          throw new Error('One or more API responses were not ok');
+        }
+
+        const weatherData = await weatherResponse.json();
+        const airQualityData = await airQualityResponse.json();
+        const uviData = await uviResponse.json();
+
+        const temp = weatherData.main.temp; // 기온
+        const humidity = weatherData.main.humidity; // 습도
+        const forecastData = weatherData.weather[0].main; // Rain, Snow
+        const airQuality = airQualityData.list[0].main.aqi; // 대기질
+        const uvi = uviData.value; // 자외선
+        console.log(
+          '기온:',
+          temp,
+          '습도:',
+          humidity,
+          '예측:',
+          forecastData,
+          '대기질:',
+          airQuality,
+          '자외선:',
+          uvi
+        );
+
+        let FirstText = '';
+        let SecondText = '';
+        let ThirdText = '';
+        // 1. 기온
+        for (const range of TempRanges) {
+          if (temp >= range.min && temp <= range.max) {
+            const randomIndex = Math.floor(Math.random() * range.text.length);
+            FirstText = range.text[randomIndex];
+            break;
+          }
+        }
+        // 2. 습도, Rain, Snow
+        if (
+          humidity >= 50 ||
+          forecastData === 'Rain' ||
+          forecastData === 'Snow'
+        ) {
+          const randomHumIndex = Math.floor(
+            Math.random() * HumidityData.length
+          );
+          const randomRainIndex = Math.floor(Math.random() * 4);
+          const randomSnowIndex = Math.floor(Math.random() * 2) + 4;
+          SecondText =
+            humidity >= 50
+              ? HumidityData[randomHumIndex]
+              : forecastData === 'Rain'
+              ? ForecastData[randomRainIndex]
+              : ForecastData[randomSnowIndex];
+        }
+        // 3. 자외선, 대기질
+        if (uvi >= 6 || airQuality >= 150) {
+          const randomUviIndex = Math.floor(Math.random() * UviTextData.length);
+          const randomAirIndex = Math.floor(Math.random() * 2);
+          ThirdText =
+            uvi >= 6
+              ? UviTextData[randomUviIndex]
+              : AirTextData[randomAirIndex];
+        } else {
+          ThirdText = AirTextData[2];
+        }
+
+        setCoditexts((prevCoditexts) => [
+          {
+            id: 1,
+            text: FirstText,
+            isChecked: false
+          },
+          {
+            id: 2,
+            text: SecondText,
+            isChecked: false
+          },
+          {
+            id: 3,
+            text: ThirdText,
+            isChecked: false
+          }
+        ]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
   }, []);
 
   const CodiCheckHandler = (id: number) => {
     setCoditexts((prevData) => {
-      const updatedCoditexts = prevData.map((item) => {
+      const updatedData = prevData.map((item) => {
         if (item.id === id) {
           return { ...item, isChecked: !item.isChecked };
         }
         return item;
       });
-
-      // 로컬 스토리지에 업데이트된 상태 저장
-      localStorage.setItem('coditexts', JSON.stringify(updatedCoditexts));
-      return updatedCoditexts;
+      return updatedData;
     });
   };
 
@@ -66,8 +176,14 @@ const CodiPoint = () => {
       {coditexts.map((item) => (
         <CodiBox
           key={item.id}
+
           style={isMobile ? { ...FONT.L5, lineHeight: '1.5' } : { ...FONT.L3 }}
           isChecked={item.isChecked}
+
+          style={FONT.L3}
+          isChecked={item.isChecked}
+          text={item.text}
+
         >
           {item.text}
           <CheckBtn
@@ -94,7 +210,14 @@ const CodiBox = styled.div<CheckProps>`
   letter-spacing: -0.41px;
   border: 2px solid ${(props) => props.theme.Blue_Main};
   border-radius: 40px;
+
   padding: 30px 42px 30px 92px;
+
+  padding: ${(props) =>
+    props.text === '오늘의 추천 코디 생각 중..'
+      ? '40px 42px 30px 92px'
+      : '30px 42px 30px 92px'};
+
   margin-bottom: 10px;
   width: 100vw;
   max-width: 531px;
@@ -109,7 +232,7 @@ const CodiBox = styled.div<CheckProps>`
   }
 `;
 
-const CheckBtn = styled.button<CheckProps>`
+const CheckBtn = styled.button<Pick<CheckProps, 'isChecked'>>`
   position: absolute;
   top: 37px;
   left: 5%;
