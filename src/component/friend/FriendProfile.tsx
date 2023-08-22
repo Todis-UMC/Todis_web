@@ -87,6 +87,14 @@ const Profile = styled.div`
     object-fit: cover;
     border-radius: 50%;
   }
+  @media (max-width: 500px) {
+    #mypage{
+      height: 350%;
+      width: 320%;
+      top: -10px;
+      left: -4px;
+    }
+  }
 `;
 const Name = styled.div`
   margin-top: 30px;

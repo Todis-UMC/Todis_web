@@ -226,10 +226,10 @@ const Avatar = () => {
         const dataUrl = await domtoimage.toJpeg(captureRef.current, {
           quality: 1,
           width: 700,
-          height: 500,
+          height: isMobile ? 350 : 500,
           style: {
             position: 'absolute',
-            transform: 'translate(-4.6%, -2.5%)',
+            transform:  isMobile ? 'translate(10%, -3%)' : 'translate(-4.6%, -2.5%)',
             backgroundColor: '#e4ebfa'
           }
         });
