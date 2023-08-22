@@ -355,3 +355,4 @@ const GradientBottom = styled.div`
 function setCity(value: string) {
   throw new Error('Function not implemented.');
 }
+
