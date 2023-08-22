@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import { ReactComponent as GoBack } from '../../assets/icon/GoBack.svg';
@@ -6,12 +6,24 @@ import { ReactComponent as Search } from '../../assets/icon/Search.svg';
 import FriendSearchComponent from './FriendSearchComponent';
 import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
+import { getFriendList, getFriendList2 } from '../../api/Friend';
 import { useMediaQuery } from 'react-responsive';
+
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
 }
+
+type FriendSearch = {
+  count: number;
+  friendList: FriendSearchResult;
+};
+type FriendSearchResult = {
+  name: string;
+  email: string;
+  profileImageUrl: string;
+};
 
 const FriendSearch = ({ onClose }: ModalProps) => {
   const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
@@ -19,11 +31,9 @@ const FriendSearch = ({ onClose }: ModalProps) => {
   const handleClose = () => {
     onClose?.();
   };
-
   // 모달창 외부 클릭시 닫기
   const modalRef = useRef<HTMLDivElement>(null);
   useOutSideClick(modalRef, handleClose);
-
   // 모달창 열렸을 때 외부 스크롤 막기
   useEffect(() => {
     const $body = document.querySelector('body') as HTMLBodyElement;
@@ -33,6 +43,76 @@ const FriendSearch = ({ onClose }: ModalProps) => {
       $body.style.overflow = overflow;
     };
   }, []);
+
+  // 친구 검색 API 연동(성공)
+  const [friendCount, setFriendCount] = useState<number>();
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchResults, setSearchResults] = useState<FriendSearchResult[]>([]);
+
+  /** 초기 친구 목록  */
+  useEffect(() => {
+    const keyword = null;
+    const fetchData = async (keyword: string | null) => {
+      try {
+        const response = await getFriendList2(keyword);
+        if (response.success) {
+          console.log('초기 친구 검색 성공:', response.message);
+          setSearchResults(response.data.friendList); // 검색 결과 설정
+          setFriendCount(response.data.count);
+        } else {
+          console.error('초기 친구 검색 실패:', response.message);
+        }
+      } catch (error) {
+        console.error('초기 친구 검색 오류:', error);
+      }
+    };
+    fetchData(keyword);
+  }, []);
+  /** keyword 입력받을 때 */
+  const handleSearch = async (keyword: string) => {
+    try {
+      const response = await getFriendList(keyword);
+      if (response.success) {
+        console.log('친구 검색 성공:', response.message);
+        setSearchResults(response.data.friendList); // 검색 결과 설정
+        setFriendCount(response.data.count);
+      } else {
+        console.error('친구 검색 실패:', response.message);
+      }
+    } catch (error) {
+      // keyword == '' 일 때
+      const response = await getFriendList2(keyword);
+      if (response.success) {
+        console.log('초기 친구 검색 성공:', response.message);
+        setSearchResults(response.data.friendList); // 검색 결과 설정
+        setFriendCount(response.data.count);
+      } else {
+        console.error('초기 친구 검색 실패:', response.message);
+      }
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const keyword = e.target.value;
+    setSearchKeyword(keyword);
+    handleSearch(keyword); // 입력값 변경 시 검색 요청 실행
+  };
+
+  /** 친구 삭제 후 친구 목록 초기화 */
+  const handleFriendRefresh = async (keyword: string) => {
+    try {
+      const response = await getFriendList2(keyword);
+      if (response.success) {
+        console.log('친구 검색 목록 초기화 성공:', response.message);
+        setSearchResults(response.data.friendList); // 검색 결과 설정
+        setFriendCount(response.data.count);
+      } else {
+        console.error('친구 검색 목록 초기화 실패:', response.message);
+      }
+    } catch (error) {
+      console.error('친구 검색 목록 초기화 오류:', error);
+    }
+  };
 
   return (
     <ModalContainer>
@@ -44,6 +124,8 @@ const FriendSearch = ({ onClose }: ModalProps) => {
               style={FONT.L3}
               placeholder='친구 검색...'
               color='${(props) => props.theme.Gray_02}'
+              value={searchKeyword}
+              onChange={handleInputChange}
             />
             <span id='search'>
               <Search />
@@ -53,20 +135,19 @@ const FriendSearch = ({ onClose }: ModalProps) => {
             </span>
           </SearchBox>
           <span id='friends' style={FONT.M3}>
-            전체 친구 : 00명
+            전체 친구 : {friendCount}명
           </span>
           <GradientTop />
           <ListBox>
-            <FriendSearchComponent name='김우진' />
-            <FriendSearchComponent name='이민하' />
-            <FriendSearchComponent name='강민경' />
-            <FriendSearchComponent name='우소정' />
-            <FriendSearchComponent name='이민하' />
-            <FriendSearchComponent name='김우진' />
-            <FriendSearchComponent name='이민하' />
-            <FriendSearchComponent name='강민경' />
-            <FriendSearchComponent name='우소정' />
-            <FriendSearchComponent name='이민하' />
+            {searchResults.map((request, index) => (
+              <FriendSearchComponent
+                key={index}
+                name={request.name}
+                email={request.email}
+                profileImageUrl={request.profileImageUrl}
+                onFriendRefresh={handleFriendRefresh}
+              />
+            ))}
           </ListBox>
           <GradientBottom />
         </Box>
