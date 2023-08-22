@@ -5,7 +5,8 @@ import FONT from '../../styles/Font';
 
 const SocialKakao = () => {
   const Rest_api_key = process.env.REACT_APP_KAKAO_REST_API_KEY;
-  const redirect_uri = 'http://localhost:3000/kakao';
+  const redirect_uri =
+    'http://todis.s3-website.ap-northeast-2.amazonaws.com/kakao';
 
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${Rest_api_key}&redirect_uri=${redirect_uri}`;
 
