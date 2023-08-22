@@ -25,9 +25,9 @@ const FriendSearchComponent = ({
     <Box>
       <Profile>
         {profileImageUrl === null ? (
-          <img src={avatar} alt='avatar-profile' />
+          <img id='avatar' src={avatar} alt='avatar-profile' />
         ) : (
-          <img src={profileImageUrl} alt='profile' />
+          <img id='mypage' src={profileImageUrl} alt='mypage-profile' />
         )}
       </Profile>
       <Name>{name}</Name>
@@ -82,7 +82,16 @@ const Profile = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
   overflow: hidden;
   position: relative;
-  img {
+  #mypage {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    height: 350%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  #avatar {
     position: absolute;
     top: -3px;
     left: -8px;

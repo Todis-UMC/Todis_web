@@ -51,9 +51,14 @@ const FriendDelete = ({
       <Box ref={modalRef}>
         <Profile>
           {profileImageUrl === null ? (
-            <img src={avatar} alt='avatar-profile' height='100%' />
+            <img id='avatar' src={avatar} alt='avatar-profile' height='100%' />
           ) : (
-            <img src={profileImageUrl} alt='profile' height='100%' />
+            <img
+              id='mypage'
+              src={profileImageUrl}
+              alt='profile'
+              height='100%'
+            />
           )}
         </Profile>
         <Name style={FONT.M2}>
@@ -110,11 +115,20 @@ const Profile = styled.div`
   left: 128.5px;
   border: none;
   overflow: hidden;
-  img {
+  #avatar {
     position: absolute;
     top: -5px;
     left: -21px;
     height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  #mypage {
+    position: absolute;
+    top: -20px;
+    left: -26px;
+    height: 330%;
     width: 150%;
     object-fit: cover;
     border-radius: 50%;
