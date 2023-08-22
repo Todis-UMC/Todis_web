@@ -23,9 +23,9 @@ const MyProfile = ({ name, codyImage, profileImageUrl, comment }: DataItem) => {
     <Box>
       <Avatar>
         {codyImage === null ? (
-          <img src={avatar} alt='avatar' height='100%' />
+          <img id='avatar' src={avatar} alt='avatar' height='100%' />
         ) : (
-          <img src={codyImage} alt='avatar' height='100%' />
+          <img id='mypage' src={codyImage} alt='mypage-avatar' height='109%' />
         )}
       </Avatar>
       <MessageBox>
@@ -35,9 +35,9 @@ const MyProfile = ({ name, codyImage, profileImageUrl, comment }: DataItem) => {
       <ProfileLine />
       <Profile>
         {profileImageUrl === null ? (
-          <img src={avatar} alt='avatar-profile' height='100%' />
+          <img id='avatar' src={avatar} alt='avatar-profile' />
         ) : (
-          <img src={profileImageUrl} alt='profile' height='100%' />
+          <img id='mypage' src={profileImageUrl} alt='mypage-profile' />
         )}
       </Profile>
       <ProfileCircle />
@@ -73,6 +73,10 @@ const Avatar = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
   border-top-left-radius: 47px;
   border-top-right-radius: 47px;
+  overflow: hidden;
+  #mypage {
+    top: -20px;
+  }
 `;
 const ProfileLine = styled.div`
   width: 96px;
@@ -92,7 +96,15 @@ const Profile = styled.div`
   top: 203px;
   left: 163px;
   overflow: hidden;
-  img {
+  #mypage {
+    position: absolute;
+    top: -20px;
+    left: -22px;
+    height: 330%;
+    width: 150%;
+    object-fit: cover;
+  }
+  #avatar {
     position: absolute;
     top: -5px;
     left: -18px;
