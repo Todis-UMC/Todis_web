@@ -28,9 +28,9 @@ const FriendAccept = ({
       <Box>
         <Profile>
           {profileImageUrl === null ? (
-            <img src={avatar} />
+            <img id='avatar' src={avatar} />
           ) : (
-            <img src={profileImageUrl} />
+            <img id='mypage' src={profileImageUrl} />
           )}
         </Profile>
         <Name style={FONT.M2}>
@@ -90,11 +90,19 @@ const Profile = styled.div`
   left: 128.5px;
   border: none;
   overflow: hidden;
-  img {
+  #avatar {
     position: absolute;
     top: -13px;
     left: -21px;
     height: 320%;
+    width: 150%;
+    object-fit: cover;
+  }
+  #mypage {
+    position: absolute;
+    top: -25px;
+    left: -26px;
+    height: 350%;
     width: 150%;
     object-fit: cover;
   }

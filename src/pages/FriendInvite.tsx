@@ -95,9 +95,9 @@ const FriendInvite = () => {
         </span>
         <Profile>
           {profile === null ? (
-            <img src={avatar} alt='avatar' />
+            <img id='avatar' src={avatar} alt='avatar' />
           ) : (
-            <img src={profile} alt='profile' />
+            <img id='mypage' src={profile} alt='profile' />
           )}
         </Profile>
         <MyInfo>
@@ -212,11 +212,11 @@ const MainBox = styled.div`
     top: 486px;
     left: 71px;
   }
-   @media (max-width: 500px) {
+  @media (max-width: 500px) {
     width: 100%;
     height: 800px;
     overflow: hidden;
-   }
+  }
 `;
 const Profile = styled.div`
   position: absolute;
@@ -229,11 +229,20 @@ const Profile = styled.div`
   border-radius: 50%;
   border: none;
   overflow: hidden;
-  img {
+  #avatar {
     position: absolute;
     top: -10px;
     left: -25px;
     height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  #mypage {
+    position: absolute;
+    top: -30px;
+    left: -30px;
+    height: 330%;
     width: 150%;
     object-fit: cover;
     border-radius: 50%;
