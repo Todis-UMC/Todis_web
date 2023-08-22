@@ -28,13 +28,14 @@ function App() {
     window.location.pathname.startsWith('/signup') ||
     window.location.pathname.startsWith('/user') ||
     window.location.pathname === '/friend/invite';
-
+  console.log(window.location.pathname);
   return (
     <>
       <BrowserRouter>
         <div className='App'>
           {!noLayout && <Nav />}
           <Routes>
+            <Route path='/' element={<Home />} />
             <Route path='/kakao' element={<Kakao />} />
             <Route path='/google' element={<Google />} />
             <Route path='/login' element={<Login />} />

@@ -1,15 +1,21 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../../../styles/Font';
 import { ReactComponent as Logo } from '../../../assets/icon/SmallLogo.svg';
 import DropDown from './DropDown';
-import { SignUpButton, SignInButton, LanguageButton } from './Button';
+import Buttons, { SignUpButton, SignInButton, LanguageButton } from './Button';
 import { toast, ToastContainer } from 'react-toastify';
+import { Mobile, PC } from '../../common/Responsive';
+import { ReactComponent as Menu } from '../../../assets/icon/Hamburger.svg';
+import Routes from '../../../constants/Route';
+import SideMenu from './SideMenu';
 
 const Nav: React.FC = () => {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState<string>('');
+  const [menu, setMenu] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
   useEffect(() => {
@@ -72,25 +78,39 @@ const Nav: React.FC = () => {
         </DropDownContainer>
       )}
       <ToastContainer />
-    </NavBarContainer>
+      {menu && <SideMenu onClose={() => setMenu(false)} />}
+    </>
   );
 };
 
 export default Nav;
 
-const LogoContainer = styled.div`
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-  margin-left: 5.5rem;
-  display: flex;
-  justify-content: center;
-`;
-
-const NavBarContainer = styled.div`
-  padding: 1rem;
-  background-color: #f3f6fc;
+const PcContainer = styled.div`
+  margin-bottom: -50px;
+  background-color: ${(props) => props.theme.Sky_Blue_04};
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  > svg {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    margin-left: 5.5rem;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const MobileContainer = styled.div`
+  padding: 2rem 1.5rem;
+  background-color: ${(props) => props.theme.Sky_Blue_04};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > svg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const NavBar = styled.div`
@@ -105,17 +125,17 @@ const NavBar = styled.div`
   justify-content: space-between;
 `;
 
-const NavLink = styled(Link)`
+const NavLink = styled.div`
   text-decoration: none;
   color: ${(props) => props.theme.Black_Main};
   width: fit-content;
   padding-right: min(5rem, 10px);
 `;
 
-const DropDownContainer = styled.div`
+const LanguageButtonContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
-  margin-right: 5.5rem;
+  margin-right: 1rem;
   display: flex;
   justify-content: center;
   cursor: pointer;
@@ -134,6 +154,7 @@ const LanguageButtonContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   margin-right: 1rem;
+
   display: flex;
   justify-content: center;
   cursor: pointer;

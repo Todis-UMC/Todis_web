@@ -5,9 +5,14 @@ import { Link } from 'react-router-dom';
 
 export const SignUpButton = () => {
   return (
-    <Link to='/signup'>
-      <SignUp style={FONT.M3}>회원가입</SignUp>
-    </Link>
+    <SignUp
+      onClick={() => {
+        window.location.href = 'signup';
+      }}
+      style={FONT.M3}
+    >
+      회원가입
+    </SignUp>
   );
 };
 export const SignInButton = () => {
@@ -23,6 +28,18 @@ export const SignInButton = () => {
 export const LanguageButton: React.FC = () => {
   return <Language style={FONT.M3}>KR</Language>;
 };
+
+export const Buttons = () => {
+  return (
+    <ButtonContainer>
+      <SignUpButton />
+      <ButtonSpacer />
+      <SignInButton />
+    </ButtonContainer>
+  );
+};
+
+export default Buttons;
 
 const SignUp = styled.button`
   background-color: ${(props) => props.theme.SkyBlue_02};
@@ -50,9 +67,19 @@ const Language = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #e6e6e6;
   background-color: transparent;
   border-radius: 30px;
   padding: 5px 18px;
   color: #437df6;
+  border: 2px solid ${(props) => props.theme.SkyBlue_02};
+`;
+
+const ButtonSpacer = styled.div`
+  margin-right: 0.5rem;
+`;
+
+const ButtonContainer = styled.div`
+  margin-right: 5.5rem;
+  display: flex;
+  align-items: center;
 `;

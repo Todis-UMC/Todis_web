@@ -4,6 +4,8 @@ import Input from '../component/common/InputComponent';
 import SmallModal from '../component/common/SmallModal';
 import AuthContainer from '../component/login/AuthContainer';
 import FONT from '../styles/Font';
+import { deleteUserLeave, postPasswordCompare } from '../api/User';
+import { ToastContainer, toast } from 'react-toastify';
 
 const WithdrawalPage = () => (
   <AuthContainer title='계정 탈퇴' component={<Withdrawal />} />
@@ -15,8 +17,34 @@ export const Withdrawal = () => {
   const [password, setPassword] = useState<string>('');
   const [notice, setNotice] = useState<boolean>(false);
 
-  const handleButton = () => {
-    setNotice(true);
+  // 회원 탈퇴 API 연동
+  const handleUserLeaveButton = async () => {
+    const data = { password: password };
+    const response = await postPasswordCompare(data);
+
+    if (response.code === 200) {
+      try {
+        const response2 = await deleteUserLeave();
+        if (response2.success) {
+          console.log('회원 탈퇴 성공:', response2.message);
+          localStorage.removeItem('token');
+          setNotice(true);
+        } else {
+          console.error('회원 탈퇴 실패:', response2.message);
+        }
+      } catch (error) {
+        console.error('회원 탈퇴 오류:', error);
+      }
+    } else if (response.code === 400) {
+      toast(response.message, {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        pauseOnHover: false,
+        progress: undefined,
+        className: 'custom-toast1'
+      });
+    }
   };
   const startButton = () => {
     setNotice(false);
@@ -32,7 +60,7 @@ export const Withdrawal = () => {
         value={password}
         onChange={(ev) => setPassword(ev.target.value)}
       />
-      <Button onClick={() => handleButton()}>탈퇴하기</Button>
+      <Button onClick={() => handleUserLeaveButton()}>탈퇴하기</Button>
 
       {notice && (
         <SmallModal
@@ -45,6 +73,7 @@ export const Withdrawal = () => {
           onStart={startButton}
         />
       )}
+      <ToastContainer />
     </>
   );
 };

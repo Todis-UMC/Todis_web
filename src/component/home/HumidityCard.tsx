@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTint } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
+import Loading from '../common/Loading';
 
 const StyledhumidityCard= styled.div`
 background: ${Color.Typo_White};
@@ -35,27 +36,41 @@ const Weather = () => {
   const [humidity] = useState<number>(82); 
 
   const styles: { [key: string]: CSSProperties } = {
+    humidityCard: {
+      background: Color.Typo_White,
+      width: '416px',
+      height: '327px',
+      padding: '20px',
+      paddingLeft: '30px',
+      color: Color.Black_Main,
+      borderRadius: '40px',
+      boxShadow: `0px 0px 10px ${Color.Gray_03}`,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start'
+    },
     humidityInfo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     humidityLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     humidityValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     humidityLevel: {
       ...Font.L3,
       color: Color.Gray_01,
       marginTop: '26.5px',
-      marginLeft: '-95px', 
-    },
+      marginLeft: '-95px'
+    }
   };
 
   /*useEffect(() => {
@@ -79,7 +94,7 @@ const Weather = () => {
 
   if (!humidity) {
     return <div>Loading...</div>
-  }
+
 
   const humidityLevel = humidity > 50 ? '높음' : '낮음';
 

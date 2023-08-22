@@ -30,26 +30,27 @@ const Weather = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     sunsetLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     sunsetValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     sunriseValue: {
       ...Font.L3,
       color: Color.Gray_01,
-      marginTop: '26.5px',
-    },
+      marginTop: '26.5px'
+    }
   };
 
   const sunsetTime = '7:19PM';
   const sunriseTime = '일출 : 5:54AM';
+
 
   return (
     <StyledSunsetCard className="Sunset-card">

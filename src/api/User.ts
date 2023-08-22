@@ -75,3 +75,18 @@ export const postFindPassword = async (email: string) => {
     throw error;
   }
 };
+
+export const deleteUserLeave = async () => {
+  console.log('회원 탈퇴하기:');
+  try {
+    const res = await request.delete({
+      url: '/user/leave',
+      params: {}
+    });
+    console.log('회원 탈퇴 성공', res);
+    return res;
+  } catch (error) {
+    console.error('회원 탈퇴 오류:', error);
+    throw error;
+  }
+};
