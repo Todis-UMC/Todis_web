@@ -2,47 +2,53 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import LankBox from '../component/Lank/LankBox';
-import axios from 'axios';
 
 type MoreButtonProps = {
   expanded: boolean;
 };
 
-type DataItem = {
-  id: number;
-  name: string;
-  codyImage: string | null;
-  comment: string;
-  lankNum: string;
-  data: DataItem[];
-};
-
-const baseURL =
-  'http://ec2-13-209-15-210.ap-northeast-2.compute.amazonaws.com:8080';
-
 const Lank = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const MoreButtonText = expanded ? '접기' : '더보기 +';
+  const [loading, setLoading] = useState<boolean>(false);
+  const [lankData, setLankData] = useState<any[]>([]);
   const ButtonHandler = () => {
     setExpanded(!expanded);
   };
   const isMobile = window.innerWidth < 768;
 
-  const [lankList, setlankList] = useState<DataItem[]>([]);
+  // 처음에 API 호출
   useEffect(() => {
-    fetchData();
+    fetchRecommendStatus();
   }, []);
-  const fetchData = async () => {
+
+  // API 호출 함수
+  const fetchRecommendStatus = async () => {
+    setLoading(true)
+
     try {
-      const response = await axios.get<DataItem>(baseURL+'/cody/getall');
-      setlankList(response.data.data);
+      const response = await fetch(
+        'http://13.209.15.210:8080/cody/recommend'
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        // 응답 성공하면 likes를 기준으로 정렬해서 lankData에 저장
+        // lankData: [{'userId': userId, 'lankNum': 1}, ...]
+        const gotData = data.data
+        var sortedLankData = [...gotData].sort((a, b) => b.likes - a.likes);
+        sortedLankData = sortedLankData.map((d, idx)=> {
+            d.lankNum = idx+1
+            return d
+        })
+        setLankData(sortedLankData);
+      }
     } catch (error) {
-      console.error('데이터 로딩 오류:', error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(true);
     }
   };
-
-  const lankData1 = lankList.slice(0, 4);
-  const lankData2 = lankList.slice(7);
 
   return (
     <Content>
@@ -55,31 +61,29 @@ const Lank = () => {
         </HeaderContainer>
       </Header>
       <Body>
-          {lankData1.map((data, index) => (
-            <LankBox
-              key={index}
-              id={data.id}
-              name={data.name}
-              comment={data.comment}
-              codyImage={data.codyImage}
-              lankNum={data.lankNum}
-            />
-          ))}
-          {expanded && (
-          <>
-          {lankData2.map((data, index) => (
-            <LankBox
-              key={index}
-              id={data.id}
-              name={data.name}
-              comment={data.comment}
-              codyImage={data.codyImage}
-              lankNum={data.lankNum}
-            />
-          ))}
-          </>
-          )}
-      </Body>
+        {lankData.map((data, index) => (
+          <LankBox
+            id={data.id}
+            key={index}
+            name={data.userId}
+            lankNum={data.lankNum}
+            codyImage={data.image}
+          />
+        ))}
+        {expanded === true
+          ? lankData
+              .slice(3)
+              .map((data, index) => (
+                <LankBox
+                  id={data.id}
+                  key={index}
+                  name={data.userId}
+                  lankNum={data.lankNum}
+                  codyImage={data.image}
+                />
+              ))
+          : null}
+          </Body>
       <MoreBox>
         <MoreButton onClick={ButtonHandler} expanded={expanded} style={FONT.L3}>
           {MoreButtonText}
@@ -88,7 +92,6 @@ const Lank = () => {
     </Content>
   );
 };
-
 export default Lank;
 
 const Header = styled.div`

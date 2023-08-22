@@ -108,26 +108,24 @@ const MobileLike = styled.div`
 `;
 
 interface DataItem {
-  name: string;
   id: number;
+  name: string;
   codyImage: string | null;
-  comment: string;
   lankNum: string;
 }
 
 const LankBox = ({
-  name,
   id,
-  codyImage,
-  comment,
-  lankNum
+  name,
+  lankNum,
+  codyImage
 }: DataItem) => {
   return (
     <>
       <PC>
         <Box>
           <Name style={FONT.H2}>{name}</Name>
-          <StatusMessage style={FONT.L4}>{comment}</StatusMessage>
+          <StatusMessage></StatusMessage>
           <LankNum style={FONT.L1}>{lankNum}</LankNum>
           <OutfitPic style={{ display: 'flex', justifyContent: 'center' }}>
           {codyImage === null ? (
@@ -150,7 +148,7 @@ const LankBox = ({
             </MobileLank>
             <Text style={FONT.H7}>
               {name}
-              <div style={FONT.L6}>{comment}</div>
+              <div></div>
             </Text>
           </TopBox>
           <ImgBox>
