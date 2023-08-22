@@ -52,6 +52,7 @@ function App() {
             <Route path='/user/edit/password' element={<PasswordResetPage />} />
             <Route path='/user/delete' element={<WithdrawalPage />} />
             <Route path='/terms/:id' Component={TermsPage} />
+            <Route path='/home' element={<Home />} />
           </Routes>
           {!noLayout && <Footer />}
         </div>

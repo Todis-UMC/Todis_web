@@ -72,7 +72,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
           {Routes.map((route, index) => (
             <MenuLink
               onClick={() => {
-                token ? navigate(route.path) : navigate('/login');
+                token
+                  ? (window.location.href = route.path)
+                  : window.location.href === '/login';
                 onClose();
               }}
               key={index}
@@ -197,4 +199,5 @@ const MenuLink = styled.div`
   border-bottom: 0.5px solid ${(props) => props.theme.Gray_02};
   width: 100%;
   padding: 20px 0;
+  cursor: pointer;
 `;

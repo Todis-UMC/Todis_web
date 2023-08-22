@@ -4,6 +4,7 @@ import FONT from '../../styles/Font';
 import { ReactComponent as GoBack } from '../../assets/icon/GoBack.svg';
 import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
+import { postMyComment } from '../../api/Friend';
 
 interface ModalProps {
   open: boolean;
@@ -27,6 +28,23 @@ const MyMessage = ({ onClose }: ModalProps) => {
       $body.style.overflow = overflow;
     };
   }, []);
+  // 글쓰기 정보
+  const [comment, setComment] = useState<string>('');
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+    setComment(value);
+  };
+  // 글쓰기 API 연동(..)
+  const handleComment = async () => {
+    try {
+      const response = await postMyComment(comment);
+      console.log('글쓰기 성공', response);
+    } catch (error) {
+      console.error('글쓰기 오류:', error);
+    }
+    onClose?.(); // 창 닫기
+    window.location.reload(); // 새로고침 실행
+  };
 
   return (
     <ModalContainer>
@@ -39,10 +57,14 @@ const MyMessage = ({ onClose }: ModalProps) => {
             <span id='title'>글쓰기</span>
           </Title>
           <Message
+            value={comment}
+            onChange={handleInputChange}
             style={FONT.L5}
             placeholder='오늘의 날씨는 어떤가요?...'
           ></Message>
-          <Ok style={FONT.L5}>완료</Ok>
+          <Ok style={FONT.L5} onClick={handleComment}>
+            완료
+          </Ok>
         </Box>
       </Container>
     </ModalContainer>
@@ -62,6 +84,9 @@ const Container = styled.div`
   top: 0px;
   left: 0px;
   z-index: 1;
+  @media (max-width: 500px) {
+    height: 100%;
+  }
 `;
 const Box = styled.div`
   z-index: 999;

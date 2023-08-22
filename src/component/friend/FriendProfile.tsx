@@ -3,24 +3,40 @@ import styled from 'styled-components';
 import FONT from '../../styles/Font';
 import avatar from '../../assets/img/avatar/M_Avatar.png';
 
+interface DataItem {
+  name: string;
+  id: number;
+  profileImageUrl: string | null;
+  codyImage: string | null;
+  comment: string | null;
+}
+
 const FriendProfile = ({
   name,
-  message
-}: {
-  name: string;
-  message: string;
-}) => {
+  id,
+  codyImage,
+  profileImageUrl,
+  comment
+}: DataItem) => {
   return (
     <Box>
       <Avatar>
-        <img src={avatar} alt='avatar' height='100%' />
+        {codyImage === null ? (
+          <img src={avatar} alt='avatar' height='100%' />
+        ) : (
+          <img src={codyImage} alt='mypage-avatar' height='109%' />
+        )}
       </Avatar>
       <MessageBox>
         <Name style={FONT.H5}>{name}</Name>
-        <Message style={FONT.L5}>{message}</Message>
+        <Message style={FONT.L5}>{comment}</Message>
       </MessageBox>
       <Profile>
-        <img src={avatar} alt='avatar-face' />
+        {profileImageUrl === null ? (
+          <img id='avatar' src={avatar} alt='avatar-profile' />
+        ) : (
+          <img id='mypage' src={profileImageUrl} alt='mypage-profile' />
+        )}
       </Profile>
     </Box>
   );
@@ -43,6 +59,7 @@ const Avatar = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
   border-top-left-radius: 47px;
   border-top-right-radius: 47px;
+  overflow: hidden;
 `;
 const Profile = styled.div`
   width: 86px;
@@ -53,7 +70,15 @@ const Profile = styled.div`
   top: 203px;
   left: 163px;
   overflow: hidden;
-  img {
+  #mypage {
+    position: absolute;
+    top: -20px;
+    left: -22px;
+    height: 330%;
+    width: 150%;
+    object-fit: cover;
+  }
+  #avatar {
     position: absolute;
     top: -5px;
     left: -18px;
