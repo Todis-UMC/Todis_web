@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../..//styles/Font';
+import { useMediaQuery } from 'react-responsive';
 
 const FriendInviteButton = () => {
-  return <Button style={FONT.L4}>친구 초대하기</Button>;
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+  return (
+    <Button style={isMobile ? { ...FONT.L5 } : { ...FONT.L4 }}>
+      친구 초대하기
+    </Button>
+  );
 };
 export default FriendInviteButton;
 
@@ -19,4 +25,11 @@ const Button = styled.button`
   color: #fff;
   border: none;
   cursor: pointer;
+  @media (max-width: 500px) {
+    width: 160px;
+    height: 50px;
+    bottom: 50px;
+    position: sticky;
+    margin-bottom: 50px;
+  }
 `;
