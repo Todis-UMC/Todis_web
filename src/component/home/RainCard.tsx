@@ -27,10 +27,10 @@ const StyledRainCard = styled.div`
   justify-content: flex-start;
 
   @media screen and (max-width: 768px) {
+    margin-top: -130px;
     transform: scale(0.5);
   }
 `;
-
 
 const Rain = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
@@ -41,23 +41,23 @@ const Rain = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     RainCardLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     RainCardValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     RainCardLevel: {
       ...Font.L3,
       color: Color.Gray_01,
       marginTop: '26.5px',
-      marginLeft: '-80px', 
-    },
+      marginLeft: '-80px'
+    }
   };
 
   /*useEffect(() => {
@@ -79,7 +79,7 @@ const Rain = () => {
   }*/
 
   return (
-    <StyledRainCard className="rain-card">
+    <StyledRainCard className='rain-card'>
       <div>
         <div style={styles.RainCardInfo}>
           <FontAwesomeIcon icon={faCloudRain} />
@@ -93,4 +93,3 @@ const Rain = () => {
 };
 
 export default Rain;
-

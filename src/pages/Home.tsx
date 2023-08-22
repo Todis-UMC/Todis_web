@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import { ReactComponent as Search } from '../assets/icon/Search.svg';
 import CitySearch from '../component/home/CitySearch';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTint } from '@fortawesome/free-solid-svg-icons';
-import Button from '../component/common/Button';
 import HumidityCard from '../component/home/HumidityCard';
 import RainCard from '../component/home/RainCard';
 import AirQualityCard from '../component/home/AirQualityCard';
@@ -30,48 +27,43 @@ const Home = () => {
     setIsOpen(true);
   };
   return (
-  <Container>
-    <TitleBox></TitleBox>
-    <SearchBox onClick={onClickButton}>
-      <span>
-        <Search />
-      </span>
-      <SearchInput style={FONT.L3}>도시 검색...</SearchInput>
-    </SearchBox>
-    {isOpen && (
-      <CitySearch
-        open={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-        }}
-      />
-    )}
-    <MainBox>
-      <MainCard />
-      <ListCard />
+    <Container>
+      <TitleBox></TitleBox>
+      <SearchBox onClick={onClickButton}>
+        <span>
+          <Search />
+        </span>
+        <SearchInput style={FONT.L3}>도시 검색...</SearchInput>
+      </SearchBox>
+      {isOpen && (
+        <CitySearch
+          open={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+          }}
+        />
+      )}
+      <MainBox>
+        <MainCard />
+        <ListCard />
 
-      {expanded === true && (
-        <>
-          
+        {expanded === true && (
+          <>
             <HumidityCard />
             <RainCard />
-          
             <AirQualityCard />
-
             <SunCard />
             <SunsetCard />
-          
-          
-        </>
-      )}
-    </MainBox>
-    <ToggleBox>
-      <ToggleBtn onClick={ToggleHandler} expanded={expanded} style={FONT.L3}>
-        {toggleBtnText}
-      </ToggleBtn>
-    </ToggleBox>
-  </Container>
-);
+          </>
+        )}
+      </MainBox>
+      <ToggleBox>
+        <ToggleBtn onClick={ToggleHandler} expanded={expanded} style={FONT.L3}>
+          {toggleBtnText}
+        </ToggleBtn>
+      </ToggleBox>
+    </Container>
+  );
 };
 
 export default Home;
@@ -91,8 +83,6 @@ const TitleBox = styled.div`
   width: 500px;
   margin: 0 auto;
   padding-top: 50px;
-
-  
 `;
 
 const SearchBox = styled.div`
@@ -107,34 +97,30 @@ const SearchBox = styled.div`
   position: relative;
   span {
     position: absolute;
-    top: 50%; 
-    left: 15px;  
-    transform: translateY(-50%); 
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
   }
   cursor: pointer;
-
   @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
     width: 348px;
     height: 41px;
+    margin-top: -50px;
   }
-  @media screen and (max-width: 768px) {
-    margin-bottom: 40px; 
-  }
-  
 `;
 
 const SearchInput = styled.div`
-  width: calc(100% - 80px); 
+  width: calc(100% - 80px);
   height: 31px;
   border: none;
   position: absolute;
   top: 50%;
-  left: 60px; 
-  transform: translateY(-50%); 
+  left: 60px;
+  transform: translateY(-50%);
   text-align: left;
   color: ${(props) => props.theme.Gray_02};
 `;
-
 
 const MainBox = styled.div`
   width: 90%;
@@ -159,8 +145,6 @@ const MainBox = styled.div`
     }
   }
 `;
-
-
 
 const ToggleBox = styled.div`
   padding: 70px 0;

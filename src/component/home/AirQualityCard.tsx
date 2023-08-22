@@ -4,7 +4,19 @@ import { faSmog } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
 import styled from 'styled-components';
-import { Chart, LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, ChartData, Point } from 'chart.js';
+import {
+  Chart,
+  LinearScale,
+  PointElement,
+  CategoryScale,
+  BarController,
+  BarElement,
+  LineController,
+  LineElement,
+  ScatterController,
+  ChartData,
+  Point
+} from 'chart.js';
 
 const StyledAirQualityCard = styled.div`
   background: ${Color.Typo_White};
@@ -21,16 +33,26 @@ const StyledAirQualityCard = styled.div`
   justify-content: flex-start;
 
   @media screen and (max-width: 768px) {
+    margin-top: -130px;
     transform: scale(0.5);
-    
+
     .graph {
-      display: none; 
+      display: none;
     }
   }
 `;
 
-
-Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
+Chart.register(
+  LinearScale,
+  PointElement,
+  CategoryScale,
+  BarController,
+  BarElement,
+  LineController,
+  LineElement,
+  ScatterController,
+  PointElement
+);
 
 interface Main {
   aqi: number;
@@ -53,26 +75,26 @@ const Weather = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     qualityLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     qualityValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     qualityLevel: {
       ...Font.L3,
       color: Color.Gray_01,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     graph: {
       width: '100%',
-      marginTop: '-25px',
-    },
+      marginTop: '-25px'
+    }
   };
 
   /*useEffect(() => {
@@ -92,96 +114,100 @@ const Weather = () => {
   }, []);*/
 
   useEffect(() => {
-    if (!chartContainer.current) return; 
-  
+    if (!chartContainer.current) return;
+
     const ctx = chartContainer.current.getContext('2d');
-    if (!ctx) return; 
-  
+    if (!ctx) return;
+
     if (chartInstance) {
       chartInstance.destroy();
     }
 
-        const gradient = ctx.createLinearGradient(0, 0, chartContainer.current.width, 0);
-  gradient.addColorStop(0, 'red');
-  gradient.addColorStop(0.2, 'orange');
-  gradient.addColorStop(0.4, 'yellow');
-  gradient.addColorStop(0.6, 'green');
-  gradient.addColorStop(0.8, 'blue');
-  gradient.addColorStop(1, 'violet');
+    const gradient = ctx.createLinearGradient(
+      0,
+      0,
+      chartContainer.current.width,
+      0
+    );
+    gradient.addColorStop(0, 'red');
+    gradient.addColorStop(0.2, 'orange');
+    gradient.addColorStop(0.4, 'yellow');
+    gradient.addColorStop(0.6, 'green');
+    gradient.addColorStop(0.8, 'blue');
+    gradient.addColorStop(1, 'violet');
 
-  const lineData = Array.from({ length: 251 }, (_, i) => ({
-    x: i,
-    y: 0,
-  }));
+    const lineData = Array.from({ length: 251 }, (_, i) => ({
+      x: i,
+      y: 0
+    }));
 
-  const pointData = [
-    {
-      x: fixedAQI,
-      y: 0,
-    },
-  ];
-
-  const chartData = {
-    datasets: [
+    const pointData = [
       {
-        data: pointData,
-        pointRadius: 10,
-        pointBackgroundColor: 'white',
-      },
-      {
-        data: lineData,
-        borderColor: gradient,
-        backgroundColor: gradient,
-        borderWidth: 8,
-        showLine: true,
-        pointRadius: 0,
-      },
-    ],
-  };
+        x: fixedAQI,
+        y: 0
+      }
+    ];
 
-  const newChartInstance = new Chart(ctx, {
-    type: 'scatter',
-    data: chartData,
-    options: {
-      layout: {
-        padding: {
-          left: 15,
-          right: 15,
-          top: 20,
-          bottom: 20,
+    const chartData = {
+      datasets: [
+        {
+          data: pointData,
+          pointRadius: 10,
+          pointBackgroundColor: 'white'
         },
-      },
-      scales: {
-        x: {
-          min: -10,
-          max: 260,
-          display: false,
-        },
-        y: {
-          min: -1,
-          max: 1,
-          display: false,
-        },
-      },
-      interaction: {
-        mode: 'nearest',
-        axis: 'x',
-        intersect: false
-      },
-      plugins: {
-        tooltip: {
-          enabled: false,
-        },
-      },
-    },
-  });
+        {
+          data: lineData,
+          borderColor: gradient,
+          backgroundColor: gradient,
+          borderWidth: 8,
+          showLine: true,
+          pointRadius: 0
+        }
+      ]
+    };
 
-  setChartInstance(newChartInstance);
-  return () => {
+    const newChartInstance = new Chart(ctx, {
+      type: 'scatter',
+      data: chartData,
+      options: {
+        layout: {
+          padding: {
+            left: 15,
+            right: 15,
+            top: 20,
+            bottom: 20
+          }
+        },
+        scales: {
+          x: {
+            min: -10,
+            max: 260,
+            display: false
+          },
+          y: {
+            min: -1,
+            max: 1,
+            display: false
+          }
+        },
+        interaction: {
+          mode: 'nearest',
+          axis: 'x',
+          intersect: false
+        },
+        plugins: {
+          tooltip: {
+            enabled: false
+          }
+        }
+      }
+    });
 
-    newChartInstance.destroy();
-  };
-}, [fixedAQI]);
+    setChartInstance(newChartInstance);
+    return () => {
+      newChartInstance.destroy();
+    };
+  }, [fixedAQI]);
   const getQualityLevel = (index: number) => {
     if (index <= 50) return '좋음';
     if (index <= 100) return '보통';
@@ -193,16 +219,16 @@ const Weather = () => {
   const qualityLevel = getQualityLevel(fixedAQI);
 
   return (
-    <StyledAirQualityCard className="AirQuality-card">
+    <StyledAirQualityCard className='AirQuality-card'>
       <div style={styles.qualityInfo}>
         <FontAwesomeIcon icon={faSmog} />
         <div style={styles.qualityLabel}>대기질</div>
       </div>
-      <div style={styles.qualityValue}>{fixedAQI}</div> 
+      <div style={styles.qualityValue}>{fixedAQI}</div>
       <div style={styles.qualityLevel}>{qualityLevel}</div>
-      <div className="graph" style={styles.graph}>
-    <canvas ref={chartContainer} />
-</div>
+      <div className='graph' style={styles.graph}>
+        <canvas ref={chartContainer} />
+      </div>
     </StyledAirQualityCard>
   );
 };

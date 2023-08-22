@@ -5,23 +5,24 @@ import { faTint } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
 
-const StyledhumidityCard= styled.div`
-background: ${Color.Typo_White};
-width: 416px;
-height: 327px;
-padding: 20px;
-padding-left: 30px;
-color: ${Color.Black_Main};
-border-radius: 40px;
-display: flex;
-flex-direction: column;
-box-shadow: 0px 0px 10px ${Color.Gray_03};
-align-items: flex-start;
-justify-content: flex-start;
+const StyledhumidityCard = styled.div`
+  background: ${Color.Typo_White};
+  width: 416px;
+  height: 327px;
+  padding: 20px;
+  padding-left: 30px;
+  color: ${Color.Black_Main};
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 10px ${Color.Gray_03};
+  align-items: flex-start;
+  justify-content: flex-start;
 
-@media screen and (max-width: 768px) {
-  transform: scale(0.5);
-}
+  @media screen and (max-width: 768px) {
+    margin-top: -50px;
+    transform: scale(0.5);
+  }
 `;
 
 interface WeatherData {
@@ -32,30 +33,30 @@ interface WeatherData {
 }
 
 const Weather = () => {
-  const [humidity] = useState<number>(82); 
+  const [humidity] = useState<number>(82);
 
   const styles: { [key: string]: CSSProperties } = {
     humidityInfo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px',
+      marginTop: '37px'
     },
     humidityLabel: {
       ...Font.H6,
-      color: Color.Gray_01,
+      color: Color.Gray_01
     },
     humidityValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px',
+      marginTop: '26.5px'
     },
     humidityLevel: {
       ...Font.L3,
       color: Color.Gray_01,
       marginTop: '26.5px',
-      marginLeft: '-95px', 
-    },
+      marginLeft: '-95px'
+    }
   };
 
   /*useEffect(() => {
@@ -78,13 +79,13 @@ const Weather = () => {
   }, []);*/
 
   if (!humidity) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   const humidityLevel = humidity > 50 ? '높음' : '낮음';
 
   return (
-    <StyledhumidityCard className="humidity-card">
+    <StyledhumidityCard className='humidity-card'>
       <div>
         <div style={styles.humidityInfo}>
           <FontAwesomeIcon icon={faTint} />

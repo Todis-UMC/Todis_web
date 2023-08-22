@@ -17,7 +17,7 @@ const mockWeatherData = [
     weather: 'Rain',
     temp: 25,
     minTemp: 24,
-    maxTemp: 28,
+    maxTemp: 28
   },
   {
     index: 1,
@@ -25,7 +25,7 @@ const mockWeatherData = [
     weather: 'Rain',
     temp: 24,
     minTemp: 23,
-    maxTemp: 30,
+    maxTemp: 30
   },
   {
     index: 2,
@@ -33,7 +33,7 @@ const mockWeatherData = [
     weather: 'cloudSun',
     temp: 25,
     minTemp: 23,
-    maxTemp: 28,
+    maxTemp: 28
   },
   {
     index: 3,
@@ -41,7 +41,7 @@ const mockWeatherData = [
     weather: 'cloudSun',
     temp: 26,
     minTemp: 24,
-    maxTemp: 28,
+    maxTemp: 28
   },
   {
     index: 4,
@@ -49,8 +49,8 @@ const mockWeatherData = [
     weather: 'cloud',
     temp: 25,
     minTemp: 23,
-    maxTemp: 27,
-  },
+    maxTemp: 27
+  }
 ];
 
 type ListCardProps = {
@@ -68,6 +68,7 @@ const ListCardStyles = styled.div`
   font-size: ${FONT.H6.fontSize}; 
   font-weight: ${FONT.H6.fontWeight}; 
   @media screen and (max-width: 768px) {
+    margin-top: -250px;
     width: 390px;
     height: 419px;
     > * {  
@@ -83,7 +84,7 @@ const weatherIcons = {
   sun,
   cloudSun,
   cloud,
-  rain,
+  rain
 };
 
 interface WeatherData {
@@ -120,28 +121,27 @@ interface WeatherItemProps {
 }
 
 const WeatherItemStyles = styled.div<WeatherItemProps>`
-z-index: 0.1;  
-display: flex;
-flex-direction: column;  
-align-items: center; 
-padding: 20px 0;
-color: ${color.Gray_01};
-font-size: ${FONT.H6.fontSize};
-font-weight: ${FONT.H6.fontWeight};
-margin-bottom: ${props => (props.index === 4 ? '0' : '5px')};  
+  z-index: 0.1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  color: ${color.Gray_01};
+  font-size: ${FONT.H6.fontSize};
+  font-weight: ${FONT.H6.fontWeight};
+  margin-bottom: ${(props) => (props.index === 4 ? '0' : '5px')};
 
-div.graph {
-  position: relative;
-  z-index: 1;  
-}
+  div.graph {
+    position: relative;
+    z-index: 1;
+  }
 
-div.graph-background,
-div.max-temp-bar {
-  z-index: 1;  
-}
+  div.graph-background,
+  div.max-temp-bar {
+    z-index: 1;
+  }
 
-
-@media screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     padding: 3px 0;
     font-size: ${FONT.H5.fontSize};
   }
@@ -149,7 +149,7 @@ div.max-temp-bar {
   img.icon {
     width: 45px;
     height: 45px;
-    marginRight: 5px;
+    marginright: 5px;
 
     @media screen and (max-width: 768px) {
       width: 35px;
@@ -158,52 +158,108 @@ div.max-temp-bar {
   }
 `;
 
-const WeatherItem: React.FC<WeatherData> = ({ index, day, weather, minTemp, maxTemp }) => (
+const WeatherItem: React.FC<WeatherData> = ({
+  index,
+  day,
+  weather,
+  minTemp,
+  maxTemp
+}) => (
   <WeatherItemStyles index={index}>
-    <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-      <span className="day" style={{ marginRight: '5px' }}>{day}</span>
-      <img 
-        className="icon"
-        src={getWeatherIcon(maxTemp, weather)} 
-        alt="weather icon"
-        style={{ width: '45px', height: '45px', marginRight: '5px' }}  
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between'
+      }}
+    >
+      <span className='day' style={{ marginRight: '5px' }}>
+        {day}
+      </span>
+      <img
+        className='icon'
+        src={getWeatherIcon(maxTemp, weather)}
+        alt='weather icon'
+        style={{ width: '45px', height: '45px', marginRight: '5px' }}
       />
-      <span className="min-temp" style={{ marginRight: '5px' }}>{minTemp}°C</span>
-      <div className="graph" style={{ flexGrow: 1, marginRight: '5px', borderRadius: '20px', position: 'relative', height: '14px' }}>
-      <div className="graph-background" style={{ width: '100%', height: '100%', backgroundColor: color.Gray_03, position: 'absolute', zIndex: 1, borderRadius: '20px' }} />
+      <span className='min-temp' style={{ marginRight: '5px' }}>
+        {minTemp}°C
+      </span>
+      <div
+        className='graph'
+        style={{
+          flexGrow: 1,
+          marginRight: '5px',
+          borderRadius: '20px',
+          position: 'relative',
+          height: '14px'
+        }}
+      >
+        <div
+          className='graph-background'
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: color.Gray_03,
+            position: 'absolute',
+            zIndex: 1,
+            borderRadius: '20px'
+          }}
+        />
 
-      <div className="min-temp-bar" style={{
-        width: `${(minTemp - 0) * 100 / 40}%`,
-        backgroundImage: 'linear-gradient(to right, blue, lightblue)',
-        borderRadius: '20px',
-        height: '100%',
-        position: 'absolute',
-        marginBottom: '10px',
-        zIndex: 1
-      }} />
+        <div
+          className='min-temp-bar'
+          style={{
+            width: `${((minTemp - 0) * 100) / 40}%`,
+            backgroundImage: 'linear-gradient(to right, blue, lightblue)',
+            borderRadius: '20px',
+            height: '100%',
+            position: 'absolute',
+            marginBottom: '10px',
+            zIndex: 1
+          }}
+        />
 
-      <div className="max-temp-bar" style={{
-        width: `${(maxTemp - 0) * 100 / 40}%`,
-        backgroundImage: 'linear-gradient(to right, red, orange)',
-        borderRadius: '20px',
-        height: '100%',
-        position: 'absolute',
-        marginBottom: '10px',
-        zIndex: 2 
-      }}>
-        {index === 0 && <div className="circle" style={{width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'white', marginTop: 'px', position: 'absolute', right: '-8px', top: '-4px', zIndex: 3 }} />}
+        <div
+          className='max-temp-bar'
+          style={{
+            width: `${((maxTemp - 0) * 100) / 40}%`,
+            backgroundImage: 'linear-gradient(to right, red, orange)',
+            borderRadius: '20px',
+            height: '100%',
+            position: 'absolute',
+            marginBottom: '10px',
+            zIndex: 2
+          }}
+        >
+          {index === 0 && (
+            <div
+              className='circle'
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: 'white',
+                marginTop: 'px',
+                position: 'absolute',
+                right: '-8px',
+                top: '-4px',
+                zIndex: 3
+              }}
+            />
+          )}
+        </div>
       </div>
-      </div>
-      <span className="max-temp">{maxTemp}°C</span>
+      <span className='max-temp'>{maxTemp}°C</span>
     </div>
     <hr style={{ color: color.Gray_01, width: '100%', margin: '5px auto' }} />
-    </WeatherItemStyles>
+  </WeatherItemStyles>
 );
 
-
 const ListCard: React.FC = () => {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>(mockWeatherData);
-
+  const [weatherData, setWeatherData] =
+    useState<WeatherData[]>(mockWeatherData);
 
   /*useEffect(() => {
     navigator.geolocation.getCurrentPosition(async function (position) {
@@ -246,21 +302,46 @@ const ListCard: React.FC = () => {
       console.error('Geolocation API error:', error);
     });
   }, []);*/
-  
+
   return (
     <ListCardStyles>
-      <div className="header" style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '40px', marginTop: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-          <FontAwesomeIcon icon={faCalendar} style={{ marginRight: '20px', marginTop: '1px' }}/>
+      <div
+        className='header'
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          marginBottom: '40px',
+          marginTop: '20px'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row'
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faCalendar}
+            style={{ marginRight: '20px', marginTop: '1px' }}
+          />
           <h1>5일간의 일기 예보</h1>
         </div>
       </div>
       {weatherData.map((data, index) => (
-        <WeatherItem key={index} index={index} day={data.day} weather={data.weather} minTemp={data.minTemp} maxTemp={data.maxTemp} temp={0} />
+        <WeatherItem
+          key={index}
+          index={index}
+          day={data.day}
+          weather={data.weather}
+          minTemp={data.minTemp}
+          maxTemp={data.maxTemp}
+          temp={0}
+        />
       ))}
     </ListCardStyles>
   );
 };
 
 export default ListCard;
-
