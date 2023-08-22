@@ -6,6 +6,8 @@ import Font from '../../styles/Font';
 import { Chart, LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, ChartData, Point } from 'chart.js';
 import styled from 'styled-components';
 
+Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
+
 const SunCardStyles = styled.div`
   background: ${Color.SkyBlue_03}; 
   width: 877px; 
@@ -104,60 +106,61 @@ const Weather = () => {
       
         navigator.geolocation.getCurrentPosition(fetchData);
       }, []);*/
-  
-  useEffect(() => {
-    if (!chartContainer.current || !weatherData) {
-      return;
-    }
 
-    const ctx = chartContainer.current.getContext('2d');
+      useEffect(() => {
+        if (!chartContainer.current) {
+          return;
+        }
 
-    if (!ctx) {
-      return;
-    }
+        const ctx = chartContainer.current.getContext('2d');
 
-    if (chartInstance) {
-      chartInstance.destroy();
-    }
-    const gradientWidth = 780;
-    const gradient = ctx.createLinearGradient(0, 0, gradientWidth, 0);
-
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.4, 'orange');
-    gradient.addColorStop(0.5, 'yellow');
-    gradient.addColorStop(0.6, 'green');
-    gradient.addColorStop(0.8, 'blue');
-    gradient.addColorStop(1, 'violet');
-
-    const lineData = Array.from({ length: 780 }, (_, i) => ({
-      x: i,
-      y: 0
-    }));
-
-    const pointData = [
-      {
-        x: weatherData.list[0].main.uvi || 0,
-        y: 0
-      }
-    ];
-
-    const chartData: ChartData<'scatter', Point[], number> = {
-      datasets: [
-        {
-          data: pointData,
-          pointRadius: 10,
-          pointBackgroundColor: 'white'
-        },
-        {
-          data: lineData,
-          borderColor: gradient,
-          backgroundColor: gradient,
-          borderWidth: 8,
-          showLine: true,
-          pointRadius: 0
+        if (!ctx) {
+          return;
         }
     
-     
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            const gradientWidth = 780;
+            const gradient = ctx.createLinearGradient(0, 0, gradientWidth, 0);
+
+            gradient.addColorStop(0, 'red');
+            gradient.addColorStop(0.4, 'orange');
+            gradient.addColorStop(0.5, 'yellow');
+            gradient.addColorStop(0.6, 'green');
+            gradient.addColorStop(0.8, 'blue');
+            gradient.addColorStop(1, 'violet');
+      
+            const lineData = Array.from({ length: 780 }, (_, i) => ({
+              x: i,
+              y: 0,
+            }));
+      
+            const pointData = [
+              {
+                x: fixedUVI, 
+                y: 0,
+              },
+          ];
+      
+            const chartData: ChartData<'scatter', Point[], number> = {
+              datasets: [
+                {
+                  data: pointData,
+                  pointRadius: 10,
+                  pointBackgroundColor: 'white',
+                },
+                {
+                  data: lineData,
+                  borderColor: gradient,
+                  backgroundColor: gradient,
+                  borderWidth: 8,
+                  showLine: true,
+                  pointRadius: 0,
+                },
+              ],
+            };
+      
             const newChartInstance = new Chart(ctx, {
               type: 'scatter',
               data: chartData,
@@ -213,6 +216,7 @@ const Weather = () => {
     return '극도로 강함';
   };
 
+
   const sunLevel = SunLevel(fixedUVI);
 
     return (
@@ -231,3 +235,4 @@ const Weather = () => {
 };
 
 export default Weather;
+
