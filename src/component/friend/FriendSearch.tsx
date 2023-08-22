@@ -7,6 +7,8 @@ import FriendSearchComponent from './FriendSearchComponent';
 import ModalContainer from './modal/ModalContainer';
 import useOutSideClick from './modal/useOutSideClick';
 import { getFriendList, getFriendList2 } from '../../api/Friend';
+import { useMediaQuery } from 'react-responsive';
+
 
 interface ModalProps {
   open: boolean;
@@ -24,6 +26,7 @@ type FriendSearchResult = {
 };
 
 const FriendSearch = ({ onClose }: ModalProps) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
   // 친구 검색 모달창 닫기
   const handleClose = () => {
     onClose?.();
@@ -128,7 +131,7 @@ const FriendSearch = ({ onClose }: ModalProps) => {
               <Search />
             </span>
             <span id='goBack' onClick={handleClose}>
-              <GoBack />
+              {!isMobile && <GoBack />}
             </span>
           </SearchBox>
           <span id='friends' style={FONT.M3}>
@@ -181,7 +184,7 @@ const Box = styled.div`
   position: relative;
   #search {
     position: absolute;
-    top: 58px;
+    top: 60px;
     left: 153px;
   }
   #goBack {
@@ -196,6 +199,16 @@ const Box = styled.div`
     top: 105px;
     left: 461px;
   }
+  @media (max-width: 500px) {
+    width: 80%;
+    height: 80%;
+    #search {
+      top: 40px;
+      left: 80%;
+    }
+    #friends {
+      left: 60%;
+    }
 `;
 const FriendSearchBox = styled.div`
   width: 456px;
@@ -209,6 +222,11 @@ const FriendSearchBox = styled.div`
   text-align: left;
   &:focus {
     outline: 3px solid ${(props) => props.theme.Blue_Main};
+  }
+  @media (max-width: 500px) {
+    width: 80%;
+    top: 30px;
+    left: 40px;
   }
 `;
 const SearchInput = styled.input`
@@ -227,6 +245,13 @@ const SearchInput = styled.input`
   &::placeholder {
     color: ${(props) => props.theme.Gray_02};
   }
+  @media (max-width: 500px) {
+    width: 60%;
+    height: 45px;
+    top: 30px;
+    left: 40px;
+    padding-left: 10px;
+  }
 `;
 const SearchBox = styled.div``;
 const ListBox = styled.div`
@@ -244,6 +269,12 @@ const ListBox = styled.div`
     background-color: hsla(0, 0%, 42%, 0.49);
     border-radius: 100px;
   }
+  @media (max-width: 500px) {
+    width: 90%;
+    position: absolute;
+    top: 150px;
+    left: 15px;
+  }
 `;
 const GradientTop = styled.div`
   z-index: 1;
@@ -257,6 +288,12 @@ const GradientTop = styled.div`
     rgba(255, 255, 255, 1) 0%,
     rgba(255, 255, 255, 0) 100%
   );
+  @media (max-width: 500px) {
+    width: 90%;
+    position: absolute;
+    top: 150px;
+    left: 15px;
+  }
 `;
 const GradientBottom = styled.div`
   width: 437px;
@@ -269,4 +306,10 @@ const GradientBottom = styled.div`
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 1) 100%
   );
+  @media (max-width: 500px) {
+    width: 90%;
+    position: absolute;
+    top: 500px;
+    left: 15px;
+  }
 `;

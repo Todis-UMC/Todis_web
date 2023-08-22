@@ -96,6 +96,9 @@ const Box = styled.div`
   justify-content: center;
   text-align: center;
   padding: 30px 40px;
+  @media (max-width: 500px) {
+    width: 80%;
+  }
 `;
 const Title = styled.div`
   margin-top: 10px;
@@ -123,6 +126,8 @@ const Message = styled.textarea`
   &:focus {
     outline: none;
   }
+  @media (max-width: 500px) {
+    width: 100%;
 `;
 const Ok = styled.button`
   width: 460px;
@@ -135,5 +140,8 @@ const Ok = styled.button`
   color: #fff;
   &:hover {
     background-color: ${(props) => props.theme.Blue_Main};
+  }
+  @media (max-width: 500px) {
+    width: 100%;
   }
 `;

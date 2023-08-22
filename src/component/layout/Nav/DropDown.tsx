@@ -20,6 +20,8 @@ const ButtonText = styled.span`
 
 const ButtonContainer = styled.div`
   position: relative;
+  margin-right: 5.5rem;
+  cursor: pointer;
 `;
 
 const MenuContainer = styled.div<{ isVisible: boolean }>`

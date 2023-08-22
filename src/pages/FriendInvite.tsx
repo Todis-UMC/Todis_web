@@ -5,6 +5,7 @@ import { ReactComponent as GoBack } from '../assets/icon/GoBack.svg';
 import FriendRequestComponent from '../component/friendInvite/FriendRequestComponent';
 import FriendRequest from '../component/friendInvite/FriendRequest';
 import avatar from '../assets/img/avatar/M_Avatar.png';
+import { useMediaQuery } from 'react-responsive';
 import { getInfo } from '../api/User';
 import { getFriendRequestList } from '../api/FriendInvite';
 import { ToastContainer, toast } from 'react-toastify';
@@ -45,6 +46,8 @@ const FriendInvite = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [id, setId] = useState('');
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+
   const handleSearchButton = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const isValidEmail = emailRegex.test(id);
@@ -75,7 +78,7 @@ const FriendInvite = () => {
     <Container>
       <TitleBox>
         <SubTitle style={FONT.L4}>친구 초대</SubTitle>
-        <Title style={FONT.H1}>
+        <Title style={isMobile ? FONT.H6 : FONT.H1}>
           <span>친구를 초대해보세요!</span>
           <br />
           <span>더 다양한 코디를 즐길 수 있어요:)</span>
@@ -173,6 +176,9 @@ const TitleBox = styled.div`
   margin: 0 auto;
   padding-top: 50px;
   padding-bottom: 30px;
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 const SubTitle = styled.div`
   margin-bottom: 10px;
@@ -206,6 +212,11 @@ const MainBox = styled.div`
     top: 486px;
     left: 71px;
   }
+   @media (max-width: 500px) {
+    width: 100%;
+    height: 800px;
+    overflow: hidden;
+   }
 `;
 const Profile = styled.div`
   position: absolute;
@@ -227,6 +238,10 @@ const Profile = styled.div`
     object-fit: cover;
     border-radius: 50%;
   }
+  @media (max-width: 500px) {
+    top: 38px;
+    left: 130px;
+  }
 `;
 const MyInfo = styled.div`
   position: absolute;
@@ -243,17 +258,31 @@ const MyInfo = styled.div`
   td {
     padding: 10px;
   }
+  @media (max-width: 500px) {
+    top: 188px;
+    left: 35px;
+    width: 80%;
+  }
 `;
 const IdText = styled.span`
   position: absolute;
   top: 321px;
   left: 68px;
+  @media (max-width: 500px) {
+    top: 321px;
+    left: 38px;
+  }
 `;
 const IdBox = styled.span`
   margin: 0 auto;
   position: absolute;
   top: 353px;
   left: 65px;
+  @media (max-width: 500px) {
+    top: 353px;
+    left: 35px;
+    width: 80%;
+  }
 `;
 const Id = styled.input`
   width: 298px;
@@ -268,6 +297,9 @@ const Id = styled.input`
   ::placeholder {
     color: ${(props) => props.theme.Gray_02};
   }
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 const Search = styled.button`
   width: 139px;
@@ -280,11 +312,19 @@ const Search = styled.button`
   &:hover {
     background-color: ${(props) => props.theme.Blue_Main};
   }
+  @media (max-width: 500px) {
+    width: 50%;
+    margin-top: 10px;
+  }
 `;
 const RequestText = styled.span`
   position: absolute;
   top: 437px;
   left: 68px;
+  @media (max-width: 500px) {
+    top: 500px;
+    left: 38px;
+  }
 `;
 const ListBox = styled.div`
   width: 437px;
@@ -303,6 +343,10 @@ const ListBox = styled.div`
     background-color: hsla(0, 0%, 42%, 0.49);
     border-radius: 100px;
   }
+  @media (max-width: 500px) {
+    top: 550px;
+    left: 38px;
+  }
 `;
 const GradiBottom = styled.div`
   width: 437px;
@@ -316,4 +360,8 @@ const GradiBottom = styled.div`
     rgba(255, 255, 255, 1) 50%,
     rgba(255, 255, 255, 1) 100%
   );
+  @media (max-width: 500px) {
+    width: 100%;
+    left: 0;
+  }
 `;

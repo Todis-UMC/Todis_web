@@ -7,6 +7,8 @@ import FriendProfile from '../component/friend/FriendProfile';
 import FriendInviteButton from '../component/friend/FriendInviteButton';
 import FriendSearch from '../component/friend/FriendSearch';
 import { getFriendListDetail, getUserDetail } from '../api/Friend';
+import { useMediaQuery } from 'react-responsive';
+
 
 type ToggleBtnProps = {
   expanded: boolean;
@@ -32,6 +34,7 @@ const Friend = () => {
   const onClickButton = () => {
     setIsOpen(true);
   };
+
 
   // 내 프로필 API 연동
   const [id, setId] = useState(0);
@@ -71,11 +74,16 @@ const Friend = () => {
   const fiveFriendList = friendList.slice(0, 5); // 처음부터 5개까지 자르기
   const toggleFriendList = friendList.slice(5);
 
+  const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+
+
   return (
     <Container>
       <TitleBox>
         <SubTitle style={FONT.L4}>날씨에 따른</SubTitle>
-        <Title style={FONT.H1}>나의 친구는 이렇게 입었어요!</Title>
+        <Title style={isMobile ? FONT.H6 : FONT.H1}>
+          나의 친구는 이렇게 입었어요!
+        </Title>
       </TitleBox>
       <SearchBox onClick={onClickButton}>
         <span>
@@ -157,6 +165,9 @@ const TitleBox = styled.div`
   width: 500px;
   margin: 0 auto;
   padding-top: 50px;
+  @media (max-width: 500px) {
+    width: 80%;
+  }
 `;
 const SubTitle = styled.div`
   margin-bottom: 10px;
@@ -165,7 +176,8 @@ const Title = styled.div``;
 const SearchBox = styled.div`
   margin: 50px auto;
   margin-bottom: 80px;
-  width: 714px;
+  max-width: 714px;
+  width: 80%;
   height: 56px;
   border-radius: 49px;
   background-color: #fff;
