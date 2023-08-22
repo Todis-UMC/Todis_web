@@ -1,47 +1,67 @@
 import React from 'react';
 import {HeartOutlined, HeartFilled} from '@ant-design/icons';
 
-interface LikeButtonState {
-    isChecked: boolean;
-}
-
-class LikeButton extends React.Component<{}, LikeButtonState> {
-    state: LikeButtonState = {
-        isChecked: false,
+class LikeButton extends React.Component {
+    state = {
+      isChecked: false,
+      loading: false,
+      responseData: {},
     };
-    
-    onClick = () => {
-        
-        fetch('/cody/like', {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ isChecked: !this.state.isChecked }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.setState(prevState => ({
-                        isChecked: !prevState.isChecked,
-                    }));
-                }
-            })
-            .catch(error => {
-                console.error('좋아요 오류:', error);
-            });
-    };
-
-    render(){
-        return(
-            <React.Fragment>
-                <div className="icons-list">
-                    {this.state.isChecked ? 															
-                    <HeartFilled style={{ color: 'red', fontSize: '2rem'}} onClick={this.onClick}/> :	
-                    <HeartOutlined style={{ color: 'white', fontSize: '2rem'}} onClick={this.onClick}/>}				
-                </div>
-            </React.Fragment> 
-        )
+  
+    componentDidMount() {
+      this.fetchLikeStatus();
     }
-}
-export default LikeButton;
+  
+    fetchLikeStatus = async (codyId = 0) => {
+      this.setState({ loading: true });
+  
+      try {
+        const response = await fetch(
+          `http://13.209.15.210:8080/cody/like?codyId=${codyId}`
+        );
+        const data = await response.json();
+  
+        if (data.success) {
+          this.setState({
+            responseData: data.data,
+          });
+        }
+      } catch (error) {
+        console.error("좋아요 오류:", error);
+      } finally {
+        this.setState({ loading: false });
+      }
+    };
+  
+    onClick = () => {
+      this.state.isChecked
+        ? this.setState({
+            isChecked: false,
+          })
+        : this.setState({
+            isChecked: true,
+          });
+    };
+    render() {
+      return (
+        <React.Fragment>
+          <div className="icons-list">
+            {this.state.isChecked ? (
+              <HeartFilled
+                style={{ color: "red", fontSize: "2rem" }}
+                onClick={this.onClick}
+                disabled={this.state.loading}
+              />
+            ) : (
+              <HeartOutlined
+                style={{ color: "white", fontSize: "2rem" }}
+                onClick={this.onClick}
+                disabled={this.state.loading}
+              />
+            )}
+          </div>
+        </React.Fragment>
+      );
+    }
+  }
+  export default LikeButton;
