@@ -33,50 +33,41 @@ const Nav: React.FC = () => {
     });
   };
   return (
-    <NavBarContainer style={FONT.M3}>
-      <LogoContainer>
-        <Logo />
-      </LogoContainer>
-      <NavBar>
-        <NavLink
-          to={token ? '/home' : '/login'}
-          style={activeLink === '/home' ? { color: '#437df6' } : {}}
-        >
-          홈
-        </NavLink>
-        <NavLink
-          to={token ? '/mypage' : '/login'}
-          style={activeLink === '/mypage' ? { color: '#437df6' } : {}}
-        >
-          마이페이지
-        </NavLink>
-        <NavLink
-          to={token ? '/friend' : '/login'}
-          style={activeLink === '/friend' ? { color: '#437df6' } : {}}
-        >
-          친구
-        </NavLink>
-        <NavLink
-          to={token ? '/lank' : '/login'}
-          style={activeLink === '/lank' ? { color: '#437df6' } : {}}
-        >
-          더보기
-        </NavLink>
-      </NavBar>
-      <LanguageButtonContainer onClick={() => changeLanguage()}>
-        <LanguageButton />
-      </LanguageButtonContainer>
-      {!token ? (
-        <ButtonContainer1>
-          <SignUpButton />
-          <ButtonSpacer />
-          <SignInButton />
-        </ButtonContainer1>
-      ) : (
-        <DropDownContainer>
-          <DropDown />
-        </DropDownContainer>
-      )}
+    <>
+      {/* PC 디자인 */}
+      <PC>
+        <PcContainer style={FONT.M3}>
+          <Logo />
+          <NavBar>
+            {Routes.map((route, index) => (
+              <NavLink
+                key={index}
+                onClick={() => {
+                  token
+                    ? (window.location.href = route.path)
+                    : window.location.href === '/login';
+                }}
+                style={activeLink === route.path ? { color: '#437df6' } : {}}
+              >
+                {route.text}
+              </NavLink>
+            ))}
+          </NavBar>
+          <LanguageButtonContainer onClick={() => changeLanguage()}>
+            <LanguageButton />
+          </LanguageButtonContainer>
+          {!token ? <Buttons /> : <DropDown />}
+        </PcContainer>{' '}
+      </PC>
+      {/* 모바일 디자인 */}
+      <MobileContainer>
+        <Mobile>
+          <Logo />
+          <MenuBox onClick={() => setMenu(!menu)}>
+            <Menu />
+          </MenuBox>
+        </Mobile>
+      </MobileContainer>
       <ToastContainer />
       {menu && <SideMenu onClose={() => setMenu(false)} />}
     </>
@@ -130,6 +121,7 @@ const NavLink = styled.div`
   color: ${(props) => props.theme.Black_Main};
   width: fit-content;
   padding-right: min(5rem, 10px);
+  cursor: pointer;
 `;
 
 const LanguageButtonContainer = styled.div`
@@ -141,20 +133,7 @@ const LanguageButtonContainer = styled.div`
   cursor: pointer;
 `;
 
-const ButtonContainer1 = styled.div`
-  margin-right: 5.5rem;
-  display: flex;
-  align-items: center;
-`;
-
-const ButtonSpacer = styled.div`
-  margin-right: 0.5rem;
-`;
-const LanguageButtonContainer = styled.div`
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-  margin-right: 1rem;
-
+const MenuBox = styled.div`
   display: flex;
   justify-content: center;
   cursor: pointer;
