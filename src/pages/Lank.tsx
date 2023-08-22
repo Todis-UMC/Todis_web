@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import LankBox from '../component/Lank/LankBox';
-import { getFriendListDetail } from '../api/Friend';
+import axios from 'axios';
 
 type MoreButtonProps = {
   expanded: boolean;
@@ -14,7 +14,11 @@ type DataItem = {
   codyImage: string | null;
   comment: string;
   lankNum: string;
+  data: DataItem[];
 };
+
+const baseURL =
+  'http://ec2-13-209-15-210.ap-northeast-2.compute.amazonaws.com:8080';
 
 const Lank = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -30,8 +34,8 @@ const Lank = () => {
   }, []);
   const fetchData = async () => {
     try {
-      const response = await getFriendListDetail(10);
-      setlankList(response.data);
+      const response = await axios.get<DataItem>(baseURL+'/cody/getall');
+      setlankList(response.data.data);
     } catch (error) {
       console.error('데이터 로딩 오류:', error);
     }
@@ -58,7 +62,7 @@ const Lank = () => {
               name={data.name}
               comment={data.comment}
               codyImage={data.codyImage}
-             
+              lankNum={data.lankNum}
             />
           ))}
           {expanded && (
@@ -70,7 +74,7 @@ const Lank = () => {
               name={data.name}
               comment={data.comment}
               codyImage={data.codyImage}
-             
+              lankNum={data.lankNum}
             />
           ))}
           </>

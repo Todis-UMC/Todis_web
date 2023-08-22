@@ -112,13 +112,15 @@ interface DataItem {
   id: number;
   codyImage: string | null;
   comment: string;
+  lankNum: string;
 }
 
 const LankBox = ({
   name,
   id,
   codyImage,
-  comment
+  comment,
+  lankNum
 }: DataItem) => {
   return (
     <>
@@ -126,8 +128,7 @@ const LankBox = ({
         <Box>
           <Name style={FONT.H2}>{name}</Name>
           <StatusMessage style={FONT.L4}>{comment}</StatusMessage>
-          <Lanking>
-          </Lanking>
+          <LankNum style={FONT.L1}>{lankNum}</LankNum>
           <OutfitPic style={{ display: 'flex', justifyContent: 'center' }}>
           {codyImage === null ? (
           <img src={avatar} alt='avatar-codyImage' height='100%' />
@@ -145,6 +146,7 @@ const LankBox = ({
         <MobileBox>
           <TopBox>
             <MobileLank>
+            <div style={FONT.L4}>{lankNum}</div>
             </MobileLank>
             <Text style={FONT.H7}>
               {name}
