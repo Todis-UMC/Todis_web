@@ -43,7 +43,9 @@ const Nav: React.FC = () => {
               <NavLink
                 key={index}
                 onClick={() => {
-                  token ? navigate(route.path) : navigate('/login');
+                  token
+                    ? (window.location.href = route.path)
+                    : window.location.href === '/login';
                 }}
                 style={activeLink === route.path ? { color: '#437df6' } : {}}
               >
@@ -119,6 +121,7 @@ const NavLink = styled.div`
   color: ${(props) => props.theme.Black_Main};
   width: fit-content;
   padding-right: min(5rem, 10px);
+  cursor: pointer;
 `;
 
 const LanguageButtonContainer = styled.div`

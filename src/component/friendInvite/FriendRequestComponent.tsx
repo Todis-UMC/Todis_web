@@ -66,9 +66,9 @@ const FriendRequestList = ({
     <Box>
       <Profile>
         {profileImageUrl === null ? (
-          <img src={avatar} />
+          <img id='avatar' src={avatar} />
         ) : (
-          <img src={profileImageUrl} />
+          <img id='mypage' src={profileImageUrl} />
         )}
       </Profile>
       <Name>{name}</Name>
@@ -79,7 +79,9 @@ const FriendRequestList = ({
         수락
       </Yes>
       <hr />
-      {isShown && <FriendAccept name={name} />}
+      {isShown && (
+        <FriendAccept name={name} profileImageUrl={profileImageUrl} />
+      )}
     </Box>
   );
 };
@@ -99,6 +101,9 @@ const Box = styled.div`
     border: 0;
     background: ${(props) => props.theme.Gray_02};
     margin: 18px 0px;
+    @media (max-width: 500px) {
+      width: 70%;
+    }
   }
   @media (max-width: 500px) {
     max-width: 400px;
@@ -113,7 +118,7 @@ const Profile = styled.div`
   background-color: ${(props) => props.theme.SkyBlue_03};
   overflow: hidden;
   position: relative;
-  img {
+  #avatar {
     position: absolute;
     top: -5px;
     left: -8.5px;
@@ -122,10 +127,20 @@ const Profile = styled.div`
     object-fit: cover;
     border: 1px solid #111;
   }
+  #mypage {
+    position: absolute;
+    top: -12px;
+    left: -10.5px;
+    height: 350%;
+    width: 150%;
+    object-fit: cover;
+    border: 1px solid #111;
+  }
 `;
 
 const Name = styled.div`
-  width: 42px;
+  text-align: left;
+  width: 150px;
   height: 19px;
   position: absolute;
   top: 11px;

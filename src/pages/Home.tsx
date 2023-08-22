@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import { ReactComponent as Search } from '../assets/icon/Search.svg';
 import CitySearch from '../component/home/CitySearch';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTint } from '@fortawesome/free-solid-svg-icons';
-import Button from '../component/common/Button';
 import HumidityCard from '../component/home/HumidityCard';
 import RainCard from '../component/home/RainCard';
 import AirQualityCard from '../component/home/AirQualityCard';
@@ -36,7 +33,7 @@ const Home = () => {
         <span>
           <Search />
         </span>
-        <SearchInput style={FONT.L3}>도시 검색</SearchInput>
+        <SearchInput style={FONT.L3}>도시 검색...</SearchInput>
       </SearchBox>
       {isOpen && (
         <CitySearch
@@ -49,7 +46,8 @@ const Home = () => {
       <MainBox>
         <MainCard />
         <ListCard />
-        {expanded === true ? (
+
+        {expanded === true && (
           <>
             <HumidityCard />
             <RainCard />
@@ -57,7 +55,7 @@ const Home = () => {
             <SunCard />
             <SunsetCard />
           </>
-        ) : null}
+        )}
       </MainBox>
       <ToggleBox>
         <ToggleBtn onClick={ToggleHandler} expanded={expanded} style={FONT.L3}>
@@ -79,10 +77,6 @@ const Container = styled.div`
   justify-content: center;
   text-align: center;
   position: relative;
-
-  @media screen and (max-width: 768px) {
-    padding: 0 20px;
-  }
 `;
 
 const TitleBox = styled.div`
@@ -90,12 +84,6 @@ const TitleBox = styled.div`
   margin: 0 auto;
   padding-top: 50px;
 `;
-
-const SubTitle = styled.div`
-  margin-bottom: 10px;
-`;
-
-const Title = styled.div``;
 
 const SearchBox = styled.div`
   margin: 50px auto;
@@ -109,19 +97,27 @@ const SearchBox = styled.div`
   position: relative;
   span {
     position: absolute;
-    top: 18px;
-    left: 23px;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
   }
   cursor: pointer;
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
+    width: 348px;
+    height: 41px;
+    margin-top: -50px;
+  }
 `;
 
 const SearchInput = styled.div`
-  width: 500px;
+  width: calc(100% - 80px);
   height: 31px;
   border: none;
   position: absolute;
-  top: 12px;
-  left: 58px;
+  top: 50%;
+  left: 60px;
+  transform: translateY(-50%);
   text-align: left;
   color: ${(props) => props.theme.Gray_02};
 `;
@@ -131,19 +127,31 @@ const MainBox = styled.div`
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 47px;
+  gap: 20px;
   text-align: center;
   justify-content: center;
 
+  > div:nth-child(1) {
+    margin-bottom: 50px;  
+  }
+
   @media screen and (max-width: 768px) {
-    width: 100%;
-    gap: 10px;
-    flex-direction: column;
+    margin-top: -200px;
+    gap: 1px;
+    
+    > div:nth-child(1) {
+      margin-bottom: 100px;
+    }
+    }
   }
 `;
 
 const ToggleBox = styled.div`
   padding: 70px 0;
+
+  @media screen and (max-width: 768px) {
+    padding: 40px 0;
+  }
 `;
 
 const ToggleBtn = styled.button<ToggleBtnProps>`
@@ -154,61 +162,4 @@ const ToggleBtn = styled.button<ToggleBtnProps>`
   border: 1px solid ${(props) => props.theme.Gray_01};
   border-radius: 35px;
   cursor: pointer;
-`;
-
-const Card = styled.div`
-  width: 877px;
-  height: 678px;
-  background-color: ${(props) => props.theme.Gray_03};
-  border-radius: 47px;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const List = styled.div`
-  width: 416px;
-  height: 678px;
-  background-color: ${(props) => props.theme.Gray_03};
-  border-radius: 47px;
-`;
-
-const MiniCard = styled.div`
-  width: 416px;
-  height: 327px;
-  background-color: ${(props) => props.theme.Gray_03};
-  border-radius: 47px;
-  margin-right: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-`;
-
-const MiniCardTitle = styled.h2`
-  margin-bottom: 20px;
-`;
-
-const MiniCardContent = styled.p``;
-
-type MiniCardProps = {
-  title: string;
-  content: string;
-};
-
-const WideCard = styled.div`
-  width: 877px;
-  height: 327px;
-  background-color: ${(props) => props.theme.Gray_03};
-  border-radius: 47px;
-  margin-right: 10px;
-`;
-
-const MiniCardsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  flex-wrap: wrap;
 `;

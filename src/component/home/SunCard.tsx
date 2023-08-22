@@ -16,7 +16,7 @@ import {
   ChartData,
   Point
 } from 'chart.js';
-import Loading from '../common/Loading';
+import styled from 'styled-components';
 
 Chart.register(
   LinearScale,
@@ -30,6 +30,34 @@ Chart.register(
   PointElement
 );
 
+const SunCardStyles = styled.div`
+  background: ${Color.SkyBlue_03};
+  width: 877px;
+  height: 327px;
+  padding: 20px;
+  paddingleft: 30px;
+  color: ${Color.Black_Main};
+  border-radius: 40px;
+  box-shadow: 0px 0px 10px ${Color.Gray_03};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 768px) {
+    margin-top: -130px;
+    transform: scale(0.55);
+
+    > div:last-child {
+      margin-top: auto;
+    }
+
+    .graph {
+      display: none;
+    }
+  }
+`;
+
 interface Main {
   uvi: number;
 }
@@ -39,27 +67,13 @@ interface WeatherData {
     main: Main;
   }[];
 }
+const fixedUVI = 7;
 
 const Weather = () => {
   const chartContainer = useRef<HTMLCanvasElement | null>(null);
   const [chartInstance, setChartInstance] = useState<Chart | null>(null);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
-  const styles: { [key: string]: CSSProperties } = {
-    SunCard: {
-      background: Color.SkyBlue_03,
-      width: '877px',
-      height: '327px',
-      padding: '20px',
-      paddingLeft: '30px',
-      color: Color.Black_Main,
-      borderRadius: '40px',
-      boxShadow: `0px 0px 10px ${Color.Gray_03}`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start'
-    },
+  const styles = {
     SunInfo: {
       display: 'flex',
       alignItems: 'center',
@@ -82,40 +96,41 @@ const Weather = () => {
     },
     graph: {
       width: '100%',
-      marginTop: '-130px'
+      marginTop: '-150px'
     }
   };
 
+  /*useEffect(() => {
+        const fetchData = async (position: GeolocationPosition) => {
+          try {
+            const response = await fetch(
+              `http://api.openweathermap.org/data/2.5/uvi?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=4d4c41dc06bbf1741b3a628d64934b98`
+            );
+            
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+      
+            const data = await response.json();
+      
+          
+            if (!data.list) {
+              data.list = [{ main: { uvi: 0 } }];
+            } else if (!data.list[0]?.main) {
+              data.list[0].main = { uvi: 0 };
+            }
+      
+            setWeatherData(data);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+      
+        navigator.geolocation.getCurrentPosition(fetchData);
+      }, []);*/
+
   useEffect(() => {
-    const fetchData = async (position: GeolocationPosition) => {
-      try {
-        const response = await fetch(
-          `http://api.openweathermap.org/data/2.5/uvi?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=4d4c41dc06bbf1741b3a628d64934b98`
-        );
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-
-        if (!data.list) {
-          data.list = [{ main: { uvi: 0 } }];
-        } else if (!data.list[0]?.main) {
-          data.list[0].main = { uvi: 0 };
-        }
-
-        setWeatherData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    navigator.geolocation.getCurrentPosition(fetchData);
-  }, []);
-
-  useEffect(() => {
-    if (!chartContainer.current || !weatherData) {
+    if (!chartContainer.current) {
       return;
     }
 
@@ -145,7 +160,7 @@ const Weather = () => {
 
     const pointData = [
       {
-        x: weatherData.list[0].main.uvi || 0,
+        x: fixedUVI,
         y: 0
       }
     ];
@@ -182,8 +197,8 @@ const Weather = () => {
         },
         scales: {
           x: {
-            min: -10,
-            max: 780,
+            min: 0,
+            max: 15,
             display: false
           },
           y: {
@@ -206,10 +221,13 @@ const Weather = () => {
     });
 
     setChartInstance(newChartInstance);
-  }, [weatherData]);
+    return () => {
+      newChartInstance.destroy();
+    };
+  }, []);
 
-  if (!weatherData) {
-    return <Loading />;
+  if (!fixedUVI) {
+    return <div>Loading...</div>;
   }
 
   const SunLevel = (index: number) => {
@@ -220,20 +238,20 @@ const Weather = () => {
     return '극도로 강함';
   };
 
-  const sunLevel = SunLevel(weatherData.list[0].main.uvi);
+  const sunLevel = SunLevel(fixedUVI);
 
   return (
-    <div style={styles.SunCard}>
+    <SunCardStyles>
       <div style={styles.SunInfo}>
         <FontAwesomeIcon icon={faSun} />
         <div style={styles.SunLabel}>자외선 지수</div>
       </div>
-      <div style={styles.SunValue}>{weatherData.list[0].main.uvi}</div>
+      <div style={styles.SunValue}>{fixedUVI}</div>
       <div style={styles.SunLevel}>{sunLevel}</div>
-      <div style={styles.graph}>
+      <div className='graph' style={styles.graph}>
         <canvas ref={chartContainer} />
       </div>
-    </div>
+    </SunCardStyles>
   );
 };
 

@@ -95,9 +95,9 @@ const FriendInvite = () => {
         </span>
         <Profile>
           {profile === null ? (
-            <img src={avatar} alt='avatar' />
+            <img id='avatar' src={avatar} alt='avatar' />
           ) : (
-            <img src={profile} alt='profile' />
+            <img id='mypage' src={profile} alt='profile' />
           )}
         </Profile>
         <MyInfo>
@@ -138,7 +138,7 @@ const FriendInvite = () => {
           />
         )}
         <RequestText>받은 친구 요청</RequestText>
-        <span id='message' style={FONT.L4}>
+        <span id='message' style={isMobile ? { ...FONT.L6 } : { ...FONT.L4 }}>
           도착한 친구 요청이 없습니다.
           <br />
           친구를 초대해보세요!
@@ -207,16 +207,21 @@ const MainBox = styled.div`
   #message {
     line-height: 20px;
     width: 437px;
-    height: 181px;
     position: absolute;
     top: 486px;
     left: 71px;
+    @media (max-width: 500px) {
+      line-height: 15px;
+      width: 65%;
+      top: 550px;
+      margin: 0 auto;
+    }
   }
-   @media (max-width: 500px) {
+  @media (max-width: 500px) {
     width: 100%;
     height: 800px;
     overflow: hidden;
-   }
+  }
 `;
 const Profile = styled.div`
   position: absolute;
@@ -229,11 +234,20 @@ const Profile = styled.div`
   border-radius: 50%;
   border: none;
   overflow: hidden;
-  img {
+  #avatar {
     position: absolute;
     top: -10px;
     left: -25px;
     height: 290%;
+    width: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  #mypage {
+    position: absolute;
+    top: -30px;
+    left: -30px;
+    height: 330%;
     width: 150%;
     object-fit: cover;
     border-radius: 50%;
