@@ -101,6 +101,9 @@ const Box = styled.div`
     border: 0;
     background: ${(props) => props.theme.Gray_02};
     margin: 18px 0px;
+    @media (max-width: 500px) {
+      width: 70%;
+    }
   }
   @media (max-width: 500px) {
     max-width: 400px;
