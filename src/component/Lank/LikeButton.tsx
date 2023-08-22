@@ -1,22 +1,36 @@
 import React from 'react';
 import {HeartOutlined, HeartFilled} from '@ant-design/icons';
-import styled from 'styled-components';
 
-class LikeButton extends React.Component{
-    state = {
-        isChecked: false,		
+interface LikeButtonState {
+    isChecked: boolean;
+}
+
+class LikeButton extends React.Component<{}, LikeButtonState> {
+    state: LikeButtonState = {
+        isChecked: false,
     };
-
-    onClick = () => {				
-        this.state.isChecked ?		
-        this.setState({
-            isChecked: false,		
+    
+    onClick = () => {
+        
+        fetch('/cody/like', {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ isChecked: !this.state.isChecked }),
         })
-        :
-        this.setState({				
-            isChecked: true,		
-        });
-    }
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.setState(prevState => ({
+                        isChecked: !prevState.isChecked,
+                    }));
+                }
+            })
+            .catch(error => {
+                console.error('좋아요 오류:', error);
+            });
+    };
 
     render(){
         return(
