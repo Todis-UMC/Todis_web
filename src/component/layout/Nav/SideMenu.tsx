@@ -81,6 +81,16 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
               <div style={FONT.H7}>{route.text}</div>
             </MenuLink>
           ))}
+          {token && (
+            <MenuLink
+              onClick={() => {
+                navigate('/user/edit');
+                onClose();
+              }}
+            >
+              <div style={FONT.H7}>회원정보 수정</div>
+            </MenuLink>
+          )}
         </div>
       </Menu>
       <Background
