@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmog } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
-
 import styled from 'styled-components';
 import { Chart, LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, ChartData, Point } from 'chart.js';
 
@@ -30,8 +29,8 @@ const StyledAirQualityCard = styled.div`
   }
 `;
 
-Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
 
+Chart.register(LinearScale, PointElement, CategoryScale, BarController, BarElement, LineController, LineElement, ScatterController, PointElement);
 
 interface Main {
   aqi: number;
@@ -54,26 +53,26 @@ const Weather = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      marginTop: '37px'
+      marginTop: '37px',
     },
     qualityLabel: {
       ...Font.H6,
-      color: Color.Gray_01
+      color: Color.Gray_01,
     },
     qualityValue: {
       ...Font.M1,
       color: Color.Gray_00,
-      marginTop: '26.5px'
+      marginTop: '26.5px',
     },
     qualityLevel: {
       ...Font.L3,
       color: Color.Gray_01,
-      marginTop: '26.5px'
+      marginTop: '26.5px',
     },
     graph: {
       width: '100%',
-      marginTop: '-25px'
-    }
+      marginTop: '-25px',
+    },
   };
 
   /*useEffect(() => {
@@ -190,9 +189,8 @@ const Weather = () => {
     if (index <= 200) return '매우 나쁨';
     return '심각하게 나쁨';
   };
-    
-  const qualityLevel = getQualityLevel(fixedAQI);
 
+  const qualityLevel = getQualityLevel(fixedAQI);
 
   return (
     <StyledAirQualityCard className="AirQuality-card">
