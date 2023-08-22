@@ -90,6 +90,9 @@ const Container = styled.div`
   top: 0px;
   left: 0px;
   z-index: 1;
+  @media (max-width: 500px) {
+    width: 65%;
+  }
 `;
 const Box = styled.div`
   background-color: #fff;

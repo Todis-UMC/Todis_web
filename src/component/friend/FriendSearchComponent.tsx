@@ -120,7 +120,7 @@ const Delete = styled.button`
   color: #fff;
   cursor: pointer;
   @media (max-width: 500px) {
-    width: 40px;
+    width: 50px;
     height: 30px;
     top: 10px;
     left: 150px;

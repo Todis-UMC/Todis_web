@@ -9,7 +9,6 @@ import useOutSideClick from './modal/useOutSideClick';
 import { getFriendList, getFriendList2 } from '../../api/Friend';
 import { useMediaQuery } from 'react-responsive';
 
-
 interface ModalProps {
   open: boolean;
   onClose: () => void;
@@ -170,6 +169,9 @@ const Container = styled.div`
   top: 0px;
   left: 0px;
   z-index: 1;
+  @media (max-width: 500px) {
+    height: 100%;
+  }
 `;
 const Box = styled.div`
   background-color: #fff;
@@ -201,7 +203,6 @@ const Box = styled.div`
   }
   @media (max-width: 500px) {
     width: 80%;
-    height: 80%;
     #search {
       top: 40px;
       left: 80%;
@@ -309,7 +310,7 @@ const GradientBottom = styled.div`
   @media (max-width: 500px) {
     width: 90%;
     position: absolute;
-    top: 500px;
+    top: 523px;
     left: 15px;
   }
 `;
