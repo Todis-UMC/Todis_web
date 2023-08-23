@@ -72,7 +72,7 @@ const CodiPoint = () => {
         const airQualityData = await airQualityResponse.json();
         const uviData = await uviResponse.json();
 
-        const temp = weatherData.main.temp; // 기온
+        const temp = parseInt(weatherData.main.temp); // 기온
         const humidity = weatherData.main.humidity; // 습도
         const forecastData = weatherData.weather[0].main; // Rain, Snow
         const airQuality = airQualityData.list[0].main.aqi; // 대기질
@@ -98,7 +98,6 @@ const CodiPoint = () => {
           if (temp >= range.min && temp <= range.max) {
             const randomIndex = Math.floor(Math.random() * range.text.length);
             FirstText = range.text[randomIndex];
-            break;
           }
         }
         // 2. 습도, Rain, Snow
