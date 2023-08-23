@@ -3,6 +3,43 @@ import styled from 'styled-components';
 import FONT from '../styles/Font';
 import LankBox from '../component/Lank/LankBox';
 
+const lankData = [
+  {
+    name: '박소정',
+    statusmessage: '난 오늘 핑크색 상의 입었다!',
+    lankNum: '1'
+  },
+  {
+    name: '강혜원',
+    statusmessage: '와 너무 더워... 근데 실내는 에어컨 때문에 추움',
+    lankNum: '2'
+  },
+  {
+    name: '추민정',
+    statusmessage:
+      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
+    lankNum: '3'
+  },
+  {
+    name: '김이름',
+    statusmessage:
+      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
+    lankNum: '4'
+  },
+  {
+    name: '김이름',
+    statusmessage:
+      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
+    lankNum: '5'
+  },
+  {
+    name: '김이름',
+    statusmessage:
+      '오늘 체감 온도가 25도까지 올라가서 반팔에다가 얇은 가디건 걸쳐줬어요~',
+    lankNum: '6'
+  }
+];
+
 type MoreButtonProps = {
   expanded: boolean;
 };
@@ -10,45 +47,12 @@ type MoreButtonProps = {
 const Lank = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const MoreButtonText = expanded ? '접기' : '더보기 +';
-  const [loading, setLoading] = useState<boolean>(false);
-  const [lankData, setLankData] = useState<any[]>([]);
   const ButtonHandler = () => {
     setExpanded(!expanded);
   };
   const isMobile = window.innerWidth < 768;
 
-  // 처음에 API 호출
-  useEffect(() => {
-    fetchRecommendStatus();
-  }, []);
-
-  // API 호출 함수
-  const fetchRecommendStatus = async () => {
-    setLoading(true)
-
-    try {
-      const response = await fetch(
-        'http://13.209.15.210:8080/cody/recommend'
-      );
-      const data = await response.json();
-
-      if (data.success) {
-        // 응답 성공하면 likes를 기준으로 정렬해서 lankData에 저장
-        // lankData: [{'userId': userId, 'lankNum': 1}, ...]
-        const gotData = data.data
-        var sortedLankData = [...gotData].sort((a, b) => b.likes - a.likes);
-        sortedLankData = sortedLankData.map((d, idx)=> {
-            d.lankNum = idx+1
-            return d
-        })
-        setLankData(sortedLankData);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(true);
-    }
-  };
+  
 
   return (
     <Content>
@@ -61,37 +65,26 @@ const Lank = () => {
         </HeaderContainer>
       </Header>
       <Body>
-        {lankData.map((data, index) => (
+        {lankData.slice(0, expanded ? lankData.length : 3).map((data, index) => (
           <LankBox
-            id={data.id}
             key={index}
-            name={data.userId}
+            name={data.name}
+            statusmessage={data.statusmessage}
             lankNum={data.lankNum}
-            codyImage={data.image}
           />
         ))}
-        {expanded === true
-          ? lankData
-              .slice(3)
-              .map((data, index) => (
-                <LankBox
-                  id={data.id}
-                  key={index}
-                  name={data.userId}
-                  lankNum={data.lankNum}
-                  codyImage={data.image}
-                />
-              ))
-          : null}
-          </Body>
-      <MoreBox>
-        <MoreButton onClick={ButtonHandler} expanded={expanded} style={FONT.L3}>
-          {MoreButtonText}
-        </MoreButton>
-      </MoreBox>
+      </Body>
+      {lankData.length > 3 && (
+        <MoreBox>
+          <MoreButton onClick={ButtonHandler} expanded={expanded} style={FONT.L3}>
+            {MoreButtonText}
+          </MoreButton>
+        </MoreBox>
+      )}
     </Content>
   );
 };
+
 export default Lank;
 
 const Header = styled.div`
