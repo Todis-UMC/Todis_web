@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmog } from '@fortawesome/free-solid-svg-icons';
 import Color from '../../styles/Color';
 import Font from '../../styles/Font';
-import styled from 'styled-components';
 import {
   Chart,
   LinearScale,
@@ -17,30 +16,7 @@ import {
   ChartData,
   Point
 } from 'chart.js';
-
-const StyledAirQualityCard = styled.div`
-  background: ${Color.Typo_White};
-  width: 416px;
-  height: 327px;
-  padding: 20px;
-  padding-left: 30px;
-  color: ${Color.Black_Main};
-  border-radius: 40px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0px 0px 10px ${Color.Gray_03};
-  align-items: flex-start;
-  justify-content: flex-start;
-
-  @media screen and (max-width: 768px) {
-    margin-top: -130px;
-    transform: scale(0.5);
-
-    .graph {
-      display: none;
-    }
-  }
-`;
+import Loading from '../common/Loading';
 
 Chart.register(
   LinearScale,
@@ -67,10 +43,23 @@ interface WeatherData {
 const Weather = () => {
   const chartContainer = useRef<HTMLCanvasElement | null>(null);
   const [chartInstance, setChartInstance] = useState<Chart | null>(null);
-
-  const fixedAQI = 56;
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
   const styles: { [key: string]: CSSProperties } = {
+    AirQualityCard: {
+      background: Color.Typo_White,
+      width: '416px',
+      height: '327px',
+      padding: '20px',
+      paddingLeft: '30px',
+      color: Color.Black_Main,
+      borderRadius: '40px',
+      boxShadow: `0px 0px 10px ${Color.Gray_03}`,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start'
+    },
     qualityInfo: {
       display: 'flex',
       alignItems: 'center',
@@ -97,7 +86,7 @@ const Weather = () => {
     }
   };
 
-  /*useEffect(() => {
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
       fetch(
         `http://api.openweathermap.org/data/2.5/air_pollution?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=4d4c41dc06bbf1741b3a628d64934b98`
@@ -111,103 +100,105 @@ const Weather = () => {
         })
         .catch((err) => console.error(err));
     });
-  }, []);*/
+  }, []);
 
   useEffect(() => {
-    if (!chartContainer.current) return;
+    if (chartContainer.current && weatherData) {
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
 
-    const ctx = chartContainer.current.getContext('2d');
-    if (!ctx) return;
+      const ctx = chartContainer.current.getContext('2d');
+      if (ctx) {
+        const gradient = ctx.createLinearGradient(
+          0,
+          0,
+          chartContainer.current.width,
+          0
+        );
+        gradient.addColorStop(0, 'red');
+        gradient.addColorStop(0.2, 'orange');
+        gradient.addColorStop(0.4, 'yellow');
+        gradient.addColorStop(0.6, 'green');
+        gradient.addColorStop(0.8, 'blue');
+        gradient.addColorStop(1, 'violet');
 
-    if (chartInstance) {
-      chartInstance.destroy();
+        const lineData = Array.from({ length: 251 }, (_, i) => ({
+          x: i,
+          y: 0
+        }));
+
+        const pointData = [
+          {
+            x: weatherData.list[0].main.aqi,
+            y: 0
+          }
+        ];
+
+        const chartData: ChartData<'scatter', Point[], number> = {
+          datasets: [
+            {
+              data: pointData,
+              pointRadius: 10,
+              pointBackgroundColor: 'white'
+            },
+            {
+              data: lineData,
+              borderColor: gradient,
+              backgroundColor: gradient,
+              borderWidth: 8,
+              showLine: true,
+              pointRadius: 0
+            }
+          ]
+        };
+
+        const newChartInstance = new Chart(ctx, {
+          type: 'scatter',
+          data: chartData,
+          options: {
+            layout: {
+              padding: {
+                left: 15,
+                right: 15,
+                top: 20,
+                bottom: 20
+              }
+            },
+            scales: {
+              x: {
+                min: -10,
+                max: 260,
+                display: false
+              },
+              y: {
+                min: -1,
+                max: 1,
+                display: false
+              }
+            },
+            interaction: {
+              mode: 'nearest',
+              axis: 'x',
+              intersect: false
+            },
+            plugins: {
+              tooltip: {
+                enabled: false
+              }
+            }
+          }
+        });
+
+        setChartInstance(newChartInstance);
+      }
     }
+  }, [weatherData]);
 
-    const gradient = ctx.createLinearGradient(
-      0,
-      0,
-      chartContainer.current.width,
-      0
-    );
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.2, 'orange');
-    gradient.addColorStop(0.4, 'yellow');
-    gradient.addColorStop(0.6, 'green');
-    gradient.addColorStop(0.8, 'blue');
-    gradient.addColorStop(1, 'violet');
+  if (!weatherData) {
+    return <Loading />;
+  }
 
-    const lineData = Array.from({ length: 251 }, (_, i) => ({
-      x: i,
-      y: 0
-    }));
-
-    const pointData = [
-      {
-        x: fixedAQI,
-        y: 0
-      }
-    ];
-
-    const chartData = {
-      datasets: [
-        {
-          data: pointData,
-          pointRadius: 10,
-          pointBackgroundColor: 'white'
-        },
-        {
-          data: lineData,
-          borderColor: gradient,
-          backgroundColor: gradient,
-          borderWidth: 8,
-          showLine: true,
-          pointRadius: 0
-        }
-      ]
-    };
-
-    const newChartInstance = new Chart(ctx, {
-      type: 'scatter',
-      data: chartData,
-      options: {
-        layout: {
-          padding: {
-            left: 15,
-            right: 15,
-            top: 20,
-            bottom: 20
-          }
-        },
-        scales: {
-          x: {
-            min: -10,
-            max: 260,
-            display: false
-          },
-          y: {
-            min: -1,
-            max: 1,
-            display: false
-          }
-        },
-        interaction: {
-          mode: 'nearest',
-          axis: 'x',
-          intersect: false
-        },
-        plugins: {
-          tooltip: {
-            enabled: false
-          }
-        }
-      }
-    });
-
-    setChartInstance(newChartInstance);
-    return () => {
-      newChartInstance.destroy();
-    };
-  }, [fixedAQI]);
   const getQualityLevel = (index: number) => {
     if (index <= 50) return '좋음';
     if (index <= 100) return '보통';
@@ -216,20 +207,20 @@ const Weather = () => {
     return '심각하게 나쁨';
   };
 
-  const qualityLevel = getQualityLevel(fixedAQI);
+  const qualityLevel = getQualityLevel(weatherData.list[0].main.aqi);
 
   return (
-    <StyledAirQualityCard className='AirQuality-card'>
+    <div style={styles.AirQualityCard}>
       <div style={styles.qualityInfo}>
         <FontAwesomeIcon icon={faSmog} />
         <div style={styles.qualityLabel}>대기질</div>
       </div>
-      <div style={styles.qualityValue}>{fixedAQI}</div>
+      <div style={styles.qualityValue}>{weatherData.list[0].main.aqi}</div>
       <div style={styles.qualityLevel}>{qualityLevel}</div>
-      <div className='graph' style={styles.graph}>
+      <div style={styles.graph}>
         <canvas ref={chartContainer} />
       </div>
-    </StyledAirQualityCard>
+    </div>
   );
 };
 
