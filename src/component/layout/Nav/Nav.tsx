@@ -137,4 +137,5 @@ const MenuBox = styled.div`
   display: flex;
   justify-content: center;
   cursor: pointer;
+  z-index: 999;
 `;
