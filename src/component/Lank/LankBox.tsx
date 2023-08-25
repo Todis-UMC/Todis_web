@@ -4,6 +4,7 @@ import FONT from '../../styles/Font';
 import { Mobile, PC } from '../common/Responsive';
 import LikeButton from './LikeButton';
 import SignUpBeforeLogo from '../../assets/img/SignUpBeforeLogo.png';
+import avatar from '../../assets/img/avatar/M_Avatar.png';
 
 const Box = styled.div`
   width: 67rem;
@@ -106,6 +107,14 @@ const MobileLike = styled.div`
   position: absolute;
 `;
 
+const CenteredImage = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+
 const LankBox = ({
   name,
   statusmessage,
@@ -124,7 +133,7 @@ const LankBox = ({
           <Lanking>
             <LankNum style={FONT.L1}>{lankNum}</LankNum>
           </Lanking>
-          <OutfitPic></OutfitPic>
+          <OutfitPic><CenteredImage src={avatar} alt='OutfitPic' height='100%' /></OutfitPic>
           <ButtonStyling>
             <LikeButton />
           </ButtonStyling>
@@ -140,7 +149,7 @@ const LankBox = ({
             <Text style={FONT.H7}>
               {name}
               <div style={FONT.L6}>{statusmessage}</div>
-            </Text>
+              </Text>
           </TopBox>
           <ImgBox>
             <MobileLike>
@@ -158,5 +167,4 @@ const LankBox = ({
     </>
   );
 };
-
 export default LankBox;

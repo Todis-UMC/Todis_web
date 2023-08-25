@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FONT from '../styles/Font';
 import LankBox from '../component/Lank/LankBox';
@@ -52,6 +52,8 @@ const Lank = () => {
   };
   const isMobile = window.innerWidth < 768;
 
+  
+
   return (
     <Content>
       <Header>
@@ -63,7 +65,7 @@ const Lank = () => {
         </HeaderContainer>
       </Header>
       <Body>
-        {lankData.map((data, index) => (
+        {lankData.slice(0, expanded ? lankData.length : 3).map((data, index) => (
           <LankBox
             key={index}
             name={data.name}
@@ -71,24 +73,14 @@ const Lank = () => {
             lankNum={data.lankNum}
           />
         ))}
-        {expanded === true
-          ? lankData
-              .slice(3)
-              .map((data, index) => (
-                <LankBox
-                  key={index}
-                  name={data.name}
-                  statusmessage={data.statusmessage}
-                  lankNum={data.lankNum}
-                />
-              ))
-          : null}
       </Body>
-      <MoreBox>
-        <MoreButton onClick={ButtonHandler} expanded={expanded} style={FONT.L3}>
-          {MoreButtonText}
-        </MoreButton>
-      </MoreBox>
+      {lankData.length > 3 && (
+        <MoreBox>
+          <MoreButton onClick={ButtonHandler} expanded={expanded} style={FONT.L3}>
+            {MoreButtonText}
+          </MoreButton>
+        </MoreBox>
+      )}
     </Content>
   );
 };
@@ -108,7 +100,7 @@ const Header = styled.div`
 const HeaderContainer = styled.div`
   width: 50rem;
   margin: 0 auto;
-  padding-top: 5rem;
+  padding-top: 50px;
   padding-bottom: 6rem;
   @media (max-width: 768px) {
     width: 100%;
